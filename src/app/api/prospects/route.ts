@@ -1,20 +1,28 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  }
+);
+
 export async function GET() {
-  const supabase = createRouteHandlerClient({ cookies });
   const { data, error } = await supabase
     .from('prospects')
     .select('*')
     .order('created_at', { ascending: false });
   
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  return NextResponse.json(data || []);
 }
 
 export async function POST(req: NextRequest) {
-  const supabase = createRouteHandlerClient({ cookies });
   const body = await req.json();
   
   const { data, error } = await supabase
@@ -37,7 +45,6 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const supabase = createRouteHandlerClient({ cookies });
   const { id, notes, status } = await req.json();
   
   const updates: any = { last_contact: new Date().toISOString() };

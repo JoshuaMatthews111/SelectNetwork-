@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 // Types for database tables
 export interface Member {
@@ -61,15 +60,26 @@ export interface Payment {
   processor?: string;
 }
 
-// Client-side Supabase client (for use in components)
-export const createBrowserClient = () => {
-  return createClientComponentClient({
-    supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  });
+// Client-side Supabase client singleton
+let browserClient: ReturnType<typeof createClient> | null = null;
+
+export const getSupabaseBrowser = () => {
+  if (!browserClient) {
+    browserClient = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+        },
+      }
+    );
+  }
+  return browserClient;
 };
 
-// Server-side Supabase client (for use in API routes/server components)
+// Server-side Supabase client (for use in API routes only)
 export const createServerClient = () => {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -81,17 +91,4 @@ export const createServerClient = () => {
       },
     }
   );
-};
-
-// Singleton browser client for use in "use client" components
-let browserClientInstance: ReturnType<typeof createClientComponentClient> | null = null;
-
-export const getSupabaseBrowser = () => {
-  if (!browserClientInstance) {
-    browserClientInstance = createClientComponentClient({
-      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    });
-  }
-  return browserClientInstance;
 };
