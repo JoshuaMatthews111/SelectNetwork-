@@ -1,0 +1,544 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700;800&display=swap');
+
+:root {
+  --navy: #071a33;
+  --navy2: #09233f;
+  --gold: #bd8e28;
+  --gold2: #d5a83d;
+  --green: #075933;
+  --green2: #0b7346;
+  --cream: #fbf8f1;
+  --white: #ffffff;
+  --text: #071a33;
+  --muted: #5b6675;
+  --line: #e7e2d8;
+  --soft: #f7f5ef;
+  --shadow: 0 18px 45px rgba(5,20,45,.12);
+}
+
+/* Glow effect for logos, icons, buttons */
+.sn-glow {
+  position: relative;
+  isolation: isolate;
+}
+.sn-glow::before {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 30px;
+  background: radial-gradient(circle, rgba(213,168,61,.38), rgba(7,89,51,.16) 48%, transparent 72%);
+  opacity: 0;
+  filter: blur(14px);
+  transition: 0.3s ease;
+  z-index: -1;
+}
+.sn-glow:hover::before {
+  opacity: 1;
+}
+
+/* Smooth scroll animations */
+.sn-fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.sn-fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Premium button base */
+.sn-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--navy);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 17px 27px;
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 0 8px 16px rgba(7,26,51,.14);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.sn-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 13px 24px rgba(7,26,51,.18);
+}
+.sn-btn-gold {
+  background: linear-gradient(135deg, #d1a645, #bc8b25);
+  color: #fff;
+}
+.sn-btn-gold:hover {
+  box-shadow: 0 13px 30px rgba(189,142,40,.35);
+}
+.sn-btn-outline {
+  background: transparent;
+  color: var(--navy);
+  border: 1px solid var(--gold);
+  box-shadow: none;
+}
+.sn-btn-outline:hover {
+  background: var(--gold);
+  color: #fff;
+}
+
+/* ─── Responsive Breakpoints ─── */
+@media (max-width: 1024px) {
+  .sn-portal-grid { grid-template-columns: 1fr !important; }
+  .sn-sidebar {
+    position: fixed !important; top: 0; left: 0; bottom: 0;
+    width: 296px; z-index: 9100;
+    transform: translateX(-110%);
+    transition: transform .35s cubic-bezier(.4,0,.2,1) !important;
+    box-shadow: 10px 0 50px rgba(5,20,45,.25);
+  }
+  .sn-sidebar.open { transform: translateX(0) !important; left: 0 !important; }
+  .sn-sidebar-overlay { display: block !important; position: fixed; inset: 0; background: rgba(7,26,51,.45); backdrop-filter: blur(3px); z-index: 9099; animation: mobileOverlayIn .25s ease; }
+  .sn-mobile-toggle { display: flex !important; }
+  .sn-desktop-topbar { display: none !important; }
+  .sn-app-topbar { display: flex !important; }
+  .sn-portal-grid > main { padding: 0 0 32px !important; }
+  .sn-kpi-grid-6 { grid-template-columns: repeat(3, 1fr) !important; }
+  .sn-kpi-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+  .sn-grid-2 { grid-template-columns: 1fr !important; }
+  .sn-grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
+  .sn-admin-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 768px) {
+  .sn-kpi-grid-6 { grid-template-columns: repeat(2, 1fr) !important; }
+  .sn-kpi-grid-4 { grid-template-columns: 1fr 1fr !important; }
+  .sn-grid-3 { grid-template-columns: 1fr !important; }
+  .sn-matrix-l2 { grid-template-columns: repeat(3, 1fr) !important; }
+  .sn-matrix-l3 { grid-template-columns: repeat(5, 1fr) !important; }
+  .sn-homepage-pillars { grid-template-columns: repeat(2, 1fr) !important; padding: 20px 24px !important; gap: 20px !important; }
+  .sn-homepage-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+  .sn-homepage-grid-2 { grid-template-columns: 1fr !important; }
+  .sn-hero { height: auto !important; min-height: 340px !important; padding: 40px 24px !important; }
+  .sn-hero-text { padding-left: 24px !important; max-width: 100% !important; }
+  .sn-hero h1 { font-size: 32px !important; }
+  .sn-section-pad { padding: 50px 24px !important; }
+  .sn-header-inner { padding: 0 20px !important; }
+  .sn-cta-band { grid-template-columns: 1fr !important; height: auto !important; padding: 24px !important; text-align: center; gap: 16px !important; }
+  .sn-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .sn-purpose-section { grid-template-columns: 1fr !important; }
+  .sn-purpose-left { padding: 30px 24px !important; }
+  .sn-returns-grid { grid-template-columns: 1fr !important; }
+  .sn-top-strip { padding: 0 20px !important; }
+  .sn-footer-inner { flex-direction: column !important; gap: 20px !important; padding: 30px 24px !important; }
+  .sn-calendar-grid { grid-template-columns: repeat(4, 1fr) !important; }
+  .sn-drawer { width: 100% !important; max-width: 380px; }
+}
+
+@media (max-width: 480px) {
+  .sn-kpi-grid-6 { grid-template-columns: 1fr !important; }
+  .sn-homepage-pillars { grid-template-columns: 1fr !important; }
+  .sn-homepage-grid-4 { grid-template-columns: 1fr !important; }
+  .sn-matrix-l2 { grid-template-columns: repeat(2, 1fr) !important; }
+  .sn-matrix-l3 { grid-template-columns: repeat(3, 1fr) !important; }
+  .sn-calendar-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* Mobile toggle button (hidden by default on desktop) */
+.sn-mobile-toggle {
+  display: none !important;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #e7e2d8;
+  border-radius: 8px;
+  background: #fff;
+  color: #071a33;
+  font-size: 20px;
+  cursor: pointer;
+  transition: .25s;
+}
+.sn-mobile-toggle:hover {
+  background: #edf6ef;
+  border-color: #075933;
+}
+
+/* Smooth transitions for all interactive elements */
+* { -webkit-tap-highlight-color: transparent; }
+button, a, .sn-btn { touch-action: manipulation; }
+
+/* Table responsive */
+.sn-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.sn-table-wrap table { min-width: 500px; }
+
+/* ─── Shared keyframes ─── */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes snRise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes arrowPulse {
+  0%, 100% { transform: translateX(0) scale(1); box-shadow: 0 6px 18px rgba(189,142,40,.35); }
+  50% { transform: translateX(4px) scale(1.08); box-shadow: 0 8px 28px rgba(189,142,40,.55); }
+}
+@keyframes arrowBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.sn-arrow-pulse { animation: arrowBounce 2s ease-in-out infinite; }
+.sn-arrow-pulse:hover { animation: arrowPulse 1s ease-in-out infinite; }
+
+/* ─── Marketing shell ─── */
+.sn-shell { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+.sn-nav-link:hover { color: #bd8e28 !important; }
+.sn-member-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(7,67,31,.3); }
+
+/* ─── Header / footer responsive ─── */
+@media (max-width: 960px) {
+  .sn-desktop-nav { display: none !important; }
+  .sn-burger { display: flex !important; }
+}
+@media (max-width: 768px) {
+  .sn-member-btn { display: none !important; }
+  .sn-shell { padding: 0 22px; }
+  .sn-footer-inner { grid-template-columns: 1fr !important; gap: 28px !important; padding: 36px 24px !important; }
+}
+
+/* Generic marketing responsive grid helpers */
+@media (max-width: 1024px) {
+  .sn-grid-5 { grid-template-columns: repeat(3, 1fr) !important; }
+  .sn-grid-4m { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 680px) {
+  .sn-grid-5 { grid-template-columns: 1fr !important; }
+  .sn-grid-4m { grid-template-columns: 1fr !important; }
+  .sn-metrics-strip { grid-template-columns: 1fr 1fr !important; }
+  .sn-split { grid-template-columns: 1fr !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   HOMEPAGE HERO — MOBILE
+   Shows hero dog image as background, stacks like app landing screen
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .sn-hero-home { position: relative !important; padding: 0 !important; overflow: hidden !important; }
+  /* Keep the dog hero image visible as a banner */
+  .sn-hero-dog {
+    position: relative !important; width: 100% !important; height: 220px !important;
+    object-fit: cover !important; object-position: center 30% !important; opacity: 1 !important;
+  }
+  /* Gradient overlay adapts */
+  .sn-hero-overlay {
+    background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,.85) 60%, #fff 100%) !important;
+  }
+  .sn-hero-inner {
+    grid-template-columns: 1fr !important; padding: 24px 20px 32px !important; gap: 20px !important;
+  }
+  .sn-hero-inner h1 { font-size: 28px !important; }
+  .sn-hero-inner p { font-size: 14px !important; }
+  /* Move LDTT logo under hero content */
+  .sn-hero-logo-right { margin: 8px auto 0 !important; }
+  .sn-hero-logo-right img { width: 140px !important; }
+  .sn-hero-logo-right span { font-size: 9px !important; }
+}
+@media (max-width: 480px) {
+  .sn-hero-dog { height: 180px !important; }
+  .sn-hero-inner { padding: 20px 16px 28px !important; }
+  .sn-hero-inner h1 { font-size: 24px !important; }
+  .sn-hero-logo-right img { width: 120px !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   INVESTMENT FLOW — TABLET (2-col) & MOBILE (1-col vertical arrows)
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .sn-opps-row { grid-template-columns: 1fr 1fr !important; gap: 14px !important; }
+  .sn-arrow-col { flex-direction: row !important; min-height: auto !important; padding: 14px 0 !important; grid-column: 1 / -1; transform: none !important; }
+  .sn-arrow-col p { text-align: left !important; max-width: 400px !important; }
+}
+@media (max-width: 768px) {
+  .sn-opps-row { grid-template-columns: 1fr !important; gap: 0 !important; }
+  /* Hide desktop horizontal arrow, show mobile vertical arrows */
+  .sn-arrow-col { display: none !important; }
+  .sn-mobile-arrow { display: flex !important; }
+  /* Founder card stacks vertically, stays premium */
+  .sn-founder-card {
+    flex-direction: column !important; align-items: center !important; text-align: center;
+    padding: 24px 20px !important;
+  }
+  .sn-founder-card img { width: 150px !important; height: 210px !important; margin-bottom: 16px; }
+  .sn-founder-card h3 { font-size: 34px !important; white-space: normal !important; }
+  /* Cards get app-style spacing */
+  .sn-opps-row > div { margin-bottom: 0; }
+}
+@media (max-width: 480px) {
+  .sn-founder-card img { width: 130px !important; height: 185px !important; }
+  .sn-founder-card h3 { font-size: 28px !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   METRICS STRIP — MOBILE
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .sn-metrics-strip { grid-template-columns: 1fr 1fr !important; gap: 0 !important; padding: 20px !important; }
+  .sn-metrics-strip > div { border-right: none !important; padding: 14px 10px !important; }
+  .sn-metrics-strip > div:nth-child(odd) { border-right: 1px solid #eee7d8 !important; }
+  .sn-metrics-strip > div:nth-child(1), .sn-metrics-strip > div:nth-child(2) { border-bottom: 1px solid #eee7d8; }
+}
+@media (max-width: 480px) {
+  .sn-metrics-strip { grid-template-columns: 1fr !important; padding: 16px !important; }
+  .sn-metrics-strip > div { border-right: none !important; border-bottom: 1px solid #eee7d8; padding: 12px 0 !important; }
+  .sn-metrics-strip > div:last-child { border-bottom: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MARKETING PAGES — MOBILE HEROES & SECTIONS
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .sn-shell { padding: 0 18px; }
+  .sn-page-hero-h1 { font-size: 30px !important; }
+  .sn-section-pad { padding: 44px 0 !important; }
+}
+@media (max-width: 480px) {
+  .sn-shell { padding: 0 14px; }
+  .sn-page-hero-h1 { font-size: 24px !important; }
+  .sn-section-pad { padding: 32px 0 !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TABLES DESKTOP/MOBILE TOGGLE
+   ═══════════════════════════════════════════════════════════════════ */
+@media (min-width: 769px) {
+  .sn-mobile-cards { display: none !important; }
+}
+@media (max-width: 768px) {
+  .sn-desktop-table { display: none !important; }
+  .sn-mobile-cards { display: flex !important; flex-direction: column; gap: 10px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SHARED ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════ */
+@keyframes tabSlideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes mobileDrawerIn {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes mobileOverlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Sidebar slide-in base */
+.sn-sidebar { transition: left .35s cubic-bezier(.4,0,.2,1) !important; }
+
+/* KPI card interaction */
+.sn-kpi-grid-6 > div,
+.sn-kpi-grid-4 > div {
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.sn-kpi-grid-6 > div:active,
+.sn-kpi-grid-4 > div:active {
+  transform: scale(.97);
+}
+
+/* Join form grid responsiveness */
+@media (max-width: 768px) {
+  .sn-split .sn-grid-3 { grid-template-columns: 1fr !important; }
+  .sn-split .sn-grid-2 { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 480px) {
+  .sn-split .sn-grid-3,
+  .sn-split .sn-grid-2 { grid-template-columns: 1fr !important; gap: 0 !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ██  PORTAL MOBILE APP EXPERIENCE — 768px
+   ██  Full restructure: app header, drawer menu, stacked cards,
+   ██  mobile charts, mobile matrix, mobile tables
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── Prevent horizontal overflow ── */
+  body { overflow-x: hidden; }
+
+  /* ── Hide desktop sidebar, replace with mobile drawer ── */
+  .sn-portal-grid { grid-template-columns: 1fr !important; }
+  .sn-sidebar {
+    position: fixed !important; top: 0; left: 0; bottom: 0;
+    width: 85vw !important; max-width: 320px;
+    z-index: 9100;
+    transform: translateX(-110%);
+    transition: transform .35s cubic-bezier(.4,0,.2,1) !important;
+    box-shadow: 10px 0 50px rgba(5,20,45,.25);
+    padding: 20px 16px !important;
+    border-right: 1px solid #e7e2d8;
+  }
+  .sn-sidebar.open {
+    transform: translateX(0) !important;
+    left: 0 !important;
+  }
+
+  /* ── Overlay behind drawer ── */
+  .sn-sidebar-overlay {
+    display: block !important;
+    position: fixed; inset: 0;
+    background: rgba(7,26,51,.45);
+    backdrop-filter: blur(3px);
+    z-index: 9099;
+    animation: mobileOverlayIn .25s ease;
+  }
+
+  /* ── Sidebar nav items: tappable, clear ── */
+  .sn-sidebar nav { gap: 4px !important; }
+  .sn-sidebar button {
+    min-height: 50px !important;
+    font-size: 15px !important;
+    padding: 14px 14px !important;
+    border-radius: 10px !important;
+  }
+
+  /* ── Mobile hamburger ── */
+  .sn-mobile-toggle {
+    display: flex !important;
+    width: 44px; height: 44px;
+    border-radius: 10px !important;
+    font-size: 22px !important;
+  }
+
+  /* ── MOBILE APP HEADER BAR ──
+     Replaces the desktop "welcome" top bar
+     Sticky, compact, with logo + title + hamburger
+  */
+  .sn-portal-grid > main {
+    padding: 0 0 32px !important;
+  }
+  .sn-app-topbar {
+    display: flex !important;
+    position: sticky; top: 0; z-index: 100;
+    align-items: center; justify-content: space-between;
+    background: linear-gradient(135deg, #071a33, #0a2244);
+    color: #fff;
+    padding: 14px 16px;
+    border-bottom: 2px solid #bd8e28;
+    box-shadow: 0 4px 20px rgba(5,20,45,.2);
+  }
+  .sn-app-topbar .sn-mobile-toggle {
+    background: rgba(255,255,255,.1) !important;
+    border-color: rgba(255,255,255,.2) !important;
+    color: #ffd46f !important;
+  }
+  .sn-app-topbar .sn-topbar-right { display: flex; align-items: center; gap: 12px; }
+  .sn-app-topbar .sn-topbar-right .sn-avatar-sm {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg,#075933,#0d6d42);
+    color: #ffd46f; display: grid; place-items: center;
+    font-weight: 900; font-size: 14px;
+  }
+
+  /* Hide the old desktop welcome header on mobile */
+  .sn-desktop-topbar { display: none !important; }
+
+  /* ── MOBILE CONTENT AREA ── */
+  .sn-mobile-content {
+    padding: 16px 14px !important;
+    animation: tabSlideIn .35s ease;
+  }
+
+  /* ── KPI GRIDS — 2-col on mobile ── */
+  .sn-kpi-grid-6 { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  .sn-kpi-grid-4 { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .sn-kpi-grid-6 > div,
+  .sn-kpi-grid-4 > div {
+    padding: 14px 12px !important;
+    border-radius: 12px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+
+  /* ── ADMIN GRID — single column ── */
+  .sn-admin-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+
+  /* ── 2-COL & 3-COL GRIDS → single column ── */
+  .sn-grid-2 { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .sn-grid-3 { grid-template-columns: 1fr !important; gap: 14px !important; }
+
+  /* ── TABLES → CARDS ── */
+  .sn-table-wrap { border-radius: 12px; overflow: visible !important; }
+  .sn-table-wrap table { display: none !important; }
+  .sn-table-wrap [style*="overflowX"] { overflow: visible !important; }
+  .sn-mobile-cards > div {
+    background: #fff; border: 1px solid #e7e2d8; border-radius: 14px;
+    padding: 16px 14px; box-shadow: 0 4px 16px rgba(5,20,45,.06);
+  }
+
+  /* ── MOBILE CARD ROW ── */
+  .sn-m-card-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0;
+  }
+  .sn-m-card-row .sn-m-label {
+    font-size: 11px; font-weight: 800; color: #667085;
+    text-transform: uppercase; letter-spacing: .04em;
+  }
+  .sn-m-card-row .sn-m-value { font-size: 14px; font-weight: 700; }
+
+  /* ── MATRIX MOBILE: stacked cards ── */
+  .sn-matrix-l2 { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+  .sn-matrix-l3 { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; }
+
+  /* ── MEMBER DRAWER: full width ── */
+  .sn-drawer { width: 100% !important; max-width: 100% !important; }
+
+  /* ── CHARTS: readable on mobile ── */
+  svg { max-width: 100%; height: auto !important; }
+  svg text { font-size: 10px; }
+
+  /* ── BUTTONS: larger tap targets ── */
+  .sn-btn { padding: 14px 22px !important; font-size: 13px !important; min-height: 48px; }
+  button { min-height: 40px; }
+
+  /* ── CARDS: consistent rounding ── */
+  .sn-portal-grid [style*="borderRadius: 14"],
+  .sn-portal-grid [style*="borderRadius:14"] {
+    border-radius: 14px;
+  }
+
+  /* ── CALENDAR: more compact ── */
+  .sn-calendar-grid { grid-template-columns: repeat(4, 1fr) !important; }
+
+  /* ── Quick actions grid: 1 col on mobile ── */
+  .sn-quick-actions { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+
+  /* ── SECTION SPACING ── */
+  section { scroll-margin-top: 20px; }
+
+  /* Hide username beside avatar */
+  .sn-user-desktop { display: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ██  PORTAL MOBILE — 480px (Small phones)
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .sn-kpi-grid-6 { grid-template-columns: 1fr !important; }
+  .sn-kpi-grid-4 { grid-template-columns: 1fr !important; }
+  .sn-kpi-grid-6 > div,
+  .sn-kpi-grid-4 > div {
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 12px !important;
+    gap: 12px !important;
+  }
+  .sn-matrix-l2 { grid-template-columns: 1fr 1fr !important; }
+  .sn-matrix-l3 { grid-template-columns: repeat(2, 1fr) !important; }
+  .sn-mobile-content { padding: 12px 10px !important; }
+  .sn-app-topbar { padding: 12px 12px; }
+  .sn-sidebar { width: 90vw !important; }
+  .sn-drawer { width: 100% !important; max-width: 100% !important; padding: 20px 16px !important; }
+  .sn-calendar-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
