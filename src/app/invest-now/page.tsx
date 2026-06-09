@@ -38,12 +38,36 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 export default function InvestNowPage() {
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [units, setUnits] = useState(50);
   const [role, setRole] = useState("");
   const [form, setForm] = useState({
     name: "", email: "", phone: "", cityState: "", heard: "", statement: "", agree: false,
   });
   const [ack, setAck] = useState({ approval: false, terms: false });
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          interest_amount: subtotal,
+          notes: `City/State: ${form.cityState}\nHow they heard: ${form.heard}\nStatement: ${form.statement}\nRole: ${role}\nUnits: ${units}`
+        })
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    setSubmitting(false);
+  };
 
   const subtotal = units * UNIT_PRICE;
   const fmt = (n: number) => `$${n.toLocaleString()}`;
@@ -282,7 +306,9 @@ export default function InvestNowPage() {
 
                     <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
                       <button onClick={back} style={btnGhost}><ArrowLeft size={16} /> Back</button>
-                      <button onClick={() => setSubmitted(true)} disabled={!agreementValid} style={{ ...btnPrimary, background: "linear-gradient(135deg,#d1a645,#bc8b25)", ...(agreementValid ? {} : disabled) }}><CreditCard size={16} /> Submit Application</button>
+                      <button onClick={handleSubmit} disabled={!agreementValid || submitting} style={{ ...btnPrimary, background: "linear-gradient(135deg,#d1a645,#bc8b25)", ...(agreementValid && !submitting ? {} : disabled) }}>
+                      {submitting ? "Submitting..." : <><CreditCard size={16} /> Submit Application</>}
+                    </button>
                     </div>
                   </div>
                 )}

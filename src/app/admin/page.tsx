@@ -77,18 +77,98 @@ export default function AdminPortal() {
     { title: "Q2 2025 Report Published", audience: "All Investors", date: "May 28, 2025", status: "Published" },
   ]);
   const [viewCert, setViewCert] = useState<{cert:string;member:string;date:string}|null>(null);
-  const [prospects, setProspects] = useState([
-    { id: 1, name: "Anthony Carter", phone: "(440) 555-2180", email: "acarter@email.com", interest: "$10,000", source: "Referral - Maria", status: "Hot Lead", lastContact: "May 30, 2025", notes: "Very interested. Wants to schedule a Zoom call. Works in real estate development." },
-    { id: 2, name: "Jessica Moore", phone: "(216) 555-7744", email: "jmoore@email.com", interest: "$5,000", source: "Website", status: "Warm", lastContact: "May 28, 2025", notes: "Left voicemail. She asked about the compensation plan. Follow up Friday." },
-    { id: 3, name: "Robert Williams", phone: "(330) 555-9932", email: "rwilliams@email.com", interest: "$25,000", source: "Referral - Lorenzo", status: "Hot Lead", lastContact: "Jun 1, 2025", notes: "High net worth. Connected through chamber of commerce event. Wants onboarding call." },
-    { id: 4, name: "Tanya Brooks", phone: "(614) 555-0198", email: "tbrooks@email.com", interest: "$15,000", source: "LinkedIn", status: "New", lastContact: "Jun 2, 2025", notes: "Initial outreach sent. No response yet." },
-    { id: 5, name: "Marcus Johnson", phone: "(216) 555-3341", email: "mjohnson@email.com", interest: "$50,000", source: "Referral - James Wilson", status: "Warm", lastContact: "May 26, 2025", notes: "Scheduled call for next week. Owns a chain of gyms. Interested in builder role." },
-  ]);
+  const [prospects, setProspects] = useState<any[]>([]);
+  const [applications, setApplications] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const [crmNote, setCrmNote] = useState("");
   const [selectedProspect, setSelectedProspect] = useState<number|null>(null);
+  const [newProspect, setNewProspect] = useState({ name: "", phone: "", email: "", interest_amount: "", source: "", notes: "" });
 
-  useEffect(() => { setTimeout(() => setChartDraw(true), 300); }, []);
+  // Fetch data from API
+  useEffect(() => { 
+    setTimeout(() => setChartDraw(true), 300); 
+    fetchProspects();
+    fetchApplications();
+  }, []);
   useEffect(() => { if (activeTab === "matrix") setTimeout(() => setMatrixAnimated(true), 100); }, [activeTab]);
+
+  const fetchProspects = async () => {
+    try {
+      const res = await fetch("/api/prospects");
+      if (res.ok) {
+        const data = await res.json();
+        setProspects(data.map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          phone: p.phone || "",
+          email: p.email || "",
+          interest: p.interest_amount ? `$${p.interest_amount.toLocaleString()}` : "",
+          source: p.source,
+          status: p.status === "hot" ? "Hot Lead" : p.status === "warm" ? "Warm" : "New",
+          lastContact: p.last_contact ? new Date(p.last_contact).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "",
+          notes: p.notes || ""
+        })));
+      }
+    } catch (err) {
+      console.error("Failed to fetch prospects:", err);
+    }
+  };
+
+  const fetchApplications = async () => {
+    try {
+      const res = await fetch("/api/applications");
+      if (res.ok) {
+        const data = await res.json();
+        setApplications(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch applications:", err);
+    }
+  };
+
+  const addProspect = async () => {
+    if (!newProspect.name) return;
+    setLoading(true);
+    try {
+      const res = await fetch("/api/prospects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newProspect.name,
+          phone: newProspect.phone,
+          email: newProspect.email,
+          interest_amount: parseInt(newProspect.interest_amount.replace(/[^0-9]/g, "")) || 0,
+          source: newProspect.source || "Manual Entry",
+          status: "new",
+          notes: newProspect.notes
+        })
+      });
+      if (res.ok) {
+        setNewProspect({ name: "", phone: "", email: "", interest_amount: "", source: "", notes: "" });
+        fetchProspects();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    setLoading(false);
+  };
+
+  const updateProspectNote = async (id: number, note: string) => {
+    if (!note.trim()) return;
+    try {
+      const res = await fetch("/api/prospects", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, notes: note })
+      });
+      if (res.ok) {
+        setCrmNote("");
+        fetchProspects();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const membersCount = useCountUp(128);
   const apps = useCountUp(23);
@@ -671,12 +751,14 @@ export default function AdminPortal() {
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Add New Prospect</h2>
                   <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                    {[["Name", "Full name"], ["Phone", "(555) 000-0000"], ["Email", "email@example.com"], ["Interest", "$5,000"], ["Home Address", "Address"], ["Occupation", "Job title"], ["Referred By", "Source"], ["Last Contact", "Date"]].map(([l, p], i) => (
-                      <div key={i}><label style={fieldLabel}>{l}</label><input placeholder={p} style={fieldInput} /></div>
-                    ))}
+                    <div><label style={fieldLabel}>Name</label><input value={newProspect.name} onChange={(e) => setNewProspect({...newProspect, name: e.target.value})} placeholder="Full name" style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Phone</label><input value={newProspect.phone} onChange={(e) => setNewProspect({...newProspect, phone: e.target.value})} placeholder="(555) 000-0000" style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Email</label><input type="email" value={newProspect.email} onChange={(e) => setNewProspect({...newProspect, email: e.target.value})} placeholder="email@example.com" style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Interest</label><input value={newProspect.interest_amount} onChange={(e) => setNewProspect({...newProspect, interest_amount: e.target.value})} placeholder="$5,000" style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Referred By</label><input value={newProspect.source} onChange={(e) => setNewProspect({...newProspect, source: e.target.value})} placeholder="Source" style={fieldInput} /></div>
                   </div>
-                  <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Notes</label><textarea placeholder="Initial notes about this prospect..." rows={3} style={{ ...fieldInput, resize: "none" as const }} /></div>
-                  <button style={btnGreen}>Add Prospect</button>
+                  <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Notes</label><textarea value={newProspect.notes} onChange={(e) => setNewProspect({...newProspect, notes: e.target.value})} placeholder="Initial notes about this prospect..." rows={3} style={{ ...fieldInput, resize: "none" as const }} /></div>
+                  <button onClick={addProspect} disabled={loading || !newProspect.name} style={{...btnGreen, opacity: loading || !newProspect.name ? 0.6 : 1}}>{loading ? "Adding..." : "Add Prospect"}</button>
                 </div>
                 {/* CRM Summary */}
                 <div style={card}>
@@ -741,7 +823,7 @@ export default function AdminPortal() {
                         <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "12px 14px", fontSize: 13.5, lineHeight: 1.6, marginBottom: 10, color: "#3d4a57" }}>{p.notes}</div>
                         <div style={{ display: "flex", gap: 10 }}>
                           <textarea value={crmNote} onChange={(e) => setCrmNote(e.target.value)} placeholder="Add a new note..." rows={2} style={{ flex: 1, ...fieldInput, resize: "none" as const }} />
-                          <button onClick={() => { if (crmNote.trim()) { setProspects(prospects.map(pr => pr.id === p.id ? { ...pr, notes: pr.notes + " | " + crmNote, lastContact: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) } : pr)); setCrmNote(""); } }} style={{ ...btnGreen, alignSelf: "flex-end" }}>Save Note</button>
+                          <button onClick={() => updateProspectNote(p.id, crmNote)} disabled={loading} style={{ ...btnGreen, alignSelf: "flex-end", opacity: loading ? 0.6 : 1 }}>{loading ? "Saving..." : "Save Note"}</button>
                         </div>
                       </div>
                       <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
