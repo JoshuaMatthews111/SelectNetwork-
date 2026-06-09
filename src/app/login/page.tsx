@@ -114,7 +114,7 @@ export default function LoginPage() {
         .from('members')
         .select('role')
         .eq('email', email)
-        .single();
+        .single() as { data: { role?: string } | null };
       
       if (profile?.role === 'admin') {
         router.push('/admin');
