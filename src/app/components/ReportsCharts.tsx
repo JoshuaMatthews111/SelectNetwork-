@@ -99,6 +99,24 @@ function SalesLine() {
             <rect x={px(i) - plotW / (ldttSales.length * 2)} y={PAD.t} width={plotW / ldttSales.length} height={plotH} fill="transparent" onMouseEnter={() => setHover(i)} />
           </g>
         ))}
+        {/* Red annotation arrow pointing at 2025 drop */}
+        {(() => {
+          const dropIdx = ldttSales.length - 1;
+          const cx = px(dropIdx);
+          const cy = py(ldttSales[dropIdx].total);
+          const labelX = cx - 60;
+          const labelY = cy - 52;
+          return (
+            <g style={{ cursor: "pointer" }} onClick={() => setDropOpen(true)}>
+              <line x1={labelX + 30} y1={labelY + 16} x2={cx} y2={cy - 10} stroke="#c0392b" strokeWidth="2" markerEnd="url(#dropArrow)" style={{ animation: "arrowBounce 1.5s ease-in-out infinite" }} />
+              <defs>
+                <marker id="dropArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#c0392b" /></marker>
+              </defs>
+              <text x={labelX} y={labelY} fill="#c0392b" fontSize="13" fontWeight="900" style={{ textTransform: "uppercase" } as React.CSSProperties}>Why the Drop?</text>
+              <text x={labelX + 4} y={labelY + 14} fill="#c0392b" fontSize="9.5" fontWeight="600" opacity="0.75">Click to learn more</text>
+            </g>
+          );
+        })()}
       </svg>
       {hover !== null && (
         <Tooltip x={(px(hover) / W) * 100} y={(py(ldttSales[hover].total) / H) * 100}>
@@ -107,38 +125,22 @@ function SalesLine() {
         </Tooltip>
       )}
 
-      {/* Why the Drop? animated button */}
-      <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 10 }}>
+      {/* Why the Drop? text button below chart */}
+      <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
         <button
           onClick={() => setDropOpen(true)}
           style={{
             display: "inline-flex",
-            flexDirection: "column",
             alignItems: "center",
-            gap: 3,
+            gap: 8,
             background: "none",
             border: "none",
             cursor: "pointer",
-            padding: 0,
+            padding: "4px 0",
           }}
         >
-          <span style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 7,
-            background: "linear-gradient(135deg,#fff3d6,#ffedb0)",
-            border: "1px solid #bd8e28",
-            borderRadius: 99,
-            padding: "7px 14px",
-            fontSize: 12.5,
-            fontWeight: 800,
-            color: "#7a4f00",
-            boxShadow: "0 0 0 0 rgba(189,142,40,.5)",
-            animation: "dropPulse 2s ease-in-out infinite",
-          }}>
-            <span style={{ fontSize: 16 }}>⚠️</span> Why the Drop?
-          </span>
-          <span style={{ fontSize: 10.5, color: "#9aa4b2", fontWeight: 600, letterSpacing: ".02em" }}>Click here to learn more</span>
+          <span style={{ color: "#c0392b", fontSize: 13, fontWeight: 900, letterSpacing: ".02em" }}>Why the Drop?</span>
+          <span style={{ color: "#9aa4b2", fontSize: 11, fontWeight: 600 }}>— Click here</span>
         </button>
       </div>
 
@@ -190,7 +192,9 @@ function SalesLine() {
               aria-label="Close"
             >✕</button>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
-              <span style={{ fontSize: 28 }}>📉</span>
+              <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#fde8e8", display: "grid", placeItems: "center" }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0392b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6" /><polyline points="17 18 23 18 23 12" /></svg>
+              </div>
               <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 24, margin: 0, color: "#071a33" }}>Why the Drop Happened</h2>
             </div>
             <p style={{ color: "#3d4a57", lineHeight: 1.8, fontSize: 14.5, margin: "0 0 16px" }}>
@@ -583,6 +587,10 @@ export default function ReportsCharts() {
         }
         @keyframes snFade { from { opacity: 0; } to { opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes arrowBounce {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.45; }
+        }
       `}</style>
     </div>
   );
