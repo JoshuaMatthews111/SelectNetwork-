@@ -24,7 +24,8 @@ export default function ReportsPage() {
     { icon: <BarChart3 size={24} />, title: "Revenue Performance Overview", desc: "Total sales and category revenue from Lorenzo's Dog Training Team historical records, 2016–2025.", pdf: null },
     { icon: <TrendingUp size={24} />, title: "Profit & Margin Summary", desc: "Operating profit and margin by year from the client-provided LDTT record.", pdf: null },
     { icon: <PieChart size={24} />, title: "Category Sales Breakdown", desc: "Training, boarding, equipment/misc, and tuition totals across all years.", pdf: null },
-    { icon: <Network size={24} />, title: "Trainer Hierarchy 2026", desc: "Visual overview of LDTT's trainer network and leadership structure. Separate from the investor referral matrix.", pdf: "/reports/trainer-hierarchy-2026.pdf" },
+    { icon: <Network size={24} />, title: "Trainer Hierarchy 2026", desc: "Visual overview of LDTT's trainer network and leadership structure. Separate from the investor referral matrix.", pdf: "/reports/trainer-hierarchy-2026.png", viewHref: "/reports/trainer-hierarchy-2026.png" },
+    { icon: <FileText size={24} />, title: "Explaining the Drop & Rebuild", desc: "A detailed explanation of why LDTT's sales volume declined and the current recovery and growth strategy moving forward.", pdf: "/reports/explaining-the-drop-and-rebuild.pages", viewHref: "#live-charts", dropDoc: true },
     { icon: <CalendarClock size={24} />, title: "Quarterly Investor Updates", desc: "Full quarterly updates, communications, and financial summaries are available exclusively inside the investor dashboard after participation is completed.", pdf: null, portal: true },
   ];
 
@@ -58,11 +59,13 @@ export default function ReportsPage() {
                   <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                     {r.portal ? (
                       <Link href="/login" style={btnGreen}><Eye size={15} /> View in Portal</Link>
+                    ) : r.viewHref ? (
+                      <a href={r.viewHref} target="_blank" rel="noopener noreferrer" style={btnGreen}><Eye size={15} /> View Report</a>
                     ) : (
                       <button onClick={scrollToCharts} style={btnGreen}><Eye size={15} /> View Report</button>
                     )}
                     {r.pdf ? (
-                      <a href={r.pdf} target="_blank" rel="noopener noreferrer" style={btnGold}><Download size={15} /> Download PDF</a>
+                      <a href={r.pdf} download target="_blank" rel="noopener noreferrer" style={btnGold}><Download size={15} /> Download PDF</a>
                     ) : !r.portal ? (
                       <button onClick={() => window.print()} style={btnOutline}><Download size={15} /> Download PDF</button>
                     ) : null}

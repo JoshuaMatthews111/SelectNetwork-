@@ -67,6 +67,7 @@ function ChartCard({ title, subtitle, children }: { title: string; subtitle?: st
 /* ─── Revenue: Total Sales line chart ─── */
 function SalesLine() {
   const [hover, setHover] = useState<number | null>(null);
+  const [dropOpen, setDropOpen] = useState(false);
   const max = Math.max(...ldttSales.map((d) => d.total)) * 1.08;
   const px = (i: number) => PAD.l + (i / (ldttSales.length - 1)) * plotW;
   const py = (v: number) => PAD.t + plotH - (v / max) * plotH;
@@ -104,6 +105,126 @@ function SalesLine() {
           <b>{ldttSales[hover].year}</b> · Total Sales<br />
           {fmtUSD(ldttSales[hover].total)}
         </Tooltip>
+      )}
+
+      {/* Why the Drop? animated button */}
+      <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 10 }}>
+        <button
+          onClick={() => setDropOpen(true)}
+          style={{
+            display: "inline-flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 3,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+          }}
+        >
+          <span style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 7,
+            background: "linear-gradient(135deg,#fff3d6,#ffedb0)",
+            border: "1px solid #bd8e28",
+            borderRadius: 99,
+            padding: "7px 14px",
+            fontSize: 12.5,
+            fontWeight: 800,
+            color: "#7a4f00",
+            boxShadow: "0 0 0 0 rgba(189,142,40,.5)",
+            animation: "dropPulse 2s ease-in-out infinite",
+          }}>
+            <span style={{ fontSize: 16 }}>⚠️</span> Why the Drop?
+          </span>
+          <span style={{ fontSize: 10.5, color: "#9aa4b2", fontWeight: 600, letterSpacing: ".02em" }}>Click here to learn more</span>
+        </button>
+      </div>
+
+      {/* Drop Explanation Lightbox */}
+      {dropOpen && (
+        <div
+          onClick={() => setDropOpen(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 99999,
+            background: "rgba(7,26,51,.82)",
+            backdropFilter: "blur(4px)",
+            display: "grid",
+            placeItems: "center",
+            padding: 24,
+            animation: "snFade .2s ease",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#fff",
+              borderRadius: 16,
+              maxWidth: 680,
+              width: "100%",
+              padding: "36px 32px",
+              boxShadow: "0 30px 80px rgba(0,0,0,.4)",
+              position: "relative",
+            }}
+          >
+            <button
+              onClick={() => setDropOpen(false)}
+              style={{
+                position: "absolute",
+                top: 16,
+                right: 16,
+                background: "#f0f2f5",
+                border: 0,
+                borderRadius: "50%",
+                width: 36,
+                height: 36,
+                display: "grid",
+                placeItems: "center",
+                cursor: "pointer",
+                fontSize: 18,
+                color: "#071a33",
+              }}
+              aria-label="Close"
+            >✕</button>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
+              <span style={{ fontSize: 28 }}>📉</span>
+              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 24, margin: 0, color: "#071a33" }}>Why the Drop Happened</h2>
+            </div>
+            <p style={{ color: "#3d4a57", lineHeight: 1.8, fontSize: 14.5, margin: "0 0 16px" }}>
+              Lorenzo&apos;s Dog Training Team previously operated with a larger trainer network, reaching more than 100 trainers before major disruption affected the company&apos;s structure and operations. During the COVID period and the seasons that followed, the trainer count dropped to approximately 25 as the business adjusted to market changes, operational challenges, staffing shifts, and the need to rebuild with stronger systems.
+            </p>
+            <p style={{ color: "#3d4a57", lineHeight: 1.8, fontSize: 14.5, margin: "0 0 16px" }}>
+              The visible decline in the Total Sales chart reflects this same disruption period — not a fundamental failure of the business model, but the direct result of workforce reduction, COVID-era constraints, and a deliberate reset to rebuild with better structure and clearer systems.
+            </p>
+            <p style={{ color: "#5b6675", lineHeight: 1.7, fontSize: 13.5, margin: "0 0 22px", fontStyle: "italic" }}>
+              This context helps investors understand that the drop represents a documented past disruption, not the final direction of the company. LDTT is currently on a rebuilding path supported by renewed strategy and investor participation.
+            </p>
+            <a
+              href="/reports/explaining-the-drop-and-rebuild.pages"
+              download="Explaining-the-Drop-and-Rebuild.pages"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "linear-gradient(135deg,#d1a645,#bc8b25)",
+                color: "#fff",
+                border: 0,
+                borderRadius: 8,
+                padding: "11px 20px",
+                fontWeight: 800,
+                fontSize: 12,
+                textTransform: "uppercase",
+                letterSpacing: ".03em",
+                textDecoration: "none",
+              }}
+            >
+              ⬇ Download Full Document
+            </a>
+          </div>
+        </div>
       )}
     </>
   );
@@ -434,17 +555,35 @@ export default function ReportsCharts() {
                 <img src="/reports/trainer-hierarchy-2026.png" alt="Lorenzo's Dog Training Team Trainer Hierarchy 2026" style={{ width: "100%", minWidth: 520, borderRadius: 8, display: "block" }} />
               </div>
             </div>
-            <a
-              href="/reports/trainer-hierarchy-2026.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", border: 0, borderRadius: 8, padding: "13px 22px", fontWeight: 800, fontSize: 13, textTransform: "uppercase", letterSpacing: ".03em", textDecoration: "none" }}
-            >
-              <Download size={16} /> Download Hierarchy PDF
-            </a>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <a
+                href="/reports/trainer-hierarchy-2026.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "linear-gradient(135deg,#0b5b34,#08431f)", color: "#fff", border: 0, borderRadius: 8, padding: "13px 22px", fontWeight: 800, fontSize: 13, textTransform: "uppercase", letterSpacing: ".03em", textDecoration: "none" }}
+              >
+                🔍 View Full Image
+              </a>
+              <a
+                href="/reports/trainer-hierarchy-2026.png"
+                download="LDTT-Trainer-Hierarchy-2026.png"
+                style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", border: 0, borderRadius: 8, padding: "13px 22px", fontWeight: 800, fontSize: 13, textTransform: "uppercase", letterSpacing: ".03em", textDecoration: "none" }}
+              >
+                <Download size={16} /> Download Image
+              </a>
+            </div>
           </ChartCard>
         )}
       </div>
+
+      <style jsx global>{`
+        @keyframes dropPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(189,142,40,.5); }
+          50% { box-shadow: 0 0 0 8px rgba(189,142,40,0); }
+        }
+        @keyframes snFade { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+      `}</style>
     </div>
   );
 }
