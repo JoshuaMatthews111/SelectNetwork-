@@ -48,9 +48,9 @@ export default function JoinPage() {
         <div className="sn-shell">
           <div className="sn-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22 }}>
             {[
-              { n: 1, icon: <FileText size={26} />, title: "Begin Application", desc: "Complete a short application to start the process." },
-              { n: 2, icon: <FileSignature size={26} />, title: "Review Membership Agreement", desc: "Review and electronically sign the Membership Agreement." },
-              { n: 3, icon: <PhoneCall size={26} />, title: "Schedule an Investor Call", desc: "Connect with our team to discuss alignment and next steps." },
+              { n: 1, icon: <FileText size={26} />, title: "Select Your Units", desc: "Choose the number of units and your participation role." },
+              { n: 2, icon: <FileSignature size={26} />, title: "Review & Sign Agreement", desc: "Read and accept the Participation Agreement." },
+              { n: 3, icon: <PhoneCall size={26} />, title: "Submit Payment", desc: "Complete payment via ACH or card to activate your investor dashboard automatically." },
             ].map((s, i) => (
               <Reveal key={i} delay={i * 100}>
                 <div style={{ background: "#fbf9f4", border: "1px solid #eee7d8", borderRadius: 16, padding: 30, height: "100%", position: "relative" }}>
@@ -71,14 +71,14 @@ export default function JoinPage() {
           {/* Form */}
           <Reveal>
             <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 18, padding: 34, boxShadow: "0 14px 40px rgba(5,20,45,.07)" }}>
-              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 26, margin: "0 0 6px" }}>Investor Application</h2>
-              <p style={{ color: "#667085", fontSize: 13.5, margin: "0 0 24px" }}>Complete the form below to begin your membership application.</p>
+              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 26, margin: "0 0 6px" }}>Your Information</h2>
+              <p style={{ color: "#667085", fontSize: 13.5, margin: "0 0 24px" }}>Complete the form below to get started with The Select Network.</p>
 
               {submitted ? (
                 <div style={{ background: "#edf6ef", border: "1px solid #c7e2d0", borderRadius: 12, padding: "28px 24px", textAlign: "center" }}>
                   <CheckCircle2 size={44} color={GREEN} style={{ margin: "0 auto 12px" }} />
-                  <h3 style={{ margin: "0 0 8px", color: NAVY }}>Application Received</h3>
-                  <p style={{ color: "#4b5563", fontSize: 14, lineHeight: 1.6, margin: 0 }}>Thank you, {form.firstName}. Our team will review your request and reach out to schedule your investor call.</p>
+                  <h3 style={{ margin: "0 0 8px", color: NAVY }}>Information Received</h3>
+                  <p style={{ color: "#4b5563", fontSize: 14, lineHeight: 1.6, margin: 0 }}>Thank you, {form.firstName}. Proceed to the Invest Now page to select your units, review the agreement, and submit your payment to activate your dashboard.</p>
                 </div>
               ) : (
                 <form onSubmit={(e) => { e.preventDefault(); if (valid) setSubmitted(true); }}>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { BarChart3, TrendingUp, PieChart, Network, CalendarClock, Eye, Download, Info, ArrowRight, FileText, X } from "lucide-react";
+import { BarChart3, TrendingUp, PieChart, Network, CalendarClock, Eye, Download, Info, ArrowRight, FileText, X, Lock } from "lucide-react";
 import SNNav from "../components/SNNav";
 import SNFooter from "../components/SNFooter";
 import Reveal from "../components/Reveal";
@@ -25,7 +25,7 @@ export default function ReportsPage() {
     { icon: <TrendingUp size={24} />, title: "Profit & Margin Summary", desc: "Operating profit and margin by year from the client-provided LDTT record.", pdf: null },
     { icon: <PieChart size={24} />, title: "Category Sales Breakdown", desc: "Training, boarding, equipment/misc, and tuition totals across all years.", pdf: null },
     { icon: <Network size={24} />, title: "Trainer Hierarchy 2026", desc: "Visual overview of LDTT's trainer network and leadership structure. Separate from the investor referral matrix.", pdf: "/reports/trainer-hierarchy-2026.pdf" },
-    { icon: <CalendarClock size={24} />, title: "Quarterly Investor Updates", desc: "Approved quarterly updates and communications, available inside the Member Portal.", pdf: null, portal: true },
+    { icon: <CalendarClock size={24} />, title: "Quarterly Investor Updates", desc: "Full quarterly updates, communications, and financial summaries are available exclusively inside the investor dashboard after participation is completed.", pdf: null, portal: true },
   ];
 
   return (
@@ -40,7 +40,7 @@ export default function ReportsPage() {
             Transparency You Can Trust
           </h1>
           <p style={{ color: "#c6d2e1", maxWidth: 760, margin: "20px auto 0", lineHeight: 1.8, fontSize: 15.5 }}>
-            At The Select Network, we believe informed investors make confident investors. Our investment reports provide clear, consistent, and data-driven visibility into the historical operating performance of Lorenzo&apos;s Dog Training Team so qualified investors can review the business record with confidence.
+            At The Select Network, we believe informed investors make confident decisions. Our investment reports provide clear, consistent, and data-driven visibility into the historical operating performance of Lorenzo&apos;s Dog Training Team so qualified investors can review the business record with confidence.
           </p>
         </div>
       </section>
@@ -94,7 +94,7 @@ export default function ReportsPage() {
                   </div>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 10px" }}>Select Network Compensation Plan</h2>
                   <p style={{ color: "#5b6675", lineHeight: 1.7, fontSize: 14.5, margin: "0 0 22px", maxWidth: 560 }}>
-                    Review the official unit investment and quarterly profit distribution overview. This document illustrates how units are purchased ($100 per unit) and how available quarterly profit is distributed equally across all units.
+                    Review the official unit investment and quarterly profit distribution overview. A Unit is a proportional participation allocation within the Select Network investment structure, used to determine an investor&apos;s share of designated company distributions and growth-based revenue participation. This document illustrates how units are purchased ($100 per unit) and how available quarterly profit is distributed across all units.
                   </p>
                   <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                     <button onClick={() => setCompOpen(true)} style={btnGreen}><Eye size={15} /> View Document</button>
@@ -153,38 +153,53 @@ export default function ReportsPage() {
         </div>
       </section>
 
-      {/* Our Tax Reports */}
+      {/* Private Reports — locked for public */}
       <section style={{ padding: "50px 0", background: "#fff" }}>
         <div className="sn-shell" style={{ maxWidth: 800 }}>
           <Reveal>
             <div style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 16, padding: "32px 28px" }}>
-              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 24, margin: "0 0 12px" }}>Tax Reports</h2>
+              <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 16 }}>
+                <Lock size={20} color={GOLD} />
+                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 24, margin: 0 }}>Quarterly Reports &amp; Tax Documents</h2>
+              </div>
               <p style={{ color: "#3d4a57", lineHeight: 1.7, fontSize: 14.5, margin: "0 0 20px" }}>
-                View and download available tax reports, IRS documentation, and supporting financial records connected to the current investment focus.
+                Full reports, quarterly updates, and tax-related documents are available inside the investor dashboard after participation is completed.
               </p>
 
-              {/* Scoped downloads */}
+              {/* Blurred/locked document tiles */}
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12, marginBottom: 20 }}>
                 {[
+                  { label: "Q1 2025 Quarterly Update", scope: "Q1 2025" },
+                  { label: "Q2 2025 Quarterly Update", scope: "Q2 2025" },
                   { label: "2024 Annual Tax Report", scope: "FY 2024" },
                   { label: "Q1 2025 Tax Summary", scope: "Q1 2025" },
                   { label: "Q2 2025 Tax Summary", scope: "Q2 2025" },
                   { label: "IRS Supporting Docs", scope: "All Years" },
                 ].map((r, i) => (
-                  <div key={i} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 10, padding: "14px 16px" }}>
-                    <b style={{ fontSize: 13, display: "block", marginBottom: 4 }}>{r.label}</b>
-                    <span style={{ fontSize: 11, color: "#667085", display: "block", marginBottom: 10 }}>{r.scope}</span>
-                    <div style={{ display: "flex", gap: 8 }}>
-                      <button style={{ ...btnBase, padding: "6px 10px", fontSize: 11, background: `linear-gradient(135deg,${GREEN},#064a28)`, color: "#fff" }}><Eye size={12} /> View</button>
-                      <button style={{ ...btnBase, padding: "6px 10px", fontSize: 11, background: `linear-gradient(135deg,${GOLD},#a07520)`, color: "#fff" }}><Download size={12} /> PDF</button>
+                  <div key={i} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 10, padding: "14px 16px", position: "relative", overflow: "hidden" }}>
+                    <div style={{ filter: "blur(3px)", pointerEvents: "none", userSelect: "none" }}>
+                      <b style={{ fontSize: 13, display: "block", marginBottom: 4 }}>{r.label}</b>
+                      <span style={{ fontSize: 11, color: "#667085", display: "block", marginBottom: 10 }}>{r.scope}</span>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <div style={{ ...btnBase, padding: "6px 10px", fontSize: 11, background: `linear-gradient(135deg,${GREEN},#064a28)`, color: "#fff" }}>View</div>
+                        <div style={{ ...btnBase, padding: "6px 10px", fontSize: 11, background: `linear-gradient(135deg,${GOLD},#a07520)`, color: "#fff" }}>PDF</div>
+                      </div>
+                    </div>
+                    <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", background: "rgba(255,255,255,0.80)" }}>
+                      <div style={{ textAlign: "center" }}>
+                        <Lock size={18} color={GOLD} style={{ margin: "0 auto 4px" }} />
+                        <span style={{ fontSize: 10.5, fontWeight: 900, color: "#604b17", textTransform: "uppercase", letterSpacing: ".03em" }}>Members Only</span>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div style={{ background: "#fff", border: "1px solid #e7d9b6", borderLeft: `4px solid ${GOLD}`, borderRadius: "0 12px 12px 0", padding: "16px 18px" }}>
-                <p style={{ margin: 0, color: "#604b17", fontSize: 13, lineHeight: 1.6, fontStyle: "italic" }}>
-                  Tax reports and supporting documents will be uploaded once provided by the client. Additional scoped documents may be added as they become available.
+              <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", borderRadius: 12, padding: "18px 22px", display: "flex", gap: 14, alignItems: "center" }}>
+                <Lock size={18} color="#ffd46f" style={{ flexShrink: 0 }} />
+                <p style={{ margin: 0, color: "#c6d2e1", fontSize: 13, lineHeight: 1.6 }}>
+                  Full reports, quarterly updates, and tax-related documents are available inside the investor dashboard after participation is completed.
+                  <Link href="/invest-now" style={{ color: "#ffd46f", fontWeight: 700, marginLeft: 8 }}>Complete Your Participation →</Link>
                 </p>
               </div>
             </div>

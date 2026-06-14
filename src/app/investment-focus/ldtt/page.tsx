@@ -13,10 +13,10 @@ const GOLD = "#bd8e28";
 const GREEN = "#075933";
 
 const FAQ_ITEMS = [
-  { q: "Who is eligible to apply for membership?", a: "Membership is open to qualified investors and strategic partners who share our mission of long-term value creation and impact in the pet industry." },
+  { q: "Who is eligible to participate?", a: "Participation is open to qualified investors and strategic partners who share our mission of long-term value creation and impact in the pet industry." },
   { q: "What types of investment opportunities are available?", a: "Members gain access to carefully selected opportunities connected to Lorenzo's Dog Training Team and future growth initiatives within the expanding pet industry." },
   { q: "How is my information protected?", a: "All member information is protected with the highest standard of privacy and security protocols. We are confidential by design." },
-  { q: "How long does the application process take?", a: "The application process typically takes 3–5 business days. After submitting your application, our team will review and schedule an investor call." },
+  { q: "How does the participation process work?", a: "The process is straightforward: select your units, choose your role, review and sign the Participation Agreement, then complete payment via ACH or card. Your investor dashboard activates automatically once payment is confirmed." },
 ];
 
 export default function LDTTOpportunityPage() {

@@ -86,7 +86,7 @@ export default function InvestorBuilderPortal() {
             <div style={{ display: "flex", alignItems: "center", gap: 16, flexShrink: 0 }}>
               <span style={{ position: "relative", cursor: "pointer" }}><Bell size={22} color="#667085" /><span style={{ position: "absolute", top: -4, right: -8, background: "#dc2626", color: "#fff", fontSize: 10, fontWeight: 900, padding: "2px 5px", borderRadius: 99 }}>3</span></span>
               <div style={{ width: 38, height: 38, borderRadius: "50%", background: "linear-gradient(135deg,#5b34a3,#7c52d4)", color: "#d4b8ff", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 16 }}>M</div>
-              <div className="sn-user-desktop"><b style={{ fontSize: 14 }}>Maria Santos</b> <span style={{ background: "linear-gradient(135deg,#5b34a3,#7c52d4)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "2px 7px", borderRadius: 4, verticalAlign: "middle" }}>Investor + Builder</span><br /><small style={{ color: "#667085" }}>Foundation Partner</small></div>
+              <div className="sn-user-desktop"><b style={{ fontSize: 14 }}>Maria Santos</b> <span style={{ background: "linear-gradient(135deg,#5b34a3,#7c52d4)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "2px 7px", borderRadius: 4, verticalAlign: "middle" }}>Investor-Builder</span><br /><small style={{ color: "#667085" }}>Foundation Partner</small></div>
             </div>
           </div>
 
@@ -119,7 +119,7 @@ export default function InvestorBuilderPortal() {
                 </div>
               </div>
 
-              <p style={{ color: "#667085", fontSize: 14, lineHeight: 1.7 }}>As an <b>Investor + Builder</b>, you have full access to investment returns, referral tools, milestones, and builder incentives. Navigate the sidebar to explore all features.</p>
+              <p style={{ color: "#667085", fontSize: 14, lineHeight: 1.7 }}>As an <b>Investor-Builder</b>, you have full access to investment returns, referral tools, milestones, and builder incentives. Eligible Investor-Builders may qualify for referral or marketing incentives according to official program terms.</p>
             </div>
           )}
 
@@ -143,7 +143,7 @@ export default function InvestorBuilderPortal() {
               <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
                 <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 22, margin: "0 0 14px" }}>Milestones & Progress</h2>
                 {[
-                  { title: "Application Approved", done: true },
+                  { title: "Payment Completed", done: true },
                   { title: "First Investment Completed", done: true },
                   { title: "First Referral Made", done: true },
                   { title: "10 Active Referrals", done: true },
@@ -168,8 +168,8 @@ export default function InvestorBuilderPortal() {
                 <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 22, margin: "0 0 14px" }}>Certificates & Achievements</h2>
                 {[
                   { title: "Foundation Partner Certificate", date: "May 20, 2025", available: true },
-                  { title: "First 125 Approved Member", date: "May 20, 2025", available: true },
-                  { title: "Builder Achievement — 10 Referrals", date: "Jun 5, 2025", available: true },
+                  { title: "Participation Certificate", date: "May 20, 2025", available: true },
+                  { title: "Investor-Builder Achievement — 10 Referrals", date: "Jun 5, 2025", available: true },
                   { title: "Top Builder Q2 2025", date: "Pending", available: false },
                 ].map((c, i) => (
                   <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 0", borderBottom: "1px solid #eef2f6", flexWrap: "wrap", gap: 8 }}>
@@ -193,7 +193,7 @@ export default function InvestorBuilderPortal() {
             <div style={{ animation: "fadeIn .5s ease" }}>
               <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", borderRadius: 14, padding: "20px 24px", color: "#fff", marginBottom: 18 }}>
                 <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: 0 }}>Communications</h2>
-                <p style={{ margin: "4px 0 0", fontSize: 12.5, color: "#c6d2e1" }}>Official broadcasts from the Select Network team.</p>
+                <p style={{ margin: "4px 0 0", fontSize: 12.5, color: "#c6d2e1" }}>Official broadcasts from The Select Network team.</p>
               </div>
               {[
                 { title: "Q2 2025 Report Published", body: "The Q2 report is now available in your Documents section.", date: "May 28, 2025" },

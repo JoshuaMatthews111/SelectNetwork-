@@ -51,8 +51,8 @@ export default function LoginPage() {
     <div style={{ maxWidth: 520, width: "100%" }}>
       <div style={{ textAlign: "center", marginBottom: 30 }}>
         <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="Select Network" width={200} height={50} className="sn-glow" style={{ height: 45, width: "auto", margin: "0 auto 20px", display: "block" }} /></Link>
-        <h1 style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 400, margin: "0 0 8px", color: "#071a33" }}>Request Private Access</h1>
-        <p style={{ color: "#667085", fontSize: 14, margin: 0 }}>Submit your application for membership review</p>
+        <h1 style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 400, margin: "0 0 8px", color: "#071a33" }}>Complete Your Participation</h1>
+        <p style={{ color: "#667085", fontSize: 14, margin: 0 }}>Submit your information to get started with The Select Network</p>
       </div>
       <div style={{ background: "#fff", border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", padding: 32, borderRadius: 6 }}>
         {applySuccess ? (
@@ -60,8 +60,8 @@ export default function LoginPage() {
             <div style={{ width: 60, height: 60, borderRadius: "50%", background: "#dcfce7", display: "grid", placeItems: "center", margin: "0 auto 16px" }}>
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
-            <h3 style={{ fontFamily: "Georgia, serif", fontSize: 22, margin: "0 0 8px" }}>Application Submitted!</h3>
-            <p style={{ color: "#667085", fontSize: 14, margin: "0 0 20px" }}>We'll review your application and contact you within 2-3 business days.</p>
+            <h3 style={{ fontFamily: "Georgia, serif", fontSize: 22, margin: "0 0 8px" }}>Information Received!</h3>
+            <p style={{ color: "#667085", fontSize: 14, margin: "0 0 20px" }}>Thank you. Visit the Invest Now page to select your units, review the agreement, and submit your payment.</p>
             <button onClick={() => { setApplySuccess(false); setMode("choice"); }} style={{ background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", border: 0, borderRadius: 8, padding: "12px 24px", fontWeight: 800, cursor: "pointer" }}>Back to Login</button>
           </div>
         ) : (
@@ -80,7 +80,7 @@ export default function LoginPage() {
             <textarea rows={3} value={applyForm.message} onChange={(e) => setApplyForm({...applyForm, message: e.target.value})} placeholder="Tell us about your interest..." style={{ ...fieldInput, resize: "none" as const }} />
           </div>
           <button type="submit" disabled={applyLoading} className="sn-btn-gold sn-btn" style={{ width: "100%", padding: "16px 0", opacity: applyLoading ? 0.7 : 1 }}>
-            {applyLoading ? <><Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} /> Submitting...</> : "Submit Application →"}
+            {applyLoading ? <><Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} /> Submitting...</> : "Continue to Invest Now →"}
           </button>
         </form>
         <button onClick={() => setMode("choice")} style={{ display: "block", width: "100%", textAlign: "center", marginTop: 14, background: "none", border: "none", color: "#667085", fontSize: 13, cursor: "pointer" }}>← Back to login options</button>
@@ -172,7 +172,7 @@ export default function LoginPage() {
         </button>
       </div>
       <div style={{ textAlign: "center", marginTop: 24 }}>
-        <button onClick={() => setMode("apply")} style={{ background: "none", border: "none", color: "#bd8e28", fontSize: 13, fontWeight: 800, cursor: "pointer" }}>Not a member? Request Private Access →</button>
+        <Link href="/invest-now" style={{ background: "none", border: "none", color: "#bd8e28", fontSize: 13, fontWeight: 800, cursor: "pointer", textDecoration: "none", display: "inline-block" }}>Not a member? Complete Your Participation →</Link>
       </div>
       <div style={{ textAlign: "center", marginTop: 10 }}>
         <Link href="/" style={{ color: "#667085", fontSize: 12 }}>← Back to Select Network</Link>

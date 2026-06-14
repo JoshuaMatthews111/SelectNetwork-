@@ -42,19 +42,23 @@ const matrixMembers = {
   ],
 };
 
-const tabs = [
-  { id: "overview", label: "Overview", ico: <LayoutDashboard size={20} /> },
-  { id: "units", label: "Founder Units", ico: <Star size={20} /> },
-  { id: "reports", label: "Reports & Progress", ico: <TrendingUp size={20} /> },
-  { id: "docs", label: "Documents", ico: <FolderOpen size={20} /> },
-  { id: "withdrawals", label: "Withdrawals", ico: <Wallet size={20} /> },
-  { id: "matrix", label: "Referral Matrix", ico: <Network size={20} /> },
-  { id: "announcements", label: "Investor Communications", ico: <Megaphone size={20} /> },
-  { id: "chat", label: "Chat", ico: <MessageSquare size={20} /> },
-  { id: "milestones", label: "Milestones", ico: <Award size={20} /> },
-  { id: "certificates", label: "Certificates", ico: <FileText size={20} /> },
-  { id: "settings", label: "Settings", ico: <Settings size={20} /> },
+const MEMBER_ROLE: "Investor" | "Investor-Builder" = "Investor-Builder";
+
+const allTabs = [
+  { id: "overview", label: "Overview", ico: <LayoutDashboard size={20} />, roles: ["Investor", "Investor-Builder"] },
+  { id: "units", label: "Founder Units", ico: <Star size={20} />, roles: ["Investor", "Investor-Builder"] },
+  { id: "reports", label: "Reports & Documents", ico: <TrendingUp size={20} />, roles: ["Investor", "Investor-Builder"] },
+  { id: "docs", label: "Documents", ico: <FolderOpen size={20} />, roles: ["Investor", "Investor-Builder"] },
+  { id: "withdrawals", label: "Withdrawals", ico: <Wallet size={20} />, roles: ["Investor", "Investor-Builder"] },
+  { id: "matrix", label: "Referral Matrix", ico: <Network size={20} />, roles: ["Investor-Builder"] },
+  { id: "announcements", label: "Investor Communications", ico: <Megaphone size={20} />, roles: ["Investor", "Investor-Builder"] },
+  { id: "chat", label: "Chat", ico: <MessageSquare size={20} />, roles: ["Investor", "Investor-Builder"] },
+  { id: "milestones", label: "Milestones", ico: <Award size={20} />, roles: ["Investor", "Investor-Builder"] },
+  { id: "certificates", label: "Certificates", ico: <FileText size={20} />, roles: ["Investor", "Investor-Builder"] },
+  { id: "settings", label: "Settings", ico: <Settings size={20} />, roles: ["Investor", "Investor-Builder"] },
 ];
+
+const tabs = allTabs.filter(t => t.roles.includes(MEMBER_ROLE));
 
 export default function InvestorPortal() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -173,14 +177,25 @@ export default function InvestorPortal() {
               {/* Charts */}
               <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 18, marginBottom: 18 }}>
                 <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
-                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 16px" }}>Investment Growth Snapshot</h2>
-                  <svg viewBox="0 0 640 260" style={{ width: "100%", height: 200 }}>
-                    <defs><linearGradient id="goldfill" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#d5a83d" stopOpacity=".36" /><stop offset="1" stopColor="#d5a83d" stopOpacity="0" /></linearGradient></defs>
-                    <polyline points="35,210 120,176 205,160 292,124 380,114 468,89 598,46" fill="none" stroke="#bd8e28" strokeWidth="5" style={{ strokeDasharray: 900, strokeDashoffset: chartDraw ? 0 : 900, transition: "stroke-dashoffset 2s ease" }} />
-                    <polygon points="35,210 120,176 205,160 292,124 380,114 468,89 598,46 598,230 35,230" fill="url(#goldfill)" style={{ opacity: chartDraw ? 1 : 0, transition: "opacity 1.5s ease .5s" }} />
-                    <polyline points="35,222 120,202 205,190 292,178 380,162 468,137 598,120" fill="none" stroke="#071a33" strokeDasharray="9 7" strokeWidth="3" style={{ opacity: chartDraw ? 1 : 0, transition: "opacity 1s ease 1s" }} />
-                    <g fill="#fff" stroke="#bd8e28" strokeWidth="4" style={{ opacity: chartDraw ? 1 : 0, transition: "opacity .5s ease 1.5s" }}><circle cx="120" cy="176" r="6" /><circle cx="292" cy="124" r="6" /><circle cx="468" cy="89" r="6" /><circle cx="598" cy="46" r="7" /></g>
-                  </svg>
+                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 4px" }}>Quarterly Distribution Overview</h2>
+                  <p style={{ fontSize: 12, color: "#667085", margin: "0 0 16px" }}>Placeholder values — updated each quarter when distributions are posted.</p>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
+                    {[
+                      { q: "Q1", val: "$0", note: "Baseline" },
+                      { q: "Q2", val: "$0", note: "Baseline" },
+                      { q: "Q3", val: "—", note: "Pending" },
+                      { q: "Q4", val: "—", note: "Pending" },
+                    ].map((d) => (
+                      <div key={d.q} style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 10, padding: "14px 10px", textAlign: "center" }}>
+                        <div style={{ fontSize: 11, fontWeight: 900, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 6 }}>{d.q}</div>
+                        <div style={{ fontSize: 22, fontWeight: 800, color: "#071a33" }}>{d.val}</div>
+                        <div style={{ fontSize: 10, color: "#9aa0ab", marginTop: 4 }}>{d.note}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: 14, borderLeft: "3px solid #bd8e28", background: "#fffaf0", color: "#604b17", padding: "10px 14px", fontSize: 12, borderRadius: "0 6px 6px 0", lineHeight: 1.5 }}>
+                    Distribution values are posted quarterly when profits are available through The Select Network reporting system.
+                  </div>
                 </div>
                 <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)", textAlign: "center" }}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 16px" }}>Founder Units</h2>
@@ -218,6 +233,12 @@ export default function InvestorPortal() {
           {/* ─── FOUNDER UNITS ─── */}
           {activeTab === "units" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
+              <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", borderRadius: 14, padding: "20px 24px", marginBottom: 22, display: "flex", gap: 14, alignItems: "flex-start" }}>
+                <Star size={22} color="#ffd46f" style={{ flexShrink: 0, marginTop: 2 }} />
+                <p style={{ margin: 0, color: "#c6d2e1", fontSize: 13.5, lineHeight: 1.7 }}>
+                  <b style={{ color: "#ffd46f" }}>What is a Unit?</b> A Unit is a proportional participation allocation within the Select Network investment structure, used to determine an investor&apos;s share of designated company distributions and growth-based revenue participation.
+                </p>
+              </div>
               <div className="sn-kpi-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 22 }}>
                 {[{ ico: <Star size={20} />, label: "Total Owned", value: "50" }, { ico: <Wallet size={20} />, label: "Unit Price", value: "$100" }, { ico: <CheckCircle size={20} />, label: "Active Units", value: "50" }, { ico: <CircleDot size={20} />, label: "Pending Units", value: "0" }].map((k, i) => (
                   <div key={i} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: "18px 16px", boxShadow: "0 8px 24px rgba(5,20,45,.06)", display: "flex", alignItems: "center", gap: 14 }}>
@@ -246,23 +267,29 @@ export default function InvestorPortal() {
                 </div>
                 <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Unit Timeline</h2>
-                  <p style={{ color: "#667085", lineHeight: 1.7 }}>Application approved → agreement signed → founder units assigned → dashboard active.</p>
+                  <p style={{ color: "#667085", lineHeight: 1.7 }}>Payment submitted → agreement signed → founder units assigned → dashboard activated automatically.</p>
                   <div style={{ marginTop: 16, height: 8, background: "#edf6ef", borderRadius: 99, overflow: "hidden" }}><div style={{ height: "100%", width: "100%", background: "linear-gradient(90deg,#075933,#d5a83d)", borderRadius: 99 }} /></div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* ─── REPORTS ─── */}
+          {/* ─── REPORTS & DOCUMENTS ─── */}
           {activeTab === "reports" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
+              <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", borderRadius: 14, padding: "20px 24px", marginBottom: 20, display: "flex", gap: 14, alignItems: "flex-start" }}>
+                <FolderOpen size={22} color="#ffd46f" style={{ flexShrink: 0, marginTop: 2 }} />
+                <p style={{ margin: 0, color: "#c6d2e1", fontSize: 13.5, lineHeight: 1.7 }}>
+                  <b style={{ color: "#ffd46f" }}>Member Reports &amp; Documents</b> — This is where you can view unlocked reports, financial summaries, quarterly updates, tax-related documents, and company performance information that are not available on the public report page. Access is provided here because your participation has been completed.
+                </p>
+              </div>
               <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap" as const }}>
                 <input placeholder="Search reports" style={{ flex: 1, background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "12px 16px", fontSize: 14, outline: "none" }} />
-                <select style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "12px 16px", fontSize: 14, outline: "none" }}><option>All Types</option><option>Monthly</option><option>Quarterly</option><option>Annual</option></select>
+                <select style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "12px 16px", fontSize: 14, outline: "none" }}><option>All Types</option><option>Monthly</option><option>Quarterly</option><option>Annual</option><option>Tax</option></select>
                 <button style={{ background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", border: 0, borderRadius: 8, padding: "12px 18px", fontWeight: 900, fontSize: 12, textTransform: "uppercase", cursor: "pointer", transition: ".25s" }} className="hover:translate-y-[-2px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)]">Apply Filters</button>
               </div>
-              <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
-                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Reports & Progress</h2>
+              <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)", marginBottom: 18 }}>
+                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Reports &amp; Progress</h2>
                 {/* Desktop table */}
                 <div className="sn-desktop-table" style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
@@ -307,6 +334,31 @@ export default function InvestorPortal() {
                       <div style={{ display: "flex", gap: 8 }}>
                         <button style={{ background: "#fff", color: "#a46a00", border: "1px solid #bd8e28", borderRadius: 8, padding: "8px 14px", fontWeight: 900, fontSize: 11, cursor: "pointer" }}>View</button>
                         <button style={{ background: "#fff", color: "#a46a00", border: "1px solid #bd8e28", borderRadius: 8, padding: "8px 14px", fontWeight: 900, fontSize: 11, cursor: "pointer" }}>Download</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Private documents section — unlocked for members */}
+              <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
+                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 6px" }}>Quarterly &amp; Tax Reports</h2>
+                <p style={{ color: "#667085", fontSize: 13, lineHeight: 1.6, margin: "0 0 18px" }}>Full quarterly updates, tax-related documents, and detailed financial report files — available exclusively inside the investor dashboard after participation is completed.</p>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12 }}>
+                  {[
+                    { label: "Q1 2025 Quarterly Update", scope: "Q1 2025", status: "Published" },
+                    { label: "Q2 2025 Quarterly Update", scope: "Q2 2025", status: "Published" },
+                    { label: "2024 Annual Tax Report", scope: "FY 2024", status: "Available" },
+                    { label: "Q1 2025 Tax Summary", scope: "Q1 2025", status: "Available" },
+                    { label: "Q2 2025 Tax Summary", scope: "Q2 2025", status: "Available" },
+                    { label: "IRS Supporting Docs", scope: "All Years", status: "Available" },
+                  ].map((r, i) => (
+                    <div key={i} style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 10, padding: "14px 16px" }}>
+                      <b style={{ fontSize: 13, display: "block", marginBottom: 4 }}>{r.label}</b>
+                      <span style={{ fontSize: 11, color: "#667085", display: "block", marginBottom: 10 }}>{r.scope}</span>
+                      <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "space-between" }}>
+                        <span style={{ padding: "3px 8px", borderRadius: 99, background: "#e3f5eb", color: "#087345", fontSize: 10, fontWeight: 900 }}>{r.status}</span>
+                        <button style={{ background: "linear-gradient(135deg,#0b5b34,#08431f)", color: "#fff", border: 0, borderRadius: 6, padding: "5px 10px", fontWeight: 900, fontSize: 10, cursor: "pointer" }}>View</button>
                       </div>
                     </div>
                   ))}
@@ -568,7 +620,7 @@ export default function InvestorPortal() {
                 <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 22, margin: "0 0 14px" }}>Milestones & Progress</h2>
                 <p style={{ color: "#667085", fontSize: 13, marginBottom: 18 }}>Track your journey through Select Network achievements.</p>
                 {[
-                  { title: "Application Approved", desc: "Your application has been reviewed and approved.", done: true },
+                  { title: "Payment Completed", desc: "Your payment was confirmed and your investor dashboard was activated automatically.", done: true },
                   { title: "First Investment Completed", desc: "Successfully purchased your first founder units.", done: true },
                   { title: "First Referral Made", desc: "Referred your first member to the network.", done: true },
                   { title: "10 Active Referrals", desc: "Built a team of 10 active members in your downline.", done: true },
@@ -597,8 +649,8 @@ export default function InvestorPortal() {
                 <p style={{ color: "#667085", fontSize: 13, marginBottom: 18 }}>Download your earned certificates and track pending achievements.</p>
                 {[
                   { title: "Foundation Partner Certificate", date: "May 20, 2025", available: true },
-                  { title: "First 125 Approved Member", date: "May 20, 2025", available: true },
-                  { title: "Builder Achievement — 10 Referrals", date: "Jun 5, 2025", available: true },
+                  { title: "Participation Certificate", date: "May 20, 2025", available: true },
+                  { title: "Investor-Builder Achievement — 10 Referrals", date: "Jun 5, 2025", available: true },
                   { title: "Top Builder Q2 2025", date: "Pending", available: false },
                 ].map((c, i) => (
                   <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 0", borderBottom: "1px solid #eef2f6", flexWrap: "wrap", gap: 8 }}>

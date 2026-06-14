@@ -34,7 +34,7 @@ const adminTabs = [
 
 const matrixL1 = [
   { name: "Maria Santos", pic: "M", invested: "$25,000", units: 25, status: "Active", joined: "May 20", location: "Miami, FL", source: "Lorenzo", labels: ["Investor + Builder", "Founder Member", "Qualified for Incentive"] },
-  { name: "David Chen", pic: "D", invested: "$10,000", units: 10, status: "Pending", joined: "May 22", location: "New York, NY", source: "Lorenzo", labels: ["Investor", "Pending Review", "125th Investor Candidate"] },
+  { name: "David Chen", pic: "D", invested: "$10,000", units: 10, status: "Pending", joined: "May 22", location: "New York, NY", source: "Lorenzo", labels: ["Investor", "Pending Review"] },
   { name: "James Wilson", pic: "J", invested: "$15,000", units: 15, status: "Active", joined: "May 28", location: "Dallas, TX", source: "Lorenzo", labels: ["Builder", "Top Builder", "Early Access Member"] },
 ];
 
@@ -201,14 +201,14 @@ export default function AdminPortal() {
       "Top Builder": { bg: "#e7f0ff", fg: "#1e4fa3" },
       "Qualified for Incentive": { bg: "#e3f5eb", fg: "#076b40" },
       "Not Yet Qualified": { bg: "#f0f2f5", fg: "#667085" },
-      "125th Investor Candidate": { bg: "#fff3d6", fg: "#8a5a00" },
+      "Foundation Partner": { bg: "#fff3d6", fg: "#8a5a00" },
       "Special Benefits Eligible": { bg: "#efe7ff", fg: "#5b34a3" },
     };
     const c = map[label] || { bg: "#f0f2f5", fg: "#667085" };
     return { padding: "2px 8px", borderRadius: 99, background: c.bg, color: c.fg, fontSize: 9, fontWeight: 900, textTransform: "uppercase" as const, letterSpacing: ".02em", display: "inline-block" };
   };
 
-  const allLabels = ["Investor", "Builder", "Investor + Builder", "Founder Member", "Early Access Member", "Pending Review", "Active", "Inactive", "Needs Follow-Up", "Top Builder", "Qualified for Incentive", "Not Yet Qualified", "125th Investor Candidate", "Special Benefits Eligible"];
+  const allLabels = ["Investor", "Investor-Builder", "Founder Member", "Foundation Partner", "Early Access Member", "Pending Review", "Active", "Inactive", "Needs Follow-Up", "Top Builder", "Qualified for Incentive", "Not Yet Qualified", "Special Benefits Eligible"];
 
   const switchTab = (id: string) => { setActiveTab(id); setSidebarOpen(false); };
 
@@ -299,27 +299,21 @@ export default function AdminPortal() {
                 ))}
               </div>
 
-              {/* First 125 Member Tracker */}
+              {/* Foundation Partner Tracker */}
               <div style={{ ...card, marginBottom: 18, background: "linear-gradient(135deg,#071a33,#0d3366)", color: "#fff", border: "1px solid rgba(213,168,61,.5)" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10, marginBottom: 16 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <Star size={22} color="#ffd46f" />
-                    <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: 0, color: "#fff" }}>First 125 Member Tracker</h2>
+                    <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: 0, color: "#fff" }}>Foundation Partner Tracker</h2>
                   </div>
-                  <span style={{ fontSize: 12, color: "#c6d2e1" }}>Foundation Partner enrollment window</span>
+                  <span style={{ fontSize: 12, color: "#c6d2e1" }}>Members with $10,000+ investment</span>
                 </div>
-                <div style={{ marginBottom: 16 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 6 }}><span style={{ color: "#c6d2e1" }}>Approved Members</span><b style={{ color: "#ffd46f" }}>87 / 125</b></div>
-                  <div style={{ height: 12, background: "rgba(255,255,255,.12)", borderRadius: 99, overflow: "hidden" }}><div style={{ height: "100%", width: chartDraw ? "69.6%" : "0%", background: "linear-gradient(90deg,#d5a83d,#ffd46f)", borderRadius: 99, transition: "width 1.6s ease" }} /></div>
-                  <p style={{ fontSize: 11.5, color: "#9fb1c7", margin: "6px 0 0" }}>38 Foundation Partner slots remaining</p>
-                </div>
-                <div className="sn-kpi-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 12 }}>
+                <div className="sn-kpi-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12 }}>
                   {[
-                    { label: "Approved", value: "87 / 125", c: "#ffd46f" },
-                    { label: "Pending Applications", value: "23", c: "#fff" },
-                    { label: "Qualified for Benefits", value: "64", c: "#9ff5c0" },
+                    { label: "Foundation Partners", value: "12", c: "#ffd46f" },
+                    { label: "Total Members", value: "87", c: "#fff" },
                     { label: "Incentive Eligible", value: "41", c: "#9ff5c0" },
-                    { label: "Needs Review", value: "9", c: "#ffd0a0" },
+                    { label: "Pending Payment", value: "9", c: "#ffd0a0" },
                   ].map((s, i) => (
                     <div key={i} style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 10, padding: "12px 14px" }}>
                       <div style={{ fontSize: 20, fontWeight: 900, color: s.c }}>{s.value}</div>
@@ -964,13 +958,13 @@ export default function AdminPortal() {
                     <thead><tr>{["Milestone", "Required", "Members Achieved", "Status"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
                     <tbody>
                       {[
-                        { name: "Application Approved", req: "Admin approval", achieved: 48, status: "Active" },
+                        { name: "Payment Completed", req: "Payment confirmed", achieved: 48, status: "Active" },
                         { name: "First Investment", req: "1+ units purchased", achieved: 42, status: "Active" },
                         { name: "10 Referrals", req: "10 active referrals", achieved: 12, status: "Active" },
                         { name: "25 Referrals", req: "25 active referrals", achieved: 4, status: "Active" },
                         { name: "40 Member Cap", req: "Full downline (40)", achieved: 1, status: "Active" },
                         { name: "$1,000 Incentive Earned", req: "Qualified sharing incentive", achieved: 8, status: "Active" },
-                        { name: "First 125 Member", req: "Among first 125 approved", achieved: 48, status: "Active" },
+                        { name: "Foundation Partner", req: "$10,000+ investment", achieved: 12, status: "Active" },
                       ].map((m, i) => (
                         <tr key={i}><td style={tdS}><b>{m.name}</b></td><td style={{ ...tdS, color: "#667085" }}>{m.req}</td><td style={tdS}>{m.achieved}</td><td style={tdS}><span style={statusBadge(m.status)}>{m.status}</span></td></tr>
                       ))}
@@ -997,7 +991,7 @@ export default function AdminPortal() {
                     <tbody>
                       {[
                         { cert: "Foundation Partner", member: "Maria Santos", date: "May 20, 2025", status: "Issued" },
-                        { cert: "First 125 Member", member: "David Chen", date: "May 22, 2025", status: "Issued" },
+                        { cert: "Participation Certificate", member: "David Chen", date: "May 22, 2025", status: "Issued" },
                         { cert: "Builder Achievement — 10 Referrals", member: "James Wilson", date: "Jun 5, 2025", status: "Issued" },
                         { cert: "Top Builder Q2", member: "Maria Santos", date: "Pending", status: "Draft" },
                       ].map((c, i) => (

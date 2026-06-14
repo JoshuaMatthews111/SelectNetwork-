@@ -41,7 +41,7 @@ export default function CompPlanPage() {
 
             <h3 style={{ fontSize: 18, margin: "0 0 14px" }}>Topics to be Covered:</h3>
             <ul style={{ color: "#3d4a57", fontSize: 14.5, lineHeight: 2, paddingLeft: 22, margin: "0 0 28px" }}>
-              <li>Unit ownership and pricing structure</li>
+              <li>Unit definition, ownership, and pricing structure — A Unit is a proportional participation allocation within the Select Network investment structure, used to determine an investor&apos;s share of designated company distributions and growth-based revenue participation</li>
               <li>Quarterly profit distribution mechanics</li>
               <li>Builder referral network (3-wide structure)</li>
               <li>Foundation Partner status and benefits</li>
