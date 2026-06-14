@@ -72,12 +72,17 @@ export default function AdminPortal() {
   const [announcePosted, setAnnouncePosted] = useState(false);
   const [annTitle, setAnnTitle] = useState("");
   const [annMsg, setAnnMsg] = useState("");
-  const [annAudience, setAnnAudience] = useState("All Members");
-  const [broadcasts, setBroadcasts] = useState([
-    { title: "Q2 Investor Webinar", audience: "All Members", date: "May 25, 2025", status: "Published" },
-    { title: "Q2 2025 Report Published", audience: "All Investors", date: "May 28, 2025", status: "Published" },
-  ]);
+  const [annAudience, setAnnAudience] = useState("all");
+  const [annPriority, setAnnPriority] = useState("normal");
+  const [broadcasts, setBroadcasts] = useState<any[]>([]);
+  const [editingAnn, setEditingAnn] = useState<any>(null);
   const [viewCert, setViewCert] = useState<{cert:string;member:string;date:string}|null>(null);
+  // Support state
+  const [tickets, setTickets] = useState<any[]>([]);
+  const [activeTicket, setActiveTicket] = useState<any>(null);
+  const [ticketMessages, setTicketMessages] = useState<any[]>([]);
+  const [replyMsg, setReplyMsg] = useState("");
+  const [ticketFilter, setTicketFilter] = useState("all");
   const [prospects, setProspects] = useState<any[]>([]);
   const [applications, setApplications] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -90,6 +95,8 @@ export default function AdminPortal() {
     setTimeout(() => setChartDraw(true), 300); 
     fetchProspects();
     fetchApplications();
+    fetchAnnouncements();
+    fetchTickets();
   }, []);
   useEffect(() => { if (activeTab === "matrix") setTimeout(() => setMatrixAnimated(true), 100); }, [activeTab]);
 
@@ -212,12 +219,91 @@ export default function AdminPortal() {
 
   const switchTab = (id: string) => { setActiveTab(id); setSidebarOpen(false); };
 
-  const handlePublishAnnouncement = () => {
+  const fetchAnnouncements = async () => {
+    try {
+      const res = await fetch('/api/announcements');
+      if (res.ok) { const data = await res.json(); setBroadcasts(data); }
+    } catch (err) { console.error('Failed to fetch announcements:', err); }
+  };
+
+  const fetchTickets = async () => {
+    try {
+      const res = await fetch('/api/support');
+      if (res.ok) { const data = await res.json(); setTickets(data.tickets || []); }
+    } catch (err) { console.error('Failed to fetch tickets:', err); }
+  };
+
+  const fetchMessages = async (ticketId: string) => {
+    try {
+      const res = await fetch(`/api/support?ticket_id=${ticketId}`);
+      if (res.ok) { const data = await res.json(); setTicketMessages(data.messages || []); }
+    } catch (err) { console.error('Failed to fetch messages:', err); }
+  };
+
+  const handlePublishAnnouncement = async () => {
     if (!annTitle.trim()) return;
-    setBroadcasts([{ title: annTitle, audience: annAudience, date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }), status: "Published" }, ...broadcasts]);
-    setAnnouncePosted(true);
-    setAnnTitle(""); setAnnMsg("");
-    setTimeout(() => setAnnouncePosted(false), 3000);
+    setLoading(true);
+    try {
+      if (editingAnn) {
+        await fetch('/api/announcements', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: editingAnn.id, title: annTitle, message: annMsg, audience: annAudience, priority: annPriority, status: 'published', published_at: new Date().toISOString() }) });
+        setEditingAnn(null);
+      } else {
+        await fetch('/api/announcements', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: annTitle, message: annMsg, audience: annAudience, priority: annPriority, status: 'published' }) });
+      }
+      setAnnouncePosted(true);
+      setAnnTitle(''); setAnnMsg(''); setAnnPriority('normal');
+      fetchAnnouncements();
+      setTimeout(() => setAnnouncePosted(false), 3000);
+    } catch (err) { console.error(err); }
+    setLoading(false);
+  };
+
+  const handleSaveDraft = async () => {
+    if (!annTitle.trim()) return;
+    setLoading(true);
+    try {
+      if (editingAnn) {
+        await fetch('/api/announcements', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: editingAnn.id, title: annTitle, message: annMsg, audience: annAudience, priority: annPriority, status: 'draft' }) });
+        setEditingAnn(null);
+      } else {
+        await fetch('/api/announcements', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: annTitle, message: annMsg, audience: annAudience, priority: annPriority, status: 'draft' }) });
+      }
+      setAnnTitle(''); setAnnMsg(''); setAnnPriority('normal');
+      fetchAnnouncements();
+    } catch (err) { console.error(err); }
+    setLoading(false);
+  };
+
+  const handleDeleteAnnouncement = async (id: string) => {
+    try {
+      await fetch(`/api/announcements?id=${id}`, { method: 'DELETE' });
+      fetchAnnouncements();
+    } catch (err) { console.error(err); }
+  };
+
+  const handleArchiveAnnouncement = async (id: string) => {
+    try {
+      await fetch('/api/announcements', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, status: 'archived' }) });
+      fetchAnnouncements();
+    } catch (err) { console.error(err); }
+  };
+
+  const handleSendReply = async () => {
+    if (!replyMsg.trim() || !activeTicket) return;
+    try {
+      await fetch('/api/support', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'send_message', ticket_id: activeTicket.id, sender_id: 'admin', sender_name: 'Admin', sender_role: 'admin', message: replyMsg }) });
+      setReplyMsg('');
+      fetchMessages(activeTicket.id);
+      fetchTickets();
+    } catch (err) { console.error(err); }
+  };
+
+  const handleUpdateTicketStatus = async (id: string, status: string) => {
+    try {
+      await fetch('/api/support', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, status }) });
+      fetchTickets();
+      if (activeTicket?.id === id) setActiveTicket({ ...activeTicket, status });
+    } catch (err) { console.error(err); }
   };
 
   const handleCreateZoom = () => {
@@ -716,22 +802,44 @@ export default function AdminPortal() {
           {/* ANNOUNCEMENTS / COMMUNICATIONS */}
           {activeTab === "announcements" && (
             <div className="sn-mobile-content sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, animation: "fadeIn .5s ease" }}>
-              {announcePosted && <div style={{ position: "fixed", top: 20, right: 20, zIndex: 99999, background: "#e3f5eb", border: "1px solid #87d4a5", borderRadius: 10, padding: "14px 20px", boxShadow: "0 10px 30px rgba(5,20,45,.15)" }}><b style={{ color: "#075933" }}>✓ Broadcast Published</b></div>}
+              {announcePosted && <div style={{ position: "fixed", top: 20, right: 20, zIndex: 99999, background: "#e3f5eb", border: "1px solid #87d4a5", borderRadius: 10, padding: "14px 20px", boxShadow: "0 10px 30px rgba(5,20,45,.15)" }}><b style={{ color: "#075933" }}>✓ Announcement {editingAnn ? "Updated" : "Published"}</b></div>}
               <div style={card}>
-                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 6px" }}>Compose Broadcast</h2>
-                <p style={{ fontSize: 12.5, color: "#667085", margin: "0 0 14px", lineHeight: 1.5 }}>Send an official message to investors. Choose where it appears. Investors receive it in their Communications inbox.</p>
-                <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Title</label><input value={annTitle} onChange={(e) => setAnnTitle(e.target.value)} placeholder="Message title" style={fieldInput} /></div>
-                <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Audience</label><select value={annAudience} onChange={(e) => setAnnAudience(e.target.value)} style={fieldInput}><option>All Members</option><option>All Investors</option><option>Builders Only</option><option>Investor + Builder</option><option>Foundation Partners (First 125)</option><option>Specific Members</option><option>General Dashboard Announcement</option></select></div>
-                <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Message</label><textarea value={annMsg} onChange={(e) => setAnnMsg(e.target.value)} rows={4} placeholder="Write your official broadcast message..." style={{ ...fieldInput, resize: "none" as const }} /></div>
-                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}><button onClick={handlePublishAnnouncement} style={btnGreen}>Publish Broadcast</button><button style={btnOutline}>Save Draft</button></div>
-                <div style={{ marginTop: 14, borderLeft: "4px solid #bd8e28", background: "#fffaf0", color: "#604b17", padding: "12px 14px", fontSize: 12, borderRadius: "0 6px 6px 0" }}>This is a controlled broadcast channel. Investors receive official messages and may react — they cannot message each other.</div>
+                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 6px" }}>{editingAnn ? "Edit Announcement" : "Compose Announcement"}</h2>
+                <p style={{ fontSize: 12.5, color: "#667085", margin: "0 0 14px", lineHeight: 1.5 }}>Create and publish announcements. They appear in investor and builder dashboards based on audience targeting.</p>
+                <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Title</label><input value={annTitle} onChange={(e) => setAnnTitle(e.target.value)} placeholder="Announcement title" style={fieldInput} /></div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+                  <div><label style={fieldLabel}>Audience</label><select value={annAudience} onChange={(e) => setAnnAudience(e.target.value)} style={fieldInput}><option value="all">All Members</option><option value="investors">Investors Only</option><option value="builders">Builders Only</option><option value="foundation_partners">Foundation Partners</option></select></div>
+                  <div><label style={fieldLabel}>Priority</label><select value={annPriority} onChange={(e) => setAnnPriority(e.target.value)} style={fieldInput}><option value="normal">Normal</option><option value="urgent">Urgent</option></select></div>
+                </div>
+                <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Message</label><textarea value={annMsg} onChange={(e) => setAnnMsg(e.target.value)} rows={4} placeholder="Write your announcement..." style={{ ...fieldInput, resize: "none" as const }} /></div>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                  <button onClick={handlePublishAnnouncement} disabled={loading || !annTitle.trim()} style={{ ...btnGreen, opacity: loading || !annTitle.trim() ? 0.6 : 1 }}>{loading ? "Publishing..." : editingAnn ? "Update & Publish" : "Publish Now"}</button>
+                  <button onClick={handleSaveDraft} disabled={loading || !annTitle.trim()} style={{ ...btnOutline, opacity: loading || !annTitle.trim() ? 0.6 : 1 }}>Save Draft</button>
+                  {editingAnn && <button onClick={() => { setEditingAnn(null); setAnnTitle(""); setAnnMsg(""); setAnnPriority("normal"); }} style={btnOutline}>Cancel Edit</button>}
+                </div>
               </div>
               <div style={card}>
-                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Published Broadcasts</h2>
-                {broadcasts.map((b, i) => (
-                  <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderBottom: "1px solid #eef2f6", gap: 10, flexWrap: "wrap" }}>
-                    <div><b style={{ fontSize: 14 }}>{b.title}</b><br /><small style={{ color: "#667085" }}>{b.date} • To: {b.audience}</small></div>
-                    <span style={statusBadge("Published")}>{b.status}</span>
+                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>All Announcements</h2>
+                {broadcasts.length === 0 && <p style={{ color: "#667085", fontSize: 13 }}>No announcements yet. Create one to get started.</p>}
+                {broadcasts.map((b: any) => (
+                  <div key={b.id} style={{ padding: "12px 0", borderBottom: "1px solid #eef2f6" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, flexWrap: "wrap", marginBottom: 6 }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                          <b style={{ fontSize: 14 }}>{b.title}</b>
+                          {b.priority === "urgent" && <span style={{ background: "#fde8e8", color: "#dc2626", fontSize: 9, fontWeight: 900, padding: "2px 6px", borderRadius: 4 }}>URGENT</span>}
+                        </div>
+                        <small style={{ color: "#667085" }}>{b.published_at ? new Date(b.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Draft"} · To: {b.audience}</small>
+                        {b.message && <p style={{ fontSize: 12, color: "#4b5563", margin: "6px 0 0", lineHeight: 1.5 }}>{b.message.substring(0, 120)}{b.message.length > 120 ? "..." : ""}</p>}
+                      </div>
+                      <span style={statusBadge(b.status === "published" ? "Active" : b.status === "draft" ? "Pending" : "Inactive")}>{b.status}</span>
+                    </div>
+                    <div style={{ display: "flex", gap: 6, marginTop: 8 }}>
+                      <button onClick={() => { setEditingAnn(b); setAnnTitle(b.title); setAnnMsg(b.message || ""); setAnnAudience(b.audience || "all"); setAnnPriority(b.priority || "normal"); }} style={{ ...btnOutline, fontSize: 10, padding: "4px 10px" }}>Edit</button>
+                      {b.status === "published" && <button onClick={() => handleArchiveAnnouncement(b.id)} style={{ ...btnOutline, fontSize: 10, padding: "4px 10px", borderColor: "#667085", color: "#667085" }}>Archive</button>}
+                      {b.status === "draft" && <button onClick={async () => { await fetch("/api/announcements", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: b.id, status: "published", published_at: new Date().toISOString() }) }); fetchAnnouncements(); }} style={{ ...btnOutline, fontSize: 10, padding: "4px 10px", borderColor: "#075933", color: "#075933" }}>Publish</button>}
+                      <button onClick={() => handleDeleteAnnouncement(b.id)} style={{ ...btnOutline, fontSize: 10, padding: "4px 10px", borderColor: "#dc2626", color: "#dc2626" }}>Delete</button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -916,31 +1024,73 @@ export default function AdminPortal() {
           {activeTab === "chat" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
               <div style={card}>
-                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 6px" }}>Chat / Member Support</h2>
-                <p style={{ color: "#667085", fontSize: 13, margin: "0 0 16px" }}>View and respond to member support messages. Chat is a controlled channel between members and admin only.</p>
-                <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 16, minHeight: 340, border: "1px solid #e7e2d8", borderRadius: 12, overflow: "hidden" }}>
-                  <div style={{ background: "#f9f6ef", borderRight: "1px solid #e7e2d8", padding: "12px 0" }}>
-                    <div style={{ padding: "0 12px 12px", borderBottom: "1px solid #e7e2d8" }}><input placeholder="Search members..." style={{ ...fieldInput, padding: "10px 12px", fontSize: 13 }} /></div>
-                    {[{ name: "Maria Santos", msg: "When is the Q2 report?", unread: 2 }, { name: "David Chen", msg: "Application status?", unread: 1 }, { name: "James Wilson", msg: "Thanks!", unread: 0 }].map((c, i) => (
-                      <div key={i} style={{ padding: "12px 14px", borderBottom: "1px solid #eef2f6", cursor: "pointer", background: i === 0 ? "#fff" : "transparent" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                          <b style={{ fontSize: 13 }}>{c.name}</b>
-                          {c.unread > 0 && <span style={{ background: "#dc2626", color: "#fff", fontSize: 10, fontWeight: 900, padding: "2px 6px", borderRadius: 99 }}>{c.unread}</span>}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
+                  <div>
+                    <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 4px" }}>Support Inbox</h2>
+                    <p style={{ color: "#667085", fontSize: 13, margin: 0 }}>View and respond to member support tickets. All messages are stored in Supabase.</p>
+                  </div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <select value={ticketFilter} onChange={(e) => setTicketFilter(e.target.value)} style={{ ...fieldInput, width: "auto", padding: "8px 12px", fontSize: 12 }}>
+                      <option value="all">All Tickets</option><option value="open">Open</option><option value="pending">Pending</option><option value="resolved">Resolved</option><option value="closed">Closed</option>
+                    </select>
+                    <button onClick={fetchTickets} style={btnOutline}>Refresh</button>
+                  </div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: 0, minHeight: 420, border: "1px solid #e7e2d8", borderRadius: 12, overflow: "hidden" }}>
+                  {/* Ticket List */}
+                  <div style={{ background: "#f9f6ef", borderRight: "1px solid #e7e2d8", overflowY: "auto", maxHeight: 500 }}>
+                    {tickets.length === 0 && <p style={{ padding: 16, color: "#667085", fontSize: 13 }}>No support tickets yet.</p>}
+                    {tickets.filter((t: any) => ticketFilter === "all" || t.status === ticketFilter).map((t: any) => (
+                      <div key={t.id} onClick={() => { setActiveTicket(t); fetchMessages(t.id); }} style={{ padding: "14px 16px", borderBottom: "1px solid #eef2f6", cursor: "pointer", background: activeTicket?.id === t.id ? "#fff" : "transparent", transition: ".2s" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                          <b style={{ fontSize: 13 }}>{t.member_name || "Unknown"}</b>
+                          <span style={{ ...statusBadge(t.status === "open" ? "Active" : t.status === "pending" ? "Pending" : "Inactive"), fontSize: 9 }}>{t.status}</span>
                         </div>
-                        <p style={{ fontSize: 12, color: "#667085", margin: "3px 0 0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.msg}</p>
+                        <p style={{ fontSize: 12, color: "#667085", margin: "0 0 4px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.subject}</p>
+                        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                          <span style={{ fontSize: 10, color: "#9ca3af" }}>{new Date(t.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
+                          {t.priority === "urgent" && <span style={{ background: "#fde8e8", color: "#dc2626", fontSize: 8, fontWeight: 900, padding: "1px 4px", borderRadius: 3 }}>URGENT</span>}
+                          <span style={{ fontSize: 10, color: "#9ca3af" }}>{t.member_role}</span>
+                        </div>
                       </div>
                     ))}
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", padding: 14 }}>
-                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12, overflowY: "auto", marginBottom: 12 }}>
-                      <div style={{ alignSelf: "flex-start", background: "#f0f2f5", borderRadius: "12px 12px 12px 2px", padding: "10px 14px", maxWidth: "80%", fontSize: 13 }}><b>Maria Santos:</b> Hi, when will the Q2 report be published?</div>
-                      <div style={{ alignSelf: "flex-end", background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", borderRadius: "12px 12px 2px 12px", padding: "10px 14px", maxWidth: "80%", fontSize: 13 }}>The Q2 report is being finalized. It will be published by end of week.</div>
-                      <div style={{ alignSelf: "flex-start", background: "#f0f2f5", borderRadius: "12px 12px 12px 2px", padding: "10px 14px", maxWidth: "80%", fontSize: 13 }}><b>Maria Santos:</b> Thank you for the update!</div>
-                    </div>
-                    <div style={{ display: "flex", gap: 10 }}>
-                      <input placeholder="Type a reply..." style={{ flex: 1, ...fieldInput, padding: "10px 14px" }} />
-                      <button style={btnGreen}>Send</button>
-                    </div>
+                  {/* Message Thread */}
+                  <div style={{ display: "flex", flexDirection: "column", padding: 0 }}>
+                    {activeTicket ? (
+                      <>
+                        <div style={{ padding: "14px 18px", borderBottom: "1px solid #e7e2d8", background: "#fff" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+                            <div>
+                              <b style={{ fontSize: 15 }}>{activeTicket.member_name}</b>
+                              <span style={{ marginLeft: 8, fontSize: 11, color: "#667085" }}>{activeTicket.member_email}</span>
+                            </div>
+                            <div style={{ display: "flex", gap: 6 }}>
+                              {activeTicket.status !== "resolved" && <button onClick={() => handleUpdateTicketStatus(activeTicket.id, "resolved")} style={{ ...btnOutline, fontSize: 10, padding: "4px 10px", borderColor: "#075933", color: "#075933" }}>Resolve</button>}
+                              {activeTicket.status !== "closed" && <button onClick={() => handleUpdateTicketStatus(activeTicket.id, "closed")} style={{ ...btnOutline, fontSize: 10, padding: "4px 10px", borderColor: "#667085", color: "#667085" }}>Close</button>}
+                              {activeTicket.status === "closed" && <button onClick={() => handleUpdateTicketStatus(activeTicket.id, "open")} style={{ ...btnOutline, fontSize: 10, padding: "4px 10px", borderColor: "#1e4fa3", color: "#1e4fa3" }}>Reopen</button>}
+                            </div>
+                          </div>
+                          <div style={{ fontSize: 12, color: "#667085", marginTop: 4 }}>Subject: {activeTicket.subject} · Priority: {activeTicket.priority} · Status: {activeTicket.status}</div>
+                        </div>
+                        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 10, overflowY: "auto", padding: 16, maxHeight: 280, background: "#fafaf8" }}>
+                          {ticketMessages.length === 0 && <p style={{ color: "#9ca3af", fontSize: 13, textAlign: "center", marginTop: 40 }}>No messages yet.</p>}
+                          {ticketMessages.map((m: any) => (
+                            <div key={m.id} style={{ alignSelf: m.sender_role === "admin" ? "flex-end" : "flex-start", background: m.sender_role === "admin" ? "linear-gradient(135deg,#075933,#0b7346)" : "#f0f2f5", color: m.sender_role === "admin" ? "#fff" : "#071a33", borderRadius: m.sender_role === "admin" ? "12px 12px 2px 12px" : "12px 12px 12px 2px", padding: "10px 14px", maxWidth: "80%", fontSize: 13 }}>
+                              {m.sender_role !== "admin" && <b style={{ fontSize: 11, display: "block", marginBottom: 3 }}>{m.sender_name}</b>}
+                              {m.message}
+                              <div style={{ fontSize: 10, opacity: 0.7, marginTop: 4 }}>{new Date(m.created_at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</div>
+                            </div>
+                          ))}
+                        </div>
+                        <div style={{ display: "flex", gap: 10, padding: "12px 16px", borderTop: "1px solid #e7e2d8" }}>
+                          <input value={replyMsg} onChange={(e) => setReplyMsg(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") handleSendReply(); }} placeholder="Type a reply..." style={{ flex: 1, ...fieldInput, padding: "10px 14px" }} />
+                          <button onClick={handleSendReply} disabled={!replyMsg.trim()} style={{ ...btnGreen, opacity: replyMsg.trim() ? 1 : 0.5 }}>Send</button>
+                        </div>
+                      </>
+                    ) : (
+                      <div style={{ display: "grid", placeItems: "center", height: "100%", color: "#9ca3af", fontSize: 14, padding: 20 }}>Select a ticket to view the conversation</div>
+                    )}
                   </div>
                 </div>
               </div>

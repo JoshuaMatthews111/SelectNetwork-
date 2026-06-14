@@ -42,20 +42,20 @@ const matrixMembers = {
   ],
 };
 
-const MEMBER_ROLE: "Investor" | "Investor-Builder" = "Investor-Builder";
+const MEMBER_ROLE: "Investor" | "Builder" = "Builder";
 
 const allTabs = [
-  { id: "overview", label: "Overview", ico: <LayoutDashboard size={20} />, roles: ["Investor", "Investor-Builder"] },
-  { id: "units", label: "Founder Units", ico: <Star size={20} />, roles: ["Investor", "Investor-Builder"] },
-  { id: "reports", label: "Reports & Documents", ico: <TrendingUp size={20} />, roles: ["Investor", "Investor-Builder"] },
-  { id: "docs", label: "Documents", ico: <FolderOpen size={20} />, roles: ["Investor", "Investor-Builder"] },
-  { id: "withdrawals", label: "Withdrawals", ico: <Wallet size={20} />, roles: ["Investor", "Investor-Builder"] },
-  { id: "matrix", label: "Referral Matrix", ico: <Network size={20} />, roles: ["Investor-Builder"] },
-  { id: "announcements", label: "Investor Communications", ico: <Megaphone size={20} />, roles: ["Investor", "Investor-Builder"] },
-  { id: "chat", label: "Chat", ico: <MessageSquare size={20} />, roles: ["Investor", "Investor-Builder"] },
-  { id: "milestones", label: "Milestones", ico: <Award size={20} />, roles: ["Investor", "Investor-Builder"] },
-  { id: "certificates", label: "Certificates", ico: <FileText size={20} />, roles: ["Investor", "Investor-Builder"] },
-  { id: "settings", label: "Settings", ico: <Settings size={20} />, roles: ["Investor", "Investor-Builder"] },
+  { id: "overview", label: "Overview", ico: <LayoutDashboard size={20} />, roles: ["Investor", "Builder"] },
+  { id: "units", label: "Founder Units", ico: <Star size={20} />, roles: ["Investor", "Builder"] },
+  { id: "reports", label: "Reports & Documents", ico: <TrendingUp size={20} />, roles: ["Investor", "Builder"] },
+  { id: "docs", label: "Documents", ico: <FolderOpen size={20} />, roles: ["Investor", "Builder"] },
+  { id: "withdrawals", label: "Withdrawals", ico: <Wallet size={20} />, roles: ["Investor", "Builder"] },
+  { id: "matrix", label: "Referral Matrix", ico: <Network size={20} />, roles: ["Builder"] },
+  { id: "announcements", label: "Announcements", ico: <Megaphone size={20} />, roles: ["Investor", "Builder"] },
+  { id: "chat", label: "Support / Chat", ico: <MessageSquare size={20} />, roles: ["Investor", "Builder"] },
+  { id: "milestones", label: "Milestones", ico: <Award size={20} />, roles: ["Investor", "Builder"] },
+  { id: "certificates", label: "Certificates", ico: <FileText size={20} />, roles: ["Investor", "Builder"] },
+  { id: "settings", label: "Settings", ico: <Settings size={20} />, roles: ["Investor", "Builder"] },
 ];
 
 const tabs = allTabs.filter(t => t.roles.includes(MEMBER_ROLE));
@@ -69,10 +69,70 @@ export default function InvestorPortal() {
   const [matrixAnimated, setMatrixAnimated] = useState(false);
   const [chartDraw, setChartDraw] = useState(false);
   const [donutAnim, setDonutAnim] = useState(false);
+  // Supabase-backed announcements
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  // Supabase-backed support
+  const [myTickets, setMyTickets] = useState<any[]>([]);
+  const [activeTicket, setActiveTicket] = useState<any>(null);
+  const [ticketMessages, setTicketMessages] = useState<any[]>([]);
+  const [chatMsg, setChatMsg] = useState("");
+  const [newTicketSubject, setNewTicketSubject] = useState("");
+  const [newTicketMsg, setNewTicketMsg] = useState("");
+  const [showNewTicket, setShowNewTicket] = useState(false);
 
   const switchTab = (id: string) => { setActiveTab(id); setSidebarOpen(false); };
 
-  useEffect(() => { setTimeout(() => setChartDraw(true), 300); setTimeout(() => setDonutAnim(true), 600); }, []);
+  useEffect(() => { setTimeout(() => setChartDraw(true), 300); setTimeout(() => setDonutAnim(true), 600); fetchAnnouncements(); fetchMyTickets(); }, []);
+
+  const fetchAnnouncements = async () => {
+    try {
+      const role = MEMBER_ROLE === "Builder" ? "builder" : "investor";
+      const res = await fetch(`/api/announcements?role=${role}`);
+      if (res.ok) { const data = await res.json(); setAnnouncements(data); }
+    } catch (err) { console.error(err); }
+  };
+
+  const fetchMyTickets = async () => {
+    try {
+      const res = await fetch('/api/support?member_id=lorenzo');
+      if (res.ok) { const data = await res.json(); setMyTickets(data.tickets || []); }
+    } catch (err) { console.error(err); }
+  };
+
+  const fetchMessages = async (ticketId: string) => {
+    try {
+      const res = await fetch(`/api/support?ticket_id=${ticketId}`);
+      if (res.ok) { const data = await res.json(); setTicketMessages(data.messages || []); }
+    } catch (err) { console.error(err); }
+  };
+
+  const handleCreateTicket = async () => {
+    if (!newTicketSubject.trim()) return;
+    try {
+      const res = await fetch('/api/support', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'create_ticket', member_id: 'lorenzo', member_name: 'Lorenzo', member_email: 'lorenzo@selectnetwork.com', member_role: MEMBER_ROLE === 'Builder' ? 'builder' : 'investor', subject: newTicketSubject, message: newTicketMsg, priority: 'normal' })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setNewTicketSubject(''); setNewTicketMsg(''); setShowNewTicket(false);
+        fetchMyTickets();
+        if (data?.[0]) { setActiveTicket(data[0]); fetchMessages(data[0].id); }
+      }
+    } catch (err) { console.error(err); }
+  };
+
+  const handleSendMessage = async () => {
+    if (!chatMsg.trim() || !activeTicket) return;
+    try {
+      await fetch('/api/support', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'send_message', ticket_id: activeTicket.id, sender_id: 'lorenzo', sender_name: 'Lorenzo', sender_role: 'member', message: chatMsg })
+      });
+      setChatMsg('');
+      fetchMessages(activeTicket.id);
+    } catch (err) { console.error(err); }
+  };
   useEffect(() => { if (activeTab === "matrix") setTimeout(() => setMatrixAnimated(true), 100); }, [activeTab]);
 
   const units = useCountUp(50);
@@ -558,33 +618,32 @@ export default function InvestorPortal() {
               <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", borderRadius: 14, padding: "20px 24px", color: "#fff", marginBottom: 18, display: "flex", alignItems: "center", gap: 14 }}>
                 <Megaphone size={26} color="#ffd46f" />
                 <div>
-                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: 0 }}>Investor Communications</h2>
-                  <p style={{ margin: "4px 0 0", fontSize: 12.5, color: "#c6d2e1" }}>Official messages and broadcasts from the Select Network team. This is a one-way communication channel — replies are handled privately by the admin team.</p>
+                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: 0 }}>Announcements</h2>
+                  <p style={{ margin: "4px 0 0", fontSize: 12.5, color: "#c6d2e1" }}>Official announcements from the Select Network team. {announcements.length > 0 ? `${announcements.length} announcement${announcements.length > 1 ? "s" : ""}.` : ""}</p>
                 </div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {[
-                  { title: "Q2 2025 Investment Report is now available", body: "The Q2 report has been published to your Documents and Reports area. Review the latest operating snapshot and quarterly progress.", type: "New Report", date: "May 28, 2025", pinned: true },
-                  { title: "Upcoming Investor Webinar — Network Expansion", body: "Join the Select Network team for a live overview of platform progress and the path ahead. A calendar invite will follow.", type: "Event", date: "May 25, 2025", pinned: false },
-                  { title: "New Expansion Milestone Reached", body: "Thank you to our early members. We've reached an important milestone in building the foundation of the network.", type: "Growth", date: "May 20, 2025", pinned: false },
-                ].map((a, i) => (
-                  <div key={i} style={{ background: "#fff", border: "1px solid #e7e2d8", borderLeft: a.pinned ? "4px solid #bd8e28" : "1px solid #e7e2d8", borderRadius: 12, padding: "18px 20px", boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
+                {announcements.length === 0 && (
+                  <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 12, padding: "40px 20px", textAlign: "center", color: "#667085" }}>
+                    <Megaphone size={32} color="#e7e2d8" style={{ margin: "0 auto 12px", display: "block" }} />
+                    <p style={{ fontSize: 14, margin: 0 }}>No announcements yet. Check back soon.</p>
+                  </div>
+                )}
+                {announcements.map((a: any) => (
+                  <div key={a.id} style={{ background: "#fff", border: "1px solid #e7e2d8", borderLeft: a.priority === "urgent" ? "4px solid #dc2626" : "1px solid #e7e2d8", borderRadius: 12, padding: "18px 20px", boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap" }}>
                       <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
                         <div style={{ width: 38, height: 38, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 13, flexShrink: 0 }}>SN</div>
                         <div>
                           <b style={{ fontSize: 15 }}>{a.title}</b>
-                          <div style={{ fontSize: 11.5, color: "#667085", margin: "2px 0 8px" }}>Select Network Team • {a.date}</div>
-                          <p style={{ margin: 0, fontSize: 13.5, color: "#3d4a57", lineHeight: 1.6, maxWidth: 640 }}>{a.body}</p>
+                          <div style={{ fontSize: 11.5, color: "#667085", margin: "2px 0 8px" }}>Select Network Team · {a.published_at ? new Date(a.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recently"}</div>
+                          {a.message && <p style={{ margin: 0, fontSize: 13.5, color: "#3d4a57", lineHeight: 1.6, maxWidth: 640 }}>{a.message}</p>}
                         </div>
                       </div>
-                      <span style={{ padding: "4px 10px", borderRadius: 99, background: a.type === "New Report" ? "#e3f5eb" : "#fffaf0", color: a.type === "New Report" ? "#087345" : "#bd8e28", fontSize: 10, fontWeight: 900, flexShrink: 0 }}>{a.type}</span>
-                    </div>
-                    <div style={{ display: "flex", gap: 8, marginTop: 14, paddingTop: 12, borderTop: "1px solid #f0f2f5", alignItems: "center" }}>
-                      <span style={{ fontSize: 11, color: "#667085", fontWeight: 700, marginRight: 4 }}>React:</span>
-                      <button style={{ fontSize: 16, background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 99, padding: "4px 10px", cursor: "pointer" }}>👍</button>
-                      <button style={{ fontSize: 16, background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 99, padding: "4px 10px", cursor: "pointer" }}>❤️</button>
-                      <button style={{ fontSize: 16, background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 99, padding: "4px 10px", cursor: "pointer" }}>🎉</button>
+                      <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                        {a.priority === "urgent" && <span style={{ padding: "4px 10px", borderRadius: 99, background: "#fde8e8", color: "#dc2626", fontSize: 10, fontWeight: 900 }}>Urgent</span>}
+                        <span style={{ padding: "4px 10px", borderRadius: 99, background: "#e3f5eb", color: "#087345", fontSize: 10, fontWeight: 900 }}>{a.audience === "all" ? "All" : a.audience}</span>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -592,22 +651,73 @@ export default function InvestorPortal() {
             </div>
           )}
 
-          {/* ─── CHAT ─── */}
+          {/* ─── CHAT / SUPPORT ─── */}
           {activeTab === "chat" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
               <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
-                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 6px" }}>Chat</h2>
-                <div style={{ borderLeft: "4px solid #bd8e28", background: "#fffaf0", color: "#604b17", padding: "12px 14px", fontSize: 12.5, borderRadius: "0 6px 6px 0", marginBottom: 16, lineHeight: 1.6 }}>
-                  Chat is a controlled communication channel. Use it to message the Select Network support team directly. Member-to-member messaging is not available.
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
+                  <div>
+                    <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 4px" }}>Support / Chat</h2>
+                    <p style={{ color: "#667085", fontSize: 12.5, margin: 0 }}>Contact the Select Network support team. All conversations are private.</p>
+                  </div>
+                  <button onClick={() => setShowNewTicket(true)} style={{ background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", border: 0, borderRadius: 8, padding: "10px 16px", fontWeight: 900, fontSize: 12, textTransform: "uppercase", cursor: "pointer" }}>+ New Ticket</button>
                 </div>
-                <div style={{ background: "#f9f6ef", borderRadius: 12, border: "1px solid #e7e2d8", padding: 20, minHeight: 200, display: "flex", flexDirection: "column", gap: 12 }}>
-                  <div style={{ alignSelf: "flex-end", background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", borderRadius: "12px 12px 2px 12px", padding: "10px 14px", maxWidth: "80%", fontSize: 13 }}>Hi, when will the Q2 report be published?</div>
-                  <div style={{ alignSelf: "flex-start", background: "#fff", border: "1px solid #e7e2d8", borderRadius: "12px 12px 12px 2px", padding: "10px 14px", maxWidth: "80%", fontSize: 13 }}><b>Support:</b> The Q2 report is being finalized. It will be published by end of week.</div>
-                  <div style={{ alignSelf: "flex-end", background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", borderRadius: "12px 12px 2px 12px", padding: "10px 14px", maxWidth: "80%", fontSize: 13 }}>Thank you for the update!</div>
-                </div>
-                <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
-                  <input placeholder="Type a message..." style={{ flex: 1, background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 8, padding: "12px 16px", fontSize: 14, outline: "none" }} />
-                  <button style={{ background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", border: 0, borderRadius: 8, padding: "12px 18px", fontWeight: 900, fontSize: 12, textTransform: "uppercase", cursor: "pointer" }}>Send</button>
+
+                {/* New Ticket Form */}
+                {showNewTicket && (
+                  <div style={{ background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 12, padding: 20, marginBottom: 16 }}>
+                    <h3 style={{ margin: "0 0 12px", fontSize: 16, fontFamily: "Georgia, serif", fontWeight: 400 }}>Create Support Ticket</h3>
+                    <div style={{ marginBottom: 10 }}><label style={{ display: "block", fontSize: 11, fontWeight: 900, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 4 }}>Subject</label><input value={newTicketSubject} onChange={(e) => setNewTicketSubject(e.target.value)} placeholder="What do you need help with?" style={{ width: "100%", background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "10px 14px", fontSize: 13, outline: "none" }} /></div>
+                    <div style={{ marginBottom: 12 }}><label style={{ display: "block", fontSize: 11, fontWeight: 900, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 4 }}>Message</label><textarea value={newTicketMsg} onChange={(e) => setNewTicketMsg(e.target.value)} rows={3} placeholder="Describe your question or issue..." style={{ width: "100%", background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "10px 14px", fontSize: 13, outline: "none", resize: "none" as const }} /></div>
+                    <div style={{ display: "flex", gap: 10 }}>
+                      <button onClick={handleCreateTicket} disabled={!newTicketSubject.trim()} style={{ background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", border: 0, borderRadius: 8, padding: "10px 16px", fontWeight: 900, fontSize: 12, cursor: "pointer", opacity: newTicketSubject.trim() ? 1 : 0.5 }}>Submit Ticket</button>
+                      <button onClick={() => setShowNewTicket(false)} style={{ background: "#fff", color: "#667085", border: "1px solid #e7e2d8", borderRadius: 8, padding: "10px 16px", fontWeight: 900, fontSize: 12, cursor: "pointer" }}>Cancel</button>
+                    </div>
+                  </div>
+                )}
+
+                <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 0, minHeight: 360, border: "1px solid #e7e2d8", borderRadius: 12, overflow: "hidden" }}>
+                  {/* Ticket List */}
+                  <div style={{ background: "#f9f6ef", borderRight: "1px solid #e7e2d8", overflowY: "auto", maxHeight: 400 }}>
+                    {myTickets.length === 0 && <p style={{ padding: 16, color: "#667085", fontSize: 13 }}>No support tickets. Click &quot;+ New Ticket&quot; to start.</p>}
+                    {myTickets.map((t: any) => (
+                      <div key={t.id} onClick={() => { setActiveTicket(t); fetchMessages(t.id); }} style={{ padding: "12px 14px", borderBottom: "1px solid #eef2f6", cursor: "pointer", background: activeTicket?.id === t.id ? "#fff" : "transparent", transition: ".2s" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 2 }}>
+                          <b style={{ fontSize: 12 }}>{t.subject}</b>
+                          <span style={{ padding: "2px 6px", borderRadius: 99, background: t.status === "open" ? "#e3f5eb" : t.status === "resolved" ? "#e7f0ff" : "#f0f2f5", color: t.status === "open" ? "#087345" : t.status === "resolved" ? "#1e4fa3" : "#667085", fontSize: 9, fontWeight: 900 }}>{t.status}</span>
+                        </div>
+                        <span style={{ fontSize: 10, color: "#9ca3af" }}>{new Date(t.updated_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Message Thread */}
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    {activeTicket ? (
+                      <>
+                        <div style={{ padding: "10px 16px", borderBottom: "1px solid #e7e2d8", background: "#fff", fontSize: 13 }}>
+                          <b>{activeTicket.subject}</b> · <span style={{ color: "#667085" }}>{activeTicket.status}</span>
+                        </div>
+                        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 10, overflowY: "auto", padding: 14, maxHeight: 260, background: "#fafaf8" }}>
+                          {ticketMessages.length === 0 && <p style={{ color: "#9ca3af", fontSize: 13, textAlign: "center", marginTop: 30 }}>No messages yet.</p>}
+                          {ticketMessages.map((m: any) => (
+                            <div key={m.id} style={{ alignSelf: m.sender_role === "member" ? "flex-end" : "flex-start", background: m.sender_role === "member" ? "linear-gradient(135deg,#075933,#0b7346)" : "#fff", color: m.sender_role === "member" ? "#fff" : "#071a33", border: m.sender_role === "admin" ? "1px solid #e7e2d8" : "none", borderRadius: m.sender_role === "member" ? "12px 12px 2px 12px" : "12px 12px 12px 2px", padding: "10px 14px", maxWidth: "80%", fontSize: 13 }}>
+                              {m.sender_role === "admin" && <b style={{ fontSize: 11, display: "block", marginBottom: 3, color: "#075933" }}>Support</b>}
+                              {m.message}
+                              <div style={{ fontSize: 10, opacity: 0.6, marginTop: 4 }}>{new Date(m.created_at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</div>
+                            </div>
+                          ))}
+                        </div>
+                        {activeTicket.status !== "closed" && (
+                          <div style={{ display: "flex", gap: 10, padding: "10px 14px", borderTop: "1px solid #e7e2d8" }}>
+                            <input value={chatMsg} onChange={(e) => setChatMsg(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") handleSendMessage(); }} placeholder="Type a message..." style={{ flex: 1, background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 8, padding: "10px 14px", fontSize: 13, outline: "none" }} />
+                            <button onClick={handleSendMessage} disabled={!chatMsg.trim()} style={{ background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", border: 0, borderRadius: 8, padding: "10px 16px", fontWeight: 900, fontSize: 12, cursor: "pointer", opacity: chatMsg.trim() ? 1 : 0.5 }}>Send</button>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div style={{ display: "grid", placeItems: "center", height: "100%", color: "#9ca3af", fontSize: 13, padding: 20 }}>Select a ticket or create a new one</div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

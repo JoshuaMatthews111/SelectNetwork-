@@ -7,13 +7,54 @@ export interface Member {
   email: string;
   phone?: string;
   status: 'active' | 'pending' | 'inactive';
-  role: 'investor' | 'builder' | 'investor+builder' | 'admin';
+  role: 'investor' | 'builder' | 'admin';
   units: number;
   invested_amount: number;
   joined_date: string;
   labels?: string[];
   location?: string;
   referral_source?: string;
+  sponsor_id?: string;
+  avatar_url?: string;
+}
+
+export interface Announcement {
+  id: string;
+  title: string;
+  message: string;
+  audience: 'all' | 'investors' | 'builders' | 'foundation_partners' | 'specific';
+  priority: 'normal' | 'urgent';
+  status: 'draft' | 'published' | 'archived';
+  attachment_url?: string;
+  attachment_name?: string;
+  created_by: string;
+  published_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SupportTicket {
+  id: string;
+  member_id: string;
+  member_name: string;
+  member_email: string;
+  member_role: string;
+  subject: string;
+  status: 'open' | 'pending' | 'resolved' | 'closed';
+  priority: 'normal' | 'important' | 'urgent';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SupportMessage {
+  id: string;
+  ticket_id: string;
+  sender_id: string;
+  sender_name: string;
+  sender_role: 'member' | 'admin';
+  message: string;
+  read: boolean;
+  created_at: string;
 }
 
 export interface Application {

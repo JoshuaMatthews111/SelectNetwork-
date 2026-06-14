@@ -118,6 +118,8 @@ export default function LoginPage() {
       
       if (profile?.role === 'admin') {
         router.push('/admin');
+      } else if (profile?.role === 'builder') {
+        router.push('/investor');
       } else {
         router.push('/investor');
       }
