@@ -42,7 +42,7 @@ const matrixMembers = {
   ],
 };
 
-const MEMBER_ROLE: "Investor" | "Builder" = "Builder";
+const MEMBER_ROLE: "Investor" | "Builder" = "Investor";
 
 const allTabs = [
   { id: "overview", label: "Overview", ico: <LayoutDashboard size={20} />, roles: ["Investor", "Builder"] },
@@ -79,6 +79,10 @@ export default function InvestorPortal() {
   const [newTicketSubject, setNewTicketSubject] = useState("");
   const [newTicketMsg, setNewTicketMsg] = useState("");
   const [showNewTicket, setShowNewTicket] = useState(false);
+  // Certificate generation
+  const [certName, setCertName] = useState("");
+  const [certUnits, setCertUnits] = useState(10);
+  const [certGenerated, setCertGenerated] = useState(false);
 
   const switchTab = (id: string) => { setActiveTab(id); setSidebarOpen(false); };
 
@@ -209,7 +213,7 @@ export default function InvestorPortal() {
               <span style={{ position: "relative", cursor: "pointer" }}><Mail size={22} color="#667085" /><span style={{ position: "absolute", top: -4, right: -8, background: "#dc2626", color: "#fff", fontSize: 10, fontWeight: 900, padding: "2px 5px", borderRadius: 99 }}>1</span></span>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <div style={{ width: 38, height: 38, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 16 }}>L</div>
-                <div className="sn-user-desktop"><b style={{ fontSize: 14 }}>Lorenzo</b> <span style={{ background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "2px 7px", borderRadius: 4, verticalAlign: "middle" }}>Foundation Partner</span><br /><small style={{ color: "#667085" }}>Founder · Investor + Builder</small></div>
+                <div className="sn-user-desktop"><b style={{ fontSize: 14 }}>Lorenzo</b> <span style={{ background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "2px 7px", borderRadius: 4, verticalAlign: "middle" }}>Investor</span><br /><small style={{ color: "#667085" }}>Member · Investor</small></div>
               </div>
             </div>
           </div>
@@ -754,28 +758,79 @@ export default function InvestorPortal() {
           {/* ─── CERTIFICATES ─── */}
           {activeTab === "certificates" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
-              <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
-                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 22, margin: "0 0 14px" }}>Certificates & Achievements</h2>
-                <p style={{ color: "#667085", fontSize: 13, marginBottom: 18 }}>Download your earned certificates and track pending achievements.</p>
-                {[
-                  { title: "Foundation Partner Certificate", date: "May 20, 2025", available: true },
-                  { title: "Participation Certificate", date: "May 20, 2025", available: true },
-                  { title: "Investor-Builder Achievement — 10 Referrals", date: "Jun 5, 2025", available: true },
-                  { title: "Top Builder Q2 2025", date: "Pending", available: false },
-                ].map((c, i) => (
-                  <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 0", borderBottom: "1px solid #eef2f6", flexWrap: "wrap", gap: 8 }}>
-                    <div>
-                      <b style={{ fontSize: 14 }}>{c.title}</b>
-                      <div style={{ fontSize: 12, color: "#667085" }}>{c.date}</div>
-                    </div>
-                    {c.available ? (
-                      <button style={{ background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", border: 0, borderRadius: 8, padding: "8px 16px", fontWeight: 900, fontSize: 11, textTransform: "uppercase", cursor: "pointer" }}>Download PDF</button>
-                    ) : (
-                      <span style={{ padding: "4px 10px", borderRadius: 99, background: "#f0f2f5", color: "#667085", fontSize: 11, fontWeight: 900 }}>Pending</span>
-                    )}
+              {/* Certificate Generation */}
+              {!certGenerated ? (
+                <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 32, boxShadow: "0 8px 24px rgba(5,20,45,.06)", maxWidth: 560, margin: "0 auto" }}>
+                  <div style={{ textAlign: "center", marginBottom: 24 }}>
+                    <div style={{ width: 64, height: 64, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", display: "grid", placeItems: "center", margin: "0 auto 16px" }}><Award size={28} color="#ffd46f" /></div>
+                    <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 24, margin: "0 0 8px" }}>Generate Your Investment Certificate</h2>
+                    <p style={{ color: "#667085", fontSize: 13.5, lineHeight: 1.6 }}>Enter your full name and select how many units you have invested. A branded certificate will be issued directly to your dashboard.</p>
                   </div>
-                ))}
-              </div>
+                  <div style={{ marginBottom: 16 }}>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 900, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 6 }}>Full Name (as it will appear on certificate)</label>
+                    <input value={certName} onChange={(e) => setCertName(e.target.value)} placeholder="Enter your full legal name" style={{ width: "100%", background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 8, padding: "14px 16px", fontSize: 15, outline: "none" }} />
+                  </div>
+                  <div style={{ marginBottom: 20 }}>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 900, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 6 }}>Units Invested</label>
+                    <select value={certUnits} onChange={(e) => setCertUnits(Number(e.target.value))} style={{ width: "100%", background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 8, padding: "14px 16px", fontSize: 15, outline: "none" }}>
+                      {[5, 10, 15, 20, 25, 30, 40, 50, 75, 100].map(u => <option key={u} value={u}>{u} Units (${(u * 100).toLocaleString()})</option>)}
+                    </select>
+                  </div>
+                  <button onClick={() => { if (certName.trim()) setCertGenerated(true); }} disabled={!certName.trim()} style={{ width: "100%", background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", border: 0, borderRadius: 10, padding: "16px 20px", fontWeight: 900, fontSize: 14, textTransform: "uppercase", letterSpacing: ".04em", cursor: "pointer", opacity: certName.trim() ? 1 : 0.5, transition: ".25s" }}>Generate Certificate</button>
+                </div>
+              ) : (
+                <div>
+                  {/* Generated Certificate Display */}
+                  <div id="cert-display" style={{ background: "#fff", border: "3px solid #bd8e28", borderRadius: 16, padding: "48px 56px", maxWidth: 820, margin: "0 auto", boxShadow: "0 20px 60px rgba(5,20,45,.12)", position: "relative", overflow: "hidden" }}>
+                    {/* Decorative corner elements */}
+                    <div style={{ position: "absolute", top: 16, left: 16, width: 60, height: 60, borderTop: "3px solid #d5a83d", borderLeft: "3px solid #d5a83d", borderRadius: "4px 0 0 0" }} />
+                    <div style={{ position: "absolute", top: 16, right: 16, width: 60, height: 60, borderTop: "3px solid #d5a83d", borderRight: "3px solid #d5a83d", borderRadius: "0 4px 0 0" }} />
+                    <div style={{ position: "absolute", bottom: 16, left: 16, width: 60, height: 60, borderBottom: "3px solid #d5a83d", borderLeft: "3px solid #d5a83d", borderRadius: "0 0 0 4px" }} />
+                    <div style={{ position: "absolute", bottom: 16, right: 16, width: 60, height: 60, borderBottom: "3px solid #d5a83d", borderRight: "3px solid #d5a83d", borderRadius: "0 0 4px 0" }} />
+                    
+                    <div style={{ textAlign: "center" }}>
+                      {/* Logo area */}
+                      <div style={{ marginBottom: 20 }}>
+                        <Image src="/assets/select-network/select-network-logo.png" alt="Select Network" width={280} height={70} style={{ width: 240, height: "auto", margin: "0 auto", display: "block" }} />
+                      </div>
+                      <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: ".2em", textTransform: "uppercase", color: "#bd8e28", marginBottom: 8 }}>Certificate of Investment</div>
+                      <div style={{ width: 80, height: 2, background: "linear-gradient(90deg,transparent,#d5a83d,transparent)", margin: "0 auto 20px" }} />
+                      
+                      <p style={{ fontSize: 14, color: "#667085", margin: "0 0 12px" }}>This certifies that</p>
+                      <h1 style={{ fontFamily: "Georgia, serif", fontSize: 36, fontWeight: 400, color: "#071a33", margin: "0 0 12px", borderBottom: "2px solid #e7e2d8", display: "inline-block", padding: "0 30px 8px" }}>{certName}</h1>
+                      <p style={{ fontSize: 14, color: "#667085", margin: "16px 0 8px" }}>has successfully invested in</p>
+                      <div style={{ fontSize: 48, fontWeight: 900, color: "#075933", margin: "8px 0" }}>{certUnits} Founder Units</div>
+                      <p style={{ fontSize: 16, color: "#071a33", margin: "4px 0 24px" }}>valued at <b style={{ color: "#bd8e28" }}>${(certUnits * 100).toLocaleString()}</b></p>
+                      <div style={{ width: 60, height: 2, background: "linear-gradient(90deg,transparent,#d5a83d,transparent)", margin: "0 auto 20px" }} />
+                      
+                      <p style={{ fontSize: 13, color: "#667085", margin: "0 0 8px" }}>through The Select Network investment structure</p>
+                      <p style={{ fontSize: 12, color: "#9aa0ab", margin: "0 0 24px" }}>Issued: {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>
+                      
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 30, paddingTop: 20, borderTop: "1px solid #eef2f6" }}>
+                        <div style={{ textAlign: "left" }}>
+                          <div style={{ width: 140, borderBottom: "1px solid #071a33", marginBottom: 4 }} />
+                          <div style={{ fontSize: 11, color: "#667085" }}>Authorized Signature</div>
+                        </div>
+                        <div style={{ textAlign: "center" }}>
+                          <div style={{ width: 60, height: 60, borderRadius: "50%", border: "2px solid #bd8e28", display: "grid", placeItems: "center", margin: "0 auto 4px" }}>
+                            <Diamond size={24} color="#bd8e28" />
+                          </div>
+                          <div style={{ fontSize: 9, color: "#bd8e28", fontWeight: 900, letterSpacing: ".1em" }}>VERIFIED</div>
+                        </div>
+                        <div style={{ textAlign: "right" }}>
+                          <div style={{ width: 140, borderBottom: "1px solid #071a33", marginBottom: 4 }} />
+                          <div style={{ fontSize: 11, color: "#667085" }}>Date of Issue</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Actions below certificate */}
+                  <div style={{ display: "flex", justifyContent: "center", gap: 14, marginTop: 24 }}>
+                    <button onClick={() => setCertGenerated(false)} style={{ background: "#fff", color: "#667085", border: "1px solid #e7e2d8", borderRadius: 8, padding: "12px 20px", fontWeight: 900, fontSize: 12, cursor: "pointer" }}>← Generate Another</button>
+                    <button onClick={() => { if (typeof window !== "undefined") window.print(); }} style={{ background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", border: 0, borderRadius: 8, padding: "12px 20px", fontWeight: 900, fontSize: 12, textTransform: "uppercase", cursor: "pointer" }}>Print / Save as PDF</button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

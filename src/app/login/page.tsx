@@ -94,6 +94,12 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    // Demo login bypass
+    if ((email === "demo" || email === "demo@demo.com") && password === "demo") {
+      router.push('/investor');
+      return;
+    }
     
     const supabase = getSupabaseBrowser();
     const { error: authError } = await supabase.auth.signInWithPassword({
@@ -119,7 +125,7 @@ export default function LoginPage() {
       if (profile?.role === 'admin') {
         router.push('/admin');
       } else if (profile?.role === 'builder') {
-        router.push('/investor');
+        router.push('/builder');
       } else {
         router.push('/investor');
       }

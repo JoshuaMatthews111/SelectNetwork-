@@ -89,6 +89,12 @@ export default function AdminPortal() {
   const [crmNote, setCrmNote] = useState("");
   const [selectedProspect, setSelectedProspect] = useState<number|null>(null);
   const [newProspect, setNewProspect] = useState({ name: "", phone: "", email: "", interest_amount: "", source: "", notes: "" });
+  // Matrix fullscreen state
+  const [matrixFullscreen, setMatrixFullscreen] = useState(false);
+  const [matrixZoom, setMatrixZoom] = useState(1);
+  const [matrixSearch, setMatrixSearch] = useState("");
+  const [matrixFilter, setMatrixFilter] = useState("all");
+  const [hoveredMember, setHoveredMember] = useState<any>(null);
 
   // Fetch data from API
   useEffect(() => { 
@@ -720,82 +726,175 @@ export default function AdminPortal() {
 
           {/* REFERRAL MATRIX */}
           {activeTab === "matrix" && (
-            <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
-              <div className="sn-kpi-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 18 }}>
-                {[{ ico: <Network size={20} />, label: "Total Organization", value: "128" }, { ico: <Users size={20} />, label: "Max Depth", value: "Unlimited" }, { ico: <CheckCircle size={20} />, label: "Active", value: "117" }, { ico: <CircleDot size={20} />, label: "Pending", value: "11" }].map((k, i) => (
-                  <div key={i} style={kpiBox}><div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div><div><small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase" }}>{k.label}</small><br /><b style={{ fontSize: 18 }}>{k.value}</b></div></div>
-                ))}
-              </div>
-              <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
-                <input placeholder="Search members..." style={{ flex: 1, minWidth: 200, ...fieldInput }} />
-                <select style={{ ...fieldInput, width: "auto" }}><option>All Statuses</option><option>Active</option><option>Pending</option><option>Paused</option></select>
-                <button style={btnGreen}>Add Member</button>
-              </div>
-              <div style={card}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 10, marginBottom: 12 }}>
-                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 22, margin: 0 }}>Admin Referral Matrix & Member Management</h2>
-                  <button style={btnOutline}>Export Organization CSV</button>
-                </div>
-                <p style={{ margin: "0 0 20px", fontSize: 12.5, color: "#667085", lineHeight: 1.5 }}>This is the <b>full organization view</b> — the admin matrix expands with <b>no fixed cap</b> on depth or width. Note: individual investor/builder members have a <b>40-member personal downline cap</b> shown in their own portal; the admin view here is not subject to that limit. The 3-wide view below is the visual starting structure; use <b>Add Level</b> to extend the organization as it grows. This investor matrix is kept separate from Lorenzo&apos;s Dog Training Team trainer hierarchy.</p>
-                <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, opacity: matrixAnimated ? 1 : 0, transform: matrixAnimated ? "translateY(0)" : "translateY(20px)", transition: "all .6s ease" }}>
-                  <div style={{ background: "#fff", border: "2px solid #bd8e28", borderRadius: 14, padding: "14px 20px", display: "flex", alignItems: "center", gap: 14, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
-                    <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 18 }}>L</div>
-                    <div><b>Lorenzo</b><br /><small style={{ color: "#667085" }}>Origin • Active</small><div style={{ fontSize: 12, color: "#5b6675" }}>Units: 50 | Invested: $5,230</div></div>
+            <div style={{ animation: "fadeIn .5s ease" }}>
+              {!matrixFullscreen ? (
+                <div className="sn-mobile-content">
+                  <div className="sn-kpi-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 18 }}>
+                    {[{ ico: <Network size={20} />, label: "Total Organization", value: "128" }, { ico: <Users size={20} />, label: "Max Depth", value: "Unlimited" }, { ico: <CheckCircle size={20} />, label: "Active", value: "117" }, { ico: <CircleDot size={20} />, label: "Pending", value: "11" }].map((k, i) => (
+                      <div key={i} style={kpiBox}><div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div><div><small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase" }}>{k.label}</small><br /><b style={{ fontSize: 18 }}>{k.value}</b></div></div>
+                    ))}
+                  </div>
+                  <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
+                    <input placeholder="Search members..." value={matrixSearch} onChange={(e) => setMatrixSearch(e.target.value)} style={{ flex: 1, minWidth: 200, ...fieldInput }} />
+                    <select value={matrixFilter} onChange={(e) => setMatrixFilter(e.target.value)} style={{ ...fieldInput, width: "auto" }}><option value="all">All Statuses</option><option value="Active">Active</option><option value="Pending">Pending</option><option value="Paused">Paused</option></select>
+                    <button onClick={() => setMatrixFullscreen(true)} style={{ ...btnGreen, display: "inline-flex", alignItems: "center", gap: 6 }}>⛶ Expand Full Screen</button>
+                  </div>
+                  <div style={card}>
+                    <p style={{ margin: "0 0 14px", fontSize: 12.5, color: "#667085", lineHeight: 1.5 }}>Click <b>Expand Full Screen</b> to view the interactive matrix across your full screen with zoom, pan, hover data, and click-to-inspect. The admin matrix has <b>no cap</b> — it shows the entire organization tree.</p>
+                    {/* Compact preview */}
+                    <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, opacity: matrixAnimated ? 1 : 0, transform: matrixAnimated ? "translateY(0)" : "translateY(20px)", transition: "all .6s ease" }}>
+                      <div style={{ background: "#fff", border: "2px solid #bd8e28", borderRadius: 14, padding: "14px 20px", display: "flex", alignItems: "center", gap: 14, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
+                        <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 18 }}>L</div>
+                        <div><b>Lorenzo</b><br /><small style={{ color: "#667085" }}>Origin • Active</small><div style={{ fontSize: 12, color: "#5b6675" }}>Units: 50 | Invested: $5,000</div></div>
+                      </div>
+                    </div>
+                    <div style={{ height: 24, width: 2, background: "linear-gradient(#bd8e28,#075933)", margin: "0 auto" }} />
+                    <div style={{ marginBottom: 10 }}>
+                      <div style={{ textAlign: "center", fontSize: 12, fontWeight: 900, color: "#075933", marginBottom: 8 }}>Level 1 — 3 Members</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
+                        {matrixL1.filter(m => (matrixFilter === "all" || m.status === matrixFilter) && (!matrixSearch || m.name.toLowerCase().includes(matrixSearch.toLowerCase()))).map((m, i) => (
+                          <div key={i} onClick={() => setDrawerMember(m)} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 12, padding: 14, cursor: "pointer", transition: ".3s", boxShadow: "0 8px 22px rgba(5,20,45,.06)" }} className="hover:translate-y-[-3px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)] hover:border-[#bd8e28]">
+                            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                              <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#075933", fontWeight: 900, fontSize: 14 }}>{m.pic}</div>
+                              <div><b style={{ fontSize: 13 }}>{m.name}</b><br /><small style={{ color: "#667085", fontSize: 11 }}>{m.invested} | {m.units} Units</small></div>
+                            </div>
+                            <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 8 }}>
+                              <span style={statusBadge(m.status)}>{m.status}</span>
+                              {m.labels.slice(0, 2).map((lb) => <span key={lb} style={labelStyle(lb)}>{lb}</span>)}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: "center", marginTop: 20 }}>
+                      <button onClick={() => setMatrixFullscreen(true)} style={{ ...btnGreen, padding: "14px 28px", fontSize: 13 }}>⛶ Open Full Interactive Matrix</button>
+                    </div>
                   </div>
                 </div>
-                <div style={{ height: 24, width: 2, background: "linear-gradient(#bd8e28,#075933)", margin: "0 auto", opacity: matrixAnimated ? 1 : 0, transition: "opacity .4s ease .3s" }} />
-                <div style={{ marginBottom: 10, opacity: matrixAnimated ? 1 : 0, transform: matrixAnimated ? "translateY(0)" : "translateY(20px)", transition: "all .6s ease .4s" }}>
-                  <div style={{ textAlign: "center", fontSize: 12, fontWeight: 900, color: "#075933", marginBottom: 8 }}>Level 1 — 3 Members</div>
-                  <div className="sn-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
-                    {matrixL1.map((m, i) => (
-                      <div key={i} onClick={() => setDrawerMember(m)} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 12, padding: 14, cursor: "pointer", transition: ".3s", boxShadow: "0 8px 22px rgba(5,20,45,.06)" }} className="hover:translate-y-[-3px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)] hover:border-[#bd8e28]">
-                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                          <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#075933", fontWeight: 900, fontSize: 14 }}>{m.pic}</div>
-                          <div><b style={{ fontSize: 13 }}>{m.name}</b><br /><small style={{ color: "#667085", fontSize: 11 }}>{m.invested} | {m.units} Units</small></div>
+              ) : (
+                /* ─── FULLSCREEN INTERACTIVE MATRIX ─── */
+                <div style={{ position: "fixed", inset: 0, zIndex: 99999, background: "#fcfbf8", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                  {/* Toolbar */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 24px", borderBottom: "1px solid #e7e2d8", background: "#fff", flexShrink: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                      <h2 style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 400, margin: 0 }}>Full Organization Matrix</h2>
+                      <span style={{ fontSize: 12, color: "#667085" }}>128 members · Unlimited depth</span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <input placeholder="Search members..." value={matrixSearch} onChange={(e) => setMatrixSearch(e.target.value)} style={{ ...fieldInput, width: 220, padding: "8px 14px", fontSize: 12 }} />
+                      <select value={matrixFilter} onChange={(e) => setMatrixFilter(e.target.value)} style={{ ...fieldInput, width: "auto", padding: "8px 12px", fontSize: 12 }}><option value="all">All</option><option value="Active">Active</option><option value="Pending">Pending</option></select>
+                      <button onClick={() => setMatrixZoom(Math.min(2, matrixZoom + 0.2))} style={{ ...btnOutline, padding: "6px 12px", fontSize: 14 }}>+</button>
+                      <button onClick={() => setMatrixZoom(Math.max(0.4, matrixZoom - 0.2))} style={{ ...btnOutline, padding: "6px 12px", fontSize: 14 }}>−</button>
+                      <span style={{ fontSize: 11, color: "#667085", minWidth: 50 }}>{Math.round(matrixZoom * 100)}%</span>
+                      <button onClick={() => setMatrixFullscreen(false)} style={{ ...btnGreen, padding: "8px 16px" }}>✕ Close</button>
+                    </div>
+                  </div>
+                  {/* Matrix Canvas — scrollable and zoomable */}
+                  <div style={{ flex: 1, overflow: "auto", padding: 40 }}>
+                    <div style={{ transform: `scale(${matrixZoom})`, transformOrigin: "top center", transition: "transform .3s ease", minWidth: 1200 }}>
+                      {/* Root */}
+                      <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
+                        <div onMouseEnter={() => setHoveredMember({ name: "Lorenzo", invested: "$50,000", units: 50, status: "Active", joined: "May 19, 2025", location: "Cleveland, OH", role: "Founder", email: "lorenzo@selectnetwork.com", referrals: 3 })} onMouseLeave={() => setHoveredMember(null)} style={{ background: "#fff", border: "3px solid #bd8e28", borderRadius: 16, padding: "18px 28px", display: "flex", alignItems: "center", gap: 16, boxShadow: "0 12px 36px rgba(5,20,45,.10)", cursor: "pointer" }}>
+                          <div style={{ width: 56, height: 56, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 22 }}>L</div>
+                          <div><b style={{ fontSize: 16 }}>Lorenzo</b><br /><small style={{ color: "#667085" }}>Origin · Founder</small><div style={{ fontSize: 12, color: "#075933", marginTop: 2 }}>$50,000 | 50 Units | 3 Direct</div></div>
                         </div>
-                        <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 8 }}>
-                          <span style={statusBadge(m.status)}>{m.status}</span>
-                          {m.labels.slice(0, 2).map((lb) => <span key={lb} style={labelStyle(lb)}>{lb}</span>)}
+                      </div>
+                      {/* Connector */}
+                      <div style={{ height: 30, width: 3, background: "linear-gradient(#bd8e28,#075933)", margin: "0 auto" }} />
+                      {/* Level 1 */}
+                      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 900, color: "#075933", marginBottom: 12 }}>Level 1 — Direct Referrals (3)</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16, maxWidth: 900, margin: "0 auto 20px" }}>
+                        {[
+                          { name: "Maria Santos", pic: "M", invested: "$25,000", units: 25, status: "Active", joined: "May 20, 2025", location: "Miami, FL", role: "Builder", email: "maria@email.com", referrals: 3 },
+                          { name: "David Chen", pic: "D", invested: "$10,000", units: 10, status: "Pending", joined: "May 22, 2025", location: "New York, NY", role: "Investor", email: "david@email.com", referrals: 2 },
+                          { name: "James Wilson", pic: "J", invested: "$15,000", units: 15, status: "Active", joined: "May 28, 2025", location: "Dallas, TX", role: "Builder", email: "james@email.com", referrals: 0 },
+                        ].filter(m => (matrixFilter === "all" || m.status === matrixFilter) && (!matrixSearch || m.name.toLowerCase().includes(matrixSearch.toLowerCase()))).map((m, i) => (
+                          <div key={i} onMouseEnter={() => setHoveredMember(m)} onMouseLeave={() => setHoveredMember(null)} onClick={() => setDrawerMember({ ...m, labels: [m.role] } as any)} style={{ background: "#fff", border: "2px solid #e7e2d8", borderRadius: 14, padding: 18, cursor: "pointer", transition: ".3s", boxShadow: "0 8px 22px rgba(5,20,45,.06)" }} className="hover:translate-y-[-4px] hover:shadow-[0_0_30px_rgba(213,168,61,.55)] hover:border-[#bd8e28]">
+                            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+                              <div style={{ width: 44, height: 44, borderRadius: "50%", background: "#edf6ef", border: "2px solid #c7e2d0", display: "grid", placeItems: "center", color: "#075933", fontWeight: 900, fontSize: 16 }}>{m.pic}</div>
+                              <div><b style={{ fontSize: 14 }}>{m.name}</b><br /><small style={{ color: "#667085", fontSize: 11 }}>{m.role} · {m.location}</small></div>
+                            </div>
+                            <div style={{ fontSize: 12, color: "#5b6675", marginBottom: 8 }}>{m.invested} | {m.units} Units | {m.referrals} referral{m.referrals !== 1 ? "s" : ""}</div>
+                            <div style={{ display: "flex", gap: 6 }}>
+                              <span style={statusBadge(m.status)}>{m.status}</span>
+                              <span style={{ padding: "3px 8px", borderRadius: 99, background: "#e7f0ff", color: "#1e4fa3", fontSize: 10, fontWeight: 900 }}>{m.role}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {/* Connector */}
+                      <div style={{ height: 24, width: 3, background: "linear-gradient(#bd8e28,#075933)", margin: "0 auto" }} />
+                      {/* Level 2 */}
+                      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 900, color: "#075933", marginBottom: 12 }}>Level 2 — 5 Active, 4 Open Slots</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 12, maxWidth: 1100, margin: "0 auto 20px" }}>
+                        {[
+                          { name: "Sophia Lee", pic: "S", invested: "$5,000", units: 5, status: "Active", location: "LA, CA", role: "Investor", email: "sophia@email.com", referrals: 1, joined: "Jun 1, 2025" },
+                          { name: "Michael Brown", pic: "M", invested: "$8,000", units: 8, status: "Active", location: "Chicago, IL", role: "Builder", email: "michael@email.com", referrals: 2, joined: "Jun 5, 2025" },
+                          { name: "Emily Davis", pic: "E", invested: "$3,000", units: 3, status: "Pending", location: "Houston, TX", role: "Investor", email: "emily@email.com", referrals: 0, joined: "Jun 8, 2025" },
+                          { name: "Chris Park", pic: "C", invested: "$12,000", units: 12, status: "Active", location: "Atlanta, GA", role: "Investor", email: "chris@email.com", referrals: 0, joined: "Jun 10, 2025" },
+                          { name: "Ana Torres", pic: "A", invested: "$6,000", units: 6, status: "Active", location: "San Diego, CA", role: "Builder", email: "ana@email.com", referrals: 0, joined: "Jun 12, 2025" },
+                        ].filter(m => (matrixFilter === "all" || m.status === matrixFilter) && (!matrixSearch || m.name.toLowerCase().includes(matrixSearch.toLowerCase()))).map((m, i) => (
+                          <div key={i} onMouseEnter={() => setHoveredMember(m)} onMouseLeave={() => setHoveredMember(null)} onClick={() => setDrawerMember({ ...m, labels: [m.role] } as any)} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 12, padding: 12, textAlign: "center", cursor: "pointer", transition: ".3s", boxShadow: "0 4px 14px rgba(5,20,45,.05)" }} className="hover:translate-y-[-3px] hover:border-[#bd8e28] hover:shadow-[0_0_22px_rgba(213,168,61,.4)]">
+                            <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#edf6ef", display: "grid", placeItems: "center", margin: "0 auto 6px", fontSize: 13, fontWeight: 900, color: "#075933" }}>{m.pic}</div>
+                            <b style={{ fontSize: 12 }}>{m.name}</b><br />
+                            <small style={{ fontSize: 10, color: "#667085" }}>{m.invested} · {m.units}u</small><br />
+                            <span style={{ ...statusBadge(m.status), fontSize: 9, marginTop: 4, display: "inline-block" }}>{m.status}</span>
+                          </div>
+                        ))}
+                        {Array.from({ length: 4 }).map((_, i) => (
+                          <div key={`open-${i}`} style={{ background: "#f9f6ef", border: "1px dashed #e7e2d8", borderRadius: 12, padding: 12, textAlign: "center" }}>
+                            <div style={{ width: 36, height: 36, borderRadius: "50%", border: "1px dashed #c7e2d0", margin: "0 auto 6px", background: "#fff" }} />
+                            <span style={{ fontSize: 11, color: "#9aa0ab" }}>Available</span>
+                          </div>
+                        ))}
+                      </div>
+                      {/* Connector */}
+                      <div style={{ height: 24, width: 3, background: "linear-gradient(#bd8e28,#075933)", margin: "0 auto" }} />
+                      {/* Level 3 */}
+                      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 900, color: "#075933", marginBottom: 12 }}>Level 3 — 3 Active, Expanding</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(9,1fr)", gap: 8, maxWidth: 1200, margin: "0 auto 20px" }}>
+                        {[
+                          { name: "Tyler Reed", pic: "T", invested: "$4,000", units: 4, status: "Active", location: "Denver, CO", role: "Investor", email: "tyler@email.com", referrals: 0, joined: "Jun 20, 2025" },
+                          { name: "Keisha Moore", pic: "K", invested: "$7,000", units: 7, status: "Active", location: "Boston, MA", role: "Builder", email: "keisha@email.com", referrals: 1, joined: "Jun 22, 2025" },
+                          { name: "Ryan Scott", pic: "R", invested: "$2,500", units: 2, status: "Pending", location: "Phoenix, AZ", role: "Investor", email: "ryan@email.com", referrals: 0, joined: "Jun 25, 2025" },
+                        ].filter(m => (matrixFilter === "all" || m.status === matrixFilter) && (!matrixSearch || m.name.toLowerCase().includes(matrixSearch.toLowerCase()))).map((m, i) => (
+                          <div key={i} onMouseEnter={() => setHoveredMember(m)} onMouseLeave={() => setHoveredMember(null)} onClick={() => setDrawerMember({ ...m, labels: [m.role] } as any)} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "8px 6px", textAlign: "center", cursor: "pointer", transition: ".3s" }} className="hover:translate-y-[-2px] hover:border-[#bd8e28]">
+                            <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#edf6ef", display: "grid", placeItems: "center", margin: "0 auto 3px", fontSize: 10, fontWeight: 900, color: "#075933" }}>{m.pic}</div>
+                            <b style={{ fontSize: 10 }}>{m.name.split(" ")[0]}</b><br />
+                            <span style={{ fontSize: 8, color: "#667085" }}>{m.units}u</span>
+                          </div>
+                        ))}
+                        {Array.from({ length: 6 }).map((_, i) => (
+                          <div key={`o3-${i}`} style={{ background: "#f9f6ef", border: "1px dashed #e7e2d8", borderRadius: 8, padding: "8px 4px", textAlign: "center" }}>
+                            <div style={{ width: 28, height: 28, borderRadius: "50%", border: "1px dashed #c7e2d0", margin: "0 auto 3px", background: "#fff" }} />
+                            <span style={{ fontSize: 9, color: "#9aa0ab" }}>Open</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ textAlign: "center", marginTop: 20, color: "#667085", fontSize: 13 }}>
+                        <p>Organization continues expanding — no cap on admin view. All levels render as members enroll.</p>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Hover tooltip */}
+                  {hoveredMember && (
+                    <div style={{ position: "fixed", bottom: 20, left: "50%", transform: "translateX(-50%)", background: "#071a33", color: "#fff", borderRadius: 14, padding: "16px 24px", boxShadow: "0 16px 48px rgba(5,20,45,.4)", display: "flex", gap: 20, alignItems: "center", zIndex: 100000, maxWidth: 600, animation: "fadeIn .2s ease" }}>
+                      <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 16, flexShrink: 0 }}>{hoveredMember.name?.charAt(0)}</div>
+                      <div style={{ flex: 1 }}>
+                        <b style={{ fontSize: 15 }}>{hoveredMember.name}</b>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "4px 16px", marginTop: 6, fontSize: 12 }}>
+                          <span><b style={{ color: "#ffd46f" }}>Invested:</b> {hoveredMember.invested}</span>
+                          <span><b style={{ color: "#ffd46f" }}>Units:</b> {hoveredMember.units}</span>
+                          <span><b style={{ color: "#ffd46f" }}>Status:</b> {hoveredMember.status}</span>
+                          <span><b style={{ color: "#ffd46f" }}>Location:</b> {hoveredMember.location}</span>
+                          <span><b style={{ color: "#ffd46f" }}>Role:</b> {hoveredMember.role}</span>
+                          <span><b style={{ color: "#ffd46f" }}>Joined:</b> {hoveredMember.joined}</span>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  )}
                 </div>
-                <div style={{ height: 20, width: 2, background: "linear-gradient(#bd8e28,#075933)", margin: "0 auto", opacity: matrixAnimated ? 1 : 0, transition: "opacity .4s ease .7s" }} />
-                <div style={{ opacity: matrixAnimated ? 1 : 0, transform: matrixAnimated ? "translateY(0)" : "translateY(20px)", transition: "all .6s ease .8s" }}>
-                  <div style={{ textAlign: "center", fontSize: 12, fontWeight: 900, color: "#075933", marginBottom: 8 }}>Level 2 — 9 Members</div>
-                  <div className="sn-matrix-l2" style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 8 }}>
-                    {["Sophia Lee", "Michael Brown", "Emily Davis", "Chris Park", "Ana Torres", null, null, null, null].map((n, i) => n ? (
-                      <div key={i} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 10, padding: 10, textAlign: "center", fontSize: 12, transition: ".3s", cursor: "pointer" }} className="hover:translate-y-[-2px] hover:border-[#bd8e28]">
-                        <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#edf6ef", display: "grid", placeItems: "center", margin: "0 auto 4px", fontSize: 11, fontWeight: 900, color: "#075933" }}>{n.charAt(0)}</div>
-                        <b style={{ fontSize: 11 }}>{n.split(" ")[0]}</b><br /><span style={{ ...statusBadge("Active"), fontSize: 9 }}>Active</span>
-                      </div>
-                    ) : (
-                      <div key={i} style={{ background: "#f9f6ef", border: "1px dashed #e7e2d8", borderRadius: 10, padding: 10, textAlign: "center", fontSize: 11, color: "#667085" }}><div style={{ width: 28, height: 28, borderRadius: "50%", border: "1px dashed #c7e2d0", margin: "0 auto 4px", background: "#fff" }} />Open</div>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ height: 20, width: 2, background: "linear-gradient(#bd8e28,#075933)", margin: "0 auto", opacity: matrixAnimated ? 1 : 0, transition: "opacity .4s ease 1s" }} />
-                <div style={{ opacity: matrixAnimated ? 1 : 0, transition: "opacity .5s ease 1.1s" }}>
-                  <div style={{ textAlign: "center", fontSize: 12, fontWeight: 900, color: "#075933", marginBottom: 8 }}>Level 3 — Expanding</div>
-                  <div className="sn-matrix-l3" style={{ display: "grid", gridTemplateColumns: "repeat(9,1fr)", gap: 6 }}>
-                    {["Tyler Reed", "Keisha Moore", "Ryan Scott"].map((n, i) => (
-                      <div key={i} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "8px 4px", textAlign: "center", fontSize: 10 }}>
-                        <div style={{ width: 24, height: 24, borderRadius: "50%", background: "#edf6ef", display: "grid", placeItems: "center", margin: "0 auto 3px", fontSize: 9, fontWeight: 900, color: "#075933" }}>{n.charAt(0)}</div>
-                        <b style={{ fontSize: 9 }}>{n.split(" ")[0]}</b>
-                      </div>
-                    ))}
-                    {Array.from({ length: 6 }).map((_, i) => (
-                      <div key={`o${i}`} style={{ background: "#f9f6ef", border: "1px dashed #e7e2d8", borderRadius: 8, padding: "8px 4px", textAlign: "center" }}><div style={{ width: 24, height: 24, borderRadius: "50%", border: "1px dashed #c7e2d0", margin: "0 auto 3px", background: "#fff" }} /><span style={{ fontSize: 9, color: "#667085" }}>Open</span></div>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ textAlign: "center", marginTop: 20, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", opacity: matrixAnimated ? 1 : 0, transition: "opacity .5s ease 1.2s" }}>
-                  <button style={btnGreen}>+ Add Level</button>
-                  <button style={btnOutline}>Expand Full Organization</button>
-                  <span style={{ alignSelf: "center", fontSize: 11.5, color: "#667085" }}>No cap — organization grows in depth and width as members enroll.</span>
-                </div>
-              </div>
+              )}
             </div>
           )}
 
