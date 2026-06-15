@@ -84,6 +84,8 @@ export default function BuilderPortal() {
   const [certName, setCertName] = useState("");
   const [certUnits, setCertUnits] = useState(10);
   const [certGenerated, setCertGenerated] = useState(false);
+  // Onboarding tutorial
+  const [showTutorial, setShowTutorial] = useState(true);
 
   const switchTab = (id: string) => { setActiveTab(id); setSidebarOpen(false); };
 
@@ -222,6 +224,27 @@ export default function BuilderPortal() {
           {/* ─── OVERVIEW ─── */}
           {activeTab === "overview" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
+              {/* Onboarding Tutorial */}
+              {showTutorial && (
+                <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", border: "2px solid #bd8e28", borderRadius: 16, padding: "24px 28px", marginBottom: 22, position: "relative" }}>
+                  <button onClick={() => setShowTutorial(false)} style={{ position: "absolute", top: 12, right: 16, background: "none", border: "none", color: "#ffd46f", fontSize: 18, cursor: "pointer", fontWeight: 900 }}>✕</button>
+                  <h3 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, color: "#fff", margin: "0 0 4px" }}>Welcome to Your Builder Dashboard!</h3>
+                  <p style={{ color: "#c6d2e1", fontSize: 12.5, margin: "0 0 16px" }}>You have full investor access plus the Referral Matrix. Here&apos;s a quick guide:</p>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
+                    {[
+                      { title: "Overview", desc: "KPIs, charts, portfolio at a glance", highlight: false },
+                      { title: "Referral Matrix", desc: "Your downline tree & builder tools", highlight: true },
+                      { title: "Certificates", desc: "View & download your certificates", highlight: true },
+                      { title: "Support", desc: "Contact our team directly", highlight: false },
+                    ].map((t, i) => (
+                      <div key={i} style={{ background: t.highlight ? "rgba(189,142,40,.15)" : "rgba(255,255,255,.06)", border: t.highlight ? "1px solid #bd8e28" : "1px solid rgba(255,255,255,.1)", borderRadius: 10, padding: "12px 10px", textAlign: "center" }}>
+                        <b style={{ fontSize: 11, color: t.highlight ? "#ffd46f" : "#fff", display: "block", marginBottom: 3 }}>{t.title}</b>
+                        <span style={{ fontSize: 10, color: "#9cb3d0" }}>{t.desc}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               {/* KPIs */}
               <div className="sn-kpi-grid-6" style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 14, marginBottom: 22 }}>
                 {[

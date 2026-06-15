@@ -95,6 +95,7 @@ export default function AdminPortal() {
   const [matrixSearch, setMatrixSearch] = useState("");
   const [matrixFilter, setMatrixFilter] = useState("all");
   const [hoveredMember, setHoveredMember] = useState<any>(null);
+  const [viewingDownline, setViewingDownline] = useState<any>(null);
 
   // Fetch data from API
   useEffect(() => { 
@@ -741,22 +742,23 @@ export default function AdminPortal() {
                   </div>
                   <div style={card}>
                     <p style={{ margin: "0 0 14px", fontSize: 12.5, color: "#667085", lineHeight: 1.5 }}>Click <b>Expand Full Screen</b> to view the interactive matrix across your full screen with zoom, pan, hover data, and click-to-inspect. The admin matrix has <b>no cap</b> — it shows the entire organization tree.</p>
-                    {/* Compact preview */}
+                    {/* Compact preview — L1 through L3 */}
                     <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, opacity: matrixAnimated ? 1 : 0, transform: matrixAnimated ? "translateY(0)" : "translateY(20px)", transition: "all .6s ease" }}>
                       <div style={{ background: "#fff", border: "2px solid #bd8e28", borderRadius: 14, padding: "14px 20px", display: "flex", alignItems: "center", gap: 14, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
                         <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 18 }}>L</div>
-                        <div><b>Lorenzo</b><br /><small style={{ color: "#667085" }}>Origin • Active</small><div style={{ fontSize: 12, color: "#5b6675" }}>Units: 50 | Invested: $5,000</div></div>
+                        <div><b>Lorenzo (Admin)</b><br /><small style={{ color: "#667085" }}>Origin • Active • Sees entire network</small><div style={{ fontSize: 12, color: "#5b6675" }}>Units: 50 | Invested: $50,000 | 3 Direct</div></div>
                       </div>
                     </div>
                     <div style={{ height: 24, width: 2, background: "linear-gradient(#bd8e28,#075933)", margin: "0 auto" }} />
+                    {/* Level 1 */}
                     <div style={{ marginBottom: 10 }}>
-                      <div style={{ textAlign: "center", fontSize: 12, fontWeight: 900, color: "#075933", marginBottom: 8 }}>Level 1 — 3 Members</div>
+                      <div style={{ textAlign: "center", fontSize: 12, fontWeight: 900, color: "#075933", marginBottom: 8 }}>Level 1 — 3 Members <span style={{ fontWeight: 400, color: "#667085" }}>(click to view their downline)</span></div>
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
                         {matrixL1.filter(m => (matrixFilter === "all" || m.status === matrixFilter) && (!matrixSearch || m.name.toLowerCase().includes(matrixSearch.toLowerCase()))).map((m, i) => (
-                          <div key={i} onClick={() => setDrawerMember(m)} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 12, padding: 14, cursor: "pointer", transition: ".3s", boxShadow: "0 8px 22px rgba(5,20,45,.06)" }} className="hover:translate-y-[-3px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)] hover:border-[#bd8e28]">
+                          <div key={i} onClick={() => setViewingDownline(m)} style={{ background: viewingDownline?.name === m.name ? "linear-gradient(135deg,#071a33,#0d3366)" : "#fff", color: viewingDownline?.name === m.name ? "#fff" : "inherit", border: viewingDownline?.name === m.name ? "2px solid #bd8e28" : "1px solid #e7e2d8", borderRadius: 12, padding: 14, cursor: "pointer", transition: ".3s", boxShadow: "0 8px 22px rgba(5,20,45,.06)" }} className="hover:translate-y-[-3px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)] hover:border-[#bd8e28]">
                             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                               <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#075933", fontWeight: 900, fontSize: 14 }}>{m.pic}</div>
-                              <div><b style={{ fontSize: 13 }}>{m.name}</b><br /><small style={{ color: "#667085", fontSize: 11 }}>{m.invested} | {m.units} Units</small></div>
+                              <div><b style={{ fontSize: 13 }}>{m.name}</b><br /><small style={{ color: viewingDownline?.name === m.name ? "#c6d2e1" : "#667085", fontSize: 11 }}>{m.invested} | {m.units} Units</small></div>
                             </div>
                             <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 8 }}>
                               <span style={statusBadge(m.status)}>{m.status}</span>
@@ -766,6 +768,70 @@ export default function AdminPortal() {
                         ))}
                       </div>
                     </div>
+                    {/* Level 2 */}
+                    <div style={{ height: 20, width: 2, background: "linear-gradient(#bd8e28,#075933)", margin: "0 auto", opacity: matrixAnimated ? 1 : 0, transition: "opacity .4s ease .5s" }} />
+                    <div style={{ opacity: matrixAnimated ? 1 : 0, transform: matrixAnimated ? "translateY(0)" : "translateY(12px)", transition: "all .5s ease .6s", marginBottom: 10 }}>
+                      <div style={{ textAlign: "center", fontSize: 12, fontWeight: 900, color: "#075933", marginBottom: 8 }}>Level 2 — 5 Active</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 8 }}>
+                        {["Sophia Lee", "Michael Brown", "Emily Davis", "Chris Park", "Ana Torres"].filter(n => !matrixSearch || n.toLowerCase().includes(matrixSearch.toLowerCase())).map((n, i) => (
+                          <div key={i} onClick={() => setViewingDownline({ name: n, pic: n.charAt(0), invested: "$5,000", units: 5, status: "Active", joined: "Jun 2025", location: "US", source: "L1", labels: ["Investor"] })} style={{ background: viewingDownline?.name === n ? "linear-gradient(135deg,#071a33,#0d3366)" : "#fff", color: viewingDownline?.name === n ? "#fff" : "inherit", border: viewingDownline?.name === n ? "2px solid #bd8e28" : "1px solid #e7e2d8", borderRadius: 10, padding: 10, textAlign: "center", fontSize: 12, transition: ".3s", cursor: "pointer" }} className="hover:translate-y-[-2px] hover:border-[#bd8e28]">
+                            <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#edf6ef", display: "grid", placeItems: "center", margin: "0 auto 4px", fontSize: 11, fontWeight: 900, color: "#075933" }}>{n.charAt(0)}</div>
+                            <b style={{ fontSize: 11 }}>{n.split(" ")[0]}</b><br /><span style={{ ...statusBadge("Active"), fontSize: 9 }}>Active</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Level 3 */}
+                    <div style={{ height: 20, width: 2, background: "linear-gradient(#bd8e28,#075933)", margin: "0 auto", opacity: matrixAnimated ? 1 : 0, transition: "opacity .4s ease .8s" }} />
+                    <div style={{ opacity: matrixAnimated ? 1 : 0, transform: matrixAnimated ? "translateY(0)" : "translateY(12px)", transition: "all .5s ease .9s", marginBottom: 10 }}>
+                      <div style={{ textAlign: "center", fontSize: 12, fontWeight: 900, color: "#075933", marginBottom: 8 }}>Level 3 — 3 Active, Expanding</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(9,1fr)", gap: 6 }}>
+                        {["Tyler Reed", "Keisha Moore", "Ryan Scott"].map((n, i) => (
+                          <div key={i} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "8px 4px", textAlign: "center", fontSize: 10, cursor: "pointer" }} className="hover:translate-y-[-2px] hover:border-[#bd8e28]">
+                            <div style={{ width: 24, height: 24, borderRadius: "50%", background: "#edf6ef", display: "grid", placeItems: "center", margin: "0 auto 3px", fontSize: 9, fontWeight: 900, color: "#075933" }}>{n.charAt(0)}</div>
+                            <b style={{ fontSize: 9 }}>{n.split(" ")[0]}</b>
+                          </div>
+                        ))}
+                        {Array.from({ length: 6 }).map((_, i) => (
+                          <div key={`o${i}`} style={{ background: "#f9f6ef", border: "1px dashed #e7e2d8", borderRadius: 8, padding: "8px 4px", textAlign: "center" }}><div style={{ width: 24, height: 24, borderRadius: "50%", border: "1px dashed #c7e2d0", margin: "0 auto 3px", background: "#fff" }} /><span style={{ fontSize: 9, color: "#667085" }}>Open</span></div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Member Downline Panel — shows when you click a member */}
+                    {viewingDownline && (
+                      <div style={{ marginTop: 20, background: "#f9f6ef", border: "2px solid #bd8e28", borderRadius: 14, padding: "20px 24px", animation: "fadeIn .3s ease" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 16 }}>{viewingDownline.pic}</div>
+                            <div><b style={{ fontSize: 15 }}>{viewingDownline.name}&apos;s Downline</b><br /><small style={{ color: "#667085" }}>Personal matrix — up to 40 members</small></div>
+                          </div>
+                          <button onClick={() => setViewingDownline(null)} style={btnOutline}>✕ Close</button>
+                        </div>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
+                          {[
+                            { name: "Sub Member 1", status: "Active", units: 3 },
+                            { name: "Sub Member 2", status: "Active", units: 5 },
+                            { name: "Sub Member 3", status: "Pending", units: 2 },
+                          ].map((sub, i) => (
+                            <div key={i} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 10, padding: 12, textAlign: "center" }}>
+                              <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#edf6ef", display: "grid", placeItems: "center", margin: "0 auto 6px", fontSize: 11, fontWeight: 900, color: "#075933" }}>{sub.name.charAt(4)}</div>
+                              <b style={{ fontSize: 11 }}>{sub.name}</b><br />
+                              <small style={{ color: "#667085", fontSize: 10 }}>{sub.units} units</small><br />
+                              <span style={{ ...statusBadge(sub.status), fontSize: 9, marginTop: 4, display: "inline-block" }}>{sub.status}</span>
+                            </div>
+                          ))}
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <div key={`emp-${i}`} style={{ background: "#fff", border: "1px dashed #e7e2d8", borderRadius: 10, padding: 12, textAlign: "center" }}>
+                              <div style={{ width: 30, height: 30, borderRadius: "50%", border: "1px dashed #c7e2d0", margin: "0 auto 6px", background: "#f9f6ef" }} />
+                              <span style={{ fontSize: 10, color: "#9aa0ab" }}>Available Slot</span>
+                            </div>
+                          ))}
+                        </div>
+                        <p style={{ fontSize: 11.5, color: "#667085", marginTop: 12, marginBottom: 0 }}>This member&apos;s personal downline cap is <b>40 members</b>. {viewingDownline.name} has 3 of 40 slots filled. As admin, you can see all member downlines from the full-screen matrix.</p>
+                      </div>
+                    )}
+
                     <div style={{ textAlign: "center", marginTop: 20 }}>
                       <button onClick={() => setMatrixFullscreen(true)} style={{ ...btnGreen, padding: "14px 28px", fontSize: 13 }}>⛶ Open Full Interactive Matrix</button>
                     </div>

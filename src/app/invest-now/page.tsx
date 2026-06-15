@@ -118,22 +118,94 @@ export default function InvestNowPage() {
         <div className="sn-shell" style={{ maxWidth: 880 }}>
           {submitted ? (
             <Reveal>
-              <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 18, padding: "48px 32px", textAlign: "center", boxShadow: "0 14px 40px rgba(5,20,45,.07)" }}>
-                <CheckCircle size={56} color={GREEN} style={{ margin: "0 auto 18px" }} />
-                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 30, margin: "0 0 12px" }}>Payment Submitted</h2>
-                <p style={{ color: "#5b6675", fontSize: 15, lineHeight: 1.7, margin: "0 auto 8px", maxWidth: 560 }}>
-                  Thank you, {form.name || "member"}. Your payment for <b>{units} units ({fmt(subtotal)})</b> has been submitted. Once payment is confirmed, your investor dashboard will be activated automatically.
-                </p>
-                {isFoundationPartner && (
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", borderRadius: 99, padding: "8px 20px", fontSize: 13, fontWeight: 900, margin: "12px auto 16px" }}>
-                    <Building2 size={16} /> Foundation Partner Status Earned
+              <div style={{ maxWidth: 960, margin: "0 auto" }}>
+                {/* Success header */}
+                <div style={{ textAlign: "center", marginBottom: 30 }}>
+                  <CheckCircle size={48} color={GREEN} style={{ margin: "0 auto 12px" }} />
+                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 8px" }}>Welcome to The Select Network!</h2>
+                  <p style={{ color: "#5b6675", fontSize: 14, margin: 0 }}>Your account has been activated. Here is your investment certificate.</p>
+                </div>
+
+                {/* ─── CERTIFICATE ─── */}
+                <div style={{ background: "#fff", border: "3px solid #bd8e28", borderRadius: 16, padding: "44px 48px", maxWidth: 820, margin: "0 auto 32px", boxShadow: "0 20px 60px rgba(5,20,45,.12)", position: "relative", overflow: "hidden" }}>
+                  <div style={{ position: "absolute", top: 14, left: 14, width: 56, height: 56, borderTop: "3px solid #d5a83d", borderLeft: "3px solid #d5a83d", borderRadius: "4px 0 0 0" }} />
+                  <div style={{ position: "absolute", top: 14, right: 14, width: 56, height: 56, borderTop: "3px solid #d5a83d", borderRight: "3px solid #d5a83d", borderRadius: "0 4px 0 0" }} />
+                  <div style={{ position: "absolute", bottom: 14, left: 14, width: 56, height: 56, borderBottom: "3px solid #d5a83d", borderLeft: "3px solid #d5a83d", borderRadius: "0 0 0 4px" }} />
+                  <div style={{ position: "absolute", bottom: 14, right: 14, width: 56, height: 56, borderBottom: "3px solid #d5a83d", borderRight: "3px solid #d5a83d", borderRadius: "0 0 4px 0" }} />
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: ".2em", textTransform: "uppercase", color: "#bd8e28", marginBottom: 6 }}>Certificate of Investment</div>
+                    <div style={{ width: 70, height: 2, background: "linear-gradient(90deg,transparent,#d5a83d,transparent)", margin: "0 auto 16px" }} />
+                    <p style={{ fontSize: 13, color: "#667085", margin: "0 0 8px" }}>This certifies that</p>
+                    <h1 style={{ fontFamily: "Georgia, serif", fontSize: 34, fontWeight: 400, color: NAVY, margin: "0 0 8px", borderBottom: "2px solid #e7e2d8", display: "inline-block", padding: "0 24px 6px" }}>{form.name || "Member"}</h1>
+                    <p style={{ fontSize: 13, color: "#667085", margin: "12px 0 6px" }}>has successfully invested in</p>
+                    <div style={{ fontSize: 44, fontWeight: 900, color: GREEN, margin: "6px 0" }}>{units} Founder Units</div>
+                    <p style={{ fontSize: 16, color: NAVY, margin: "4px 0 20px" }}>valued at <b style={{ color: GOLD }}>{fmt(subtotal)}</b></p>
+                    <div style={{ width: 50, height: 2, background: "linear-gradient(90deg,transparent,#d5a83d,transparent)", margin: "0 auto 16px" }} />
+                    <p style={{ fontSize: 12, color: "#667085", margin: "0 0 4px" }}>through The Select Network investment structure</p>
+                    <p style={{ fontSize: 11, color: "#9aa0ab", margin: "0 0 20px" }}>Issued: {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>
+                    {isFoundationPartner && (
+                      <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", borderRadius: 99, padding: "6px 16px", fontSize: 11, fontWeight: 900, marginBottom: 14 }}>
+                        <Building2 size={14} /> Foundation Partner
+                      </div>
+                    )}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 20, paddingTop: 16, borderTop: "1px solid #eef2f6" }}>
+                      <div style={{ textAlign: "left" }}><div style={{ width: 120, borderBottom: "1px solid #071a33", marginBottom: 3 }} /><div style={{ fontSize: 10, color: "#667085" }}>Authorized Signature</div></div>
+                      <div style={{ textAlign: "center" }}><div style={{ width: 48, height: 48, borderRadius: "50%", border: "2px solid #bd8e28", display: "grid", placeItems: "center", margin: "0 auto 3px" }}><Shield size={18} color={GOLD} /></div><div style={{ fontSize: 8, color: GOLD, fontWeight: 900, letterSpacing: ".1em" }}>VERIFIED</div></div>
+                      <div style={{ textAlign: "right" }}><div style={{ width: 120, borderBottom: "1px solid #071a33", marginBottom: 3 }} /><div style={{ fontSize: 10, color: "#667085" }}>Date of Issue</div></div>
+                    </div>
                   </div>
-                )}
-                <p style={{ color: "#667085", fontSize: 13.5, lineHeight: 1.7, margin: "0 auto 24px", maxWidth: 560 }}>
-                  Full report access, quarterly updates, and member-only documents will be available inside your investor dashboard after payment is confirmed.
-                </p>
-                <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-                  <Link href="/login" style={btnPrimary}>Go to Investor Dashboard</Link>
+                </div>
+
+                {/* Print button */}
+                <div style={{ textAlign: "center", marginBottom: 36 }}>
+                  <button onClick={() => { if (typeof window !== "undefined") window.print(); }} style={{ ...btnGhost, fontSize: 12 }}>Print / Save Certificate as PDF</button>
+                </div>
+
+                {/* ─── YOUR BACK OFFICE DATA ─── */}
+                <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 16, padding: "28px 30px", marginBottom: 28, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
+                  <h3 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 16px" }}>Your Back Office Summary</h3>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
+                    {[
+                      { label: "Units Owned", value: `${units}`, sub: "Founder Units" },
+                      { label: "Amount Invested", value: fmt(subtotal), sub: "Total investment" },
+                      { label: "Role", value: role || "Investor", sub: "Your participation" },
+                    ].map((d, i) => (
+                      <div key={i} style={{ background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 12, padding: "18px 16px", textAlign: "center" }}>
+                        <div style={{ fontSize: 11, fontWeight: 800, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 6 }}>{d.label}</div>
+                        <div style={{ fontSize: 24, fontWeight: 900, color: NAVY }}>{d.value}</div>
+                        <div style={{ fontSize: 11, color: "#9aa0ab", marginTop: 2 }}>{d.sub}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ─── TUTORIAL: HOW TO USE YOUR DASHBOARD ─── */}
+                <div style={{ marginBottom: 28 }}>
+                  <h3 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 6px", textAlign: "center" }}>How to Use Your Dashboard</h3>
+                  <p style={{ textAlign: "center", color: "#667085", fontSize: 13, margin: "0 0 20px" }}>Your investor dashboard gives you everything you need. Here&apos;s a quick guide:</p>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 16 }}>
+                    {[
+                      { title: "Overview", desc: "See your total invested, current value, units owned, and quarterly distributions at a glance.", highlight: true },
+                      { title: "Founder Units", desc: "Track your unit allocation, purchase history, and current unit value over time.", highlight: true },
+                      { title: "Reports & Documents", desc: "Access quarterly financial reports, official documents, and download PDFs.", highlight: false },
+                      { title: "Withdrawals", desc: "Request profit withdrawals from your available balance. Track pending and completed requests.", highlight: false },
+                      { title: "Announcements", desc: "Stay updated with official announcements from the Select Network team.", highlight: false },
+                      { title: "Support / Chat", desc: "Contact our support team directly. Create tickets and get responses in your dashboard.", highlight: false },
+                      { title: "Certificates", desc: "View, generate, and download your investment certificates at any time.", highlight: true },
+                      { title: "Milestones", desc: "Track your achievement progress — from first investment to referral goals.", highlight: false },
+                    ].map((t, i) => (
+                      <div key={i} style={{ background: t.highlight ? "linear-gradient(135deg,#071a33,#0d3366)" : "#fff", color: t.highlight ? "#fff" : NAVY, border: t.highlight ? "2px solid #bd8e28" : "1px solid #e7e2d8", borderRadius: 14, padding: "20px 18px", boxShadow: t.highlight ? "0 10px 30px rgba(5,20,45,.15)" : "0 4px 12px rgba(5,20,45,.04)" }}>
+                        <b style={{ fontSize: 14, display: "block", marginBottom: 6 }}>{t.title}</b>
+                        <p style={{ fontSize: 12.5, margin: 0, lineHeight: 1.6, color: t.highlight ? "#c6d2e1" : "#667085" }}>{t.desc}</p>
+                        {t.highlight && <div style={{ marginTop: 8, fontSize: 10, fontWeight: 900, color: "#ffd46f", textTransform: "uppercase", letterSpacing: ".06em" }}>★ Key Feature</div>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* CTA */}
+                <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
+                  <Link href={role === "Investor-Builder" ? "/builder" : "/investor"} style={{ ...btnPrimary, padding: "16px 32px", fontSize: 14 }}>Enter Your Dashboard <ArrowRight size={16} /></Link>
                   <Link href="/contact" style={btnGhost}>Speak With Our Team</Link>
                 </div>
               </div>
