@@ -57,7 +57,7 @@ export interface SupportMessage {
   created_at: string;
 }
 
-export interface Application {
+export interface MemberRequest {
   id: string;
   name: string;
   email: string;

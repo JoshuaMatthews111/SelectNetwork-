@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
-import { LayoutDashboard, ClipboardList, Users, Star, CreditCard, BarChart3, FolderOpen, Network, Megaphone, Contact, CalendarDays, Settings, ShieldCheck, Bell, Mail, CheckCircle, CircleDot, TrendingUp, Wallet, Menu, LogOut, UserCircle, MessageSquare, Award, FileText } from "lucide-react";
+import { Binoculars, ClipboardList, Users, Star, CreditCard, BarChart3, FolderOpen, TreePine, Megaphone, Contact, CalendarDays, Settings, ShieldCheck, Bell, Mail, CheckCircle, CircleDot, TrendingUp, Wallet, Menu, LogOut, UserCircle, MessageSquare, Award, Ribbon, FileBarChart, UserRoundPlus } from "lucide-react";
+import ReferralNetwork from "../components/ReferralNetwork";
 
 function useCountUp(target: number, duration = 1200) {
   const [count, setCount] = useState(0);
@@ -14,26 +15,26 @@ function useCountUp(target: number, duration = 1200) {
 }
 
 const adminTabs = [
-  { id: "overview", label: "Overview", ico: "dashboard" },
-  { id: "applications", label: "Applications", ico: "clipboard" },
+  { id: "overview", label: "Overview", ico: "binoculars" },
+  { id: "requests", label: "Member Requests", ico: "request" },
   { id: "members", label: "Members", ico: "users" },
   { id: "units", label: "Units", ico: "star" },
   { id: "payments", label: "Payments", ico: "credit" },
-  { id: "reports", label: "Financial Reports", ico: "chart" },
-  { id: "docs", label: "Documents", ico: "folder" },
-  { id: "matrix", label: "Referral Matrix", ico: "network" },
-  { id: "announcements", label: "Announcements", ico: "megaphone" },
-  { id: "chat", label: "Chat / Support", ico: "chat" },
-  { id: "milestones", label: "Milestones", ico: "award" },
-  { id: "certificates", label: "Certificates", ico: "filetext" },
-  { id: "crm", label: "Prospects CRM", ico: "contact" },
+  { id: "crm", label: "Prospect CRM", ico: "contact" },
   { id: "scheduler", label: "Scheduler", ico: "calendar" },
+  { id: "reports", label: "Reports", ico: "chart" },
+  { id: "docs", label: "Documents", ico: "folder" },
+  { id: "matrix", label: "My Referral Network", ico: "tree" },
+  { id: "announcements", label: "Updates", ico: "megaphone" },
+  { id: "chat", label: "Support", ico: "chat" },
+  { id: "milestones", label: "Milestones", ico: "award" },
+  { id: "certificates", label: "Certificates", ico: "ribbon" },
   { id: "settings", label: "Settings", ico: "settings" },
   { id: "audit", label: "Audit Logs", ico: "shield" },
 ];
 
 const matrixL1 = [
-  { name: "Maria Santos", pic: "M", invested: "$25,000", units: 25, status: "Active", joined: "May 20", location: "Miami, FL", source: "Lorenzo", labels: ["Investor + Builder", "Founder Member", "Qualified for Incentive"] },
+  { name: "Maria Santos", pic: "M", invested: "$25,000", units: 25, status: "Active", joined: "May 20", location: "Miami, FL", source: "Lorenzo", labels: ["Investor-Builder", "Founder Member", "Qualified for Incentive"] },
   { name: "David Chen", pic: "D", invested: "$10,000", units: 10, status: "Pending", joined: "May 22", location: "New York, NY", source: "Lorenzo", labels: ["Investor", "Pending Review"] },
   { name: "James Wilson", pic: "J", invested: "$15,000", units: 15, status: "Active", joined: "May 28", location: "Dallas, TX", source: "Lorenzo", labels: ["Builder", "Top Builder", "Early Access Member"] },
 ];
@@ -84,7 +85,7 @@ export default function AdminPortal() {
   const [replyMsg, setReplyMsg] = useState("");
   const [ticketFilter, setTicketFilter] = useState("all");
   const [prospects, setProspects] = useState<any[]>([]);
-  const [applications, setApplications] = useState<any[]>([]);
+  const [memberRequests, setMemberRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [crmNote, setCrmNote] = useState("");
   const [selectedProspect, setSelectedProspect] = useState<number|null>(null);
@@ -95,13 +96,13 @@ export default function AdminPortal() {
   const [matrixSearch, setMatrixSearch] = useState("");
   const [matrixFilter, setMatrixFilter] = useState("all");
   const [hoveredMember, setHoveredMember] = useState<any>(null);
-  const [viewingDownline, setViewingDownline] = useState<any>(null);
+  const [viewingReferralNetwork, setViewingReferralNetwork] = useState<any>(null);
 
   // Fetch data from API
   useEffect(() => { 
     setTimeout(() => setChartDraw(true), 300); 
     fetchProspects();
-    fetchApplications();
+    fetchMemberRequests();
     fetchAnnouncements();
     fetchTickets();
   }, []);
@@ -129,15 +130,15 @@ export default function AdminPortal() {
     }
   };
 
-  const fetchApplications = async () => {
+  const fetchMemberRequests = async () => {
     try {
-      const res = await fetch("/api/applications");
+      const res = await fetch("/api/member-requests");
       if (res.ok) {
         const data = await res.json();
-        setApplications(data);
+        setMemberRequests(data);
       }
     } catch (err) {
-      console.error("Failed to fetch applications:", err);
+      console.error("Failed to fetch member requests:", err);
     }
   };
 
@@ -205,7 +206,7 @@ export default function AdminPortal() {
     const map: Record<string, { bg: string; fg: string }> = {
       "Investor": { bg: "#e3f5eb", fg: "#087345" },
       "Builder": { bg: "#e7f0ff", fg: "#1e4fa3" },
-      "Investor + Builder": { bg: "#efe7ff", fg: "#5b34a3" },
+      "Investor-Builder": { bg: "#efe7ff", fg: "#5b34a3" },
       "Founder Member": { bg: "#fff3d6", fg: "#8a5a00" },
       "Early Access Member": { bg: "#fde8f3", fg: "#a3346e" },
       "Pending Review": { bg: "#fffaf0", fg: "#bd8e28" },
@@ -223,6 +224,18 @@ export default function AdminPortal() {
   };
 
   const allLabels = ["Investor", "Investor-Builder", "Founder Member", "Foundation Partner", "Early Access Member", "Pending Review", "Active", "Inactive", "Needs Follow-Up", "Top Builder", "Qualified for Incentive", "Not Yet Qualified", "Special Benefits Eligible"];
+  const requestRows = memberRequests.length
+    ? memberRequests.map((request: any) => ({
+      name: request.name || "New member",
+      interest: request.interest_amount ? `$${Number(request.interest_amount).toLocaleString()}` : "Not listed",
+      date: request.submitted_at ? new Date(request.submitted_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "New",
+      status: request.status === "pending" ? "Pending" : request.status === "approved" ? "Active" : "Review",
+    }))
+    : [
+      { name: "Michael Anderson", interest: "$10,000", date: "May 20", status: "Review" },
+      { name: "Sophia Martinez", interest: "$25,000", date: "May 19", status: "Review" },
+      { name: "David Thompson", interest: "$50,000", date: "May 18", status: "Pending" },
+    ];
 
   const switchTab = (id: string) => { setActiveTab(id); setSidebarOpen(false); };
 
@@ -324,7 +337,25 @@ export default function AdminPortal() {
     setTimeout(() => setMeetingCreated(false), 3000);
   };
 
-  const icoMap: Record<string, React.ReactNode> = { dashboard: <LayoutDashboard size={18} />, clipboard: <ClipboardList size={18} />, users: <Users size={18} />, star: <Star size={18} />, credit: <CreditCard size={18} />, chart: <BarChart3 size={18} />, folder: <FolderOpen size={18} />, network: <Network size={18} />, megaphone: <Megaphone size={18} />, chat: <MessageSquare size={18} />, award: <Award size={18} />, filetext: <FileText size={18} />, contact: <Contact size={18} />, calendar: <CalendarDays size={18} />, settings: <Settings size={18} />, shield: <ShieldCheck size={18} /> };
+  const icoMap: Record<string, React.ReactNode> = {
+    binoculars: <Binoculars size={18} />,
+    request: <UserRoundPlus size={18} />,
+    clipboard: <ClipboardList size={18} />,
+    users: <Users size={18} />,
+    star: <Star size={18} />,
+    credit: <CreditCard size={18} />,
+    chart: <FileBarChart size={18} />,
+    folder: <FolderOpen size={18} />,
+    tree: <TreePine size={18} />,
+    megaphone: <Megaphone size={18} />,
+    chat: <MessageSquare size={18} />,
+    award: <Award size={18} />,
+    ribbon: <Ribbon size={18} />,
+    contact: <Contact size={18} />,
+    calendar: <CalendarDays size={18} />,
+    settings: <Settings size={18} />,
+    shield: <ShieldCheck size={18} />,
+  };
 
   return (
     <div style={{ fontFamily: "Inter, Arial, sans-serif", color: "#071a33", background: "#fcfbf8" }}>
@@ -334,7 +365,7 @@ export default function AdminPortal() {
       <div className="sn-portal-grid" style={{ display: "grid", gridTemplateColumns: "296px 1fr", minHeight: "100vh" }}>
         {/* Sidebar */}
         <aside className={`sn-sidebar ${sidebarOpen ? "open" : ""}`} style={{ background: "linear-gradient(180deg,#fff 0%,#fbf8f1 54%,#edf6ef 100%)", borderRight: "1px solid #e7e2d8", padding: "24px 18px", position: "sticky", top: 0, height: "100vh", overflow: "auto" }}>
-          <div style={{ marginBottom: 28 }}><Link href=""><Image src="/assets/select-network/select-network-logo.png" alt="Select Network" width={245} height={60} style={{ width: 245, height: "auto" }} /></Link></div>
+          <div style={{ marginBottom: 28 }}><Link href=""><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={245} height={122} priority style={{ width: 245, height: "auto" }} /></Link></div>
           <nav style={{ display: "grid", gap: 7 }}>
             {adminTabs.map((t) => (
               <button key={t.id} onClick={() => switchTab(t.id)} style={{ display: "flex", alignItems: "center", gap: 14, textAlign: "left", padding: "14px 16px", border: 0, borderRadius: 12, background: activeTab === t.id ? "linear-gradient(135deg,#075933,#0d6d42)" : "transparent", color: activeTab === t.id ? "#fff" : "#10233b", fontWeight: 800, fontSize: 14, transition: ".25s", transform: activeTab === t.id ? "translateX(3px)" : "none", boxShadow: activeTab === t.id ? "0 0 22px rgba(213,168,61,.55)" : "none", cursor: "pointer" }}>
@@ -384,7 +415,7 @@ export default function AdminPortal() {
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
               {/* KPI Row */}
               <div className="sn-kpi-grid-6" style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 14, marginBottom: 22 }}>
-                {[{ ico: <Users size={20} />, label: "Active Members", value: String(membersCount) }, { ico: <ClipboardList size={20} />, label: "Pending Apps", value: String(apps) }, { ico: <Star size={20} />, label: "Units Issued", value: issued.toLocaleString() }, { ico: <CircleDot size={20} />, label: "Remaining", value: remaining.toLocaleString() }, { ico: <CreditCard size={20} />, label: "Revenue (MTD)", value: "$84,200" }, { ico: <TrendingUp size={20} />, label: "Growth", value: "+18.4%" }].map((k, i) => (
+                {[{ ico: <Users size={20} />, label: "Active Members", value: String(membersCount) }, { ico: <UserRoundPlus size={20} />, label: "New Requests", value: String(apps) }, { ico: <Star size={20} />, label: "Units Issued", value: issued.toLocaleString() }, { ico: <CircleDot size={20} />, label: "Remaining", value: remaining.toLocaleString() }, { ico: <CreditCard size={20} />, label: "Revenue (MTD)", value: "$84,200" }, { ico: <TrendingUp size={20} />, label: "Growth", value: "+18.4%" }].map((k, i) => (
                   <div key={i} style={kpiBox} className="hover:translate-y-[-3px] hover:shadow-[0_16px_40px_rgba(5,20,45,.10)]">
                     <div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div>
                     <div><small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em" }}>{k.label}</small><br /><b style={{ fontSize: 18 }}>{k.value}</b></div>
@@ -425,7 +456,7 @@ export default function AdminPortal() {
                     <span style={{ fontSize: 11, color: "#667085" }}>Last 6 months</span>
                   </div>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 18 }}>
+                <div className="sn-analytics-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 18 }}>
                   {[
                     { label: "Total Revenue", value: "$345,000", change: "+22%" },
                     { label: "New Members (MTD)", value: "18", change: "+12%" },
@@ -484,15 +515,17 @@ export default function AdminPortal() {
                 </div>
               </div>
 
+              <ReferralNetwork mode="admin" preview onOpenFull={() => switchTab("matrix")} />
+
               {/* Briefing Grid */}
               <div className="sn-admin-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 18, marginBottom: 18 }}>
                 {/* Recent Activity */}
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Recent Activity</h2>
                   {[
-                    { action: "Application Approved", who: "Michael Anderson", time: "2 hours ago", color: "#087345" },
+                    { action: "Member Request Approved", who: "Michael Anderson", time: "2 hours ago", color: "#087345" },
                     { action: "Payment Received", who: "$10,000 — Maria Santos", time: "5 hours ago", color: "#bd8e28" },
-                    { action: "New Application", who: "Jessica Moore", time: "8 hours ago", color: "#1e4fa3" },
+                    { action: "New Member Request", who: "Jessica Moore", time: "8 hours ago", color: "#1e4fa3" },
                     { action: "Certificate Issued", who: "James Wilson — Builder 10", time: "1 day ago", color: "#5b34a3" },
                     { action: "Units Assigned", who: "25 units → David Chen", time: "1 day ago", color: "#075933" },
                   ].map((a, i) => (
@@ -503,13 +536,13 @@ export default function AdminPortal() {
                   ))}
                 </div>
 
-                {/* Applications Queue */}
+                {/* Member Requests Queue */}
                 <div style={card}>
-                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Applications Queue</h2>
+                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Member Requests</h2>
                   {[{ name: "Michael Anderson", loc: "Miami, FL", amt: "$10,000" }, { name: "Sophia Martinez", loc: "Austin, TX", amt: "$25,000" }, { name: "David Thompson", loc: "Dallas, TX", amt: "$50,000" }, { name: "Jessica Moore", loc: "Cleveland, OH", amt: "$5,000" }].map((a, i) => (
                     <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #eef2f6" }}>
                       <div><b style={{ fontSize: 13 }}>{a.name}</b><br /><small style={{ color: "#667085" }}>{a.loc} · {a.amt}</small></div>
-                      <button onClick={() => switchTab("applications")} style={{ ...btnOutline, fontSize: 10, padding: "4px 10px" }}>Review</button>
+                      <button onClick={() => switchTab("requests")} style={{ ...btnOutline, fontSize: 10, padding: "4px 10px" }}>Review</button>
                     </div>
                   ))}
                 </div>
@@ -518,8 +551,8 @@ export default function AdminPortal() {
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Quick Actions</h2>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                    {["Review Apps", "Approve Reports", "Schedule Meeting", "Export Data", "Add Member", "Upload CSV", "Send Update", "Open Matrix"].map((a, i) => (
-                      <button key={i} onClick={() => { if (a === "Review Apps") switchTab("applications"); if (a === "Approve Reports") switchTab("reports"); if (a === "Schedule Meeting") switchTab("scheduler"); if (a === "Open Matrix") switchTab("matrix"); }} style={{ padding: "10px 8px", background: i % 2 === 0 ? "#f9f6ef" : "#edf6ef", border: "1px solid #e7e2d8", borderRadius: 8, fontSize: 11, fontWeight: 800, cursor: "pointer", transition: ".25s", color: "#071a33" }} className="hover:translate-y-[-2px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)]">{a} →</button>
+                    {["Review Requests", "Approve Reports", "Schedule Meeting", "Export Data", "Add Member", "Upload CSV", "Send Update", "Open Referrals"].map((a, i) => (
+                      <button key={i} onClick={() => { if (a === "Review Requests") switchTab("requests"); if (a === "Approve Reports") switchTab("reports"); if (a === "Schedule Meeting") switchTab("scheduler"); if (a === "Open Referrals") switchTab("matrix"); }} style={{ padding: "10px 8px", background: i % 2 === 0 ? "#f9f6ef" : "#edf6ef", border: "1px solid #e7e2d8", borderRadius: 8, fontSize: 11, fontWeight: 800, cursor: "pointer", transition: ".25s", color: "#071a33" }} className="hover:translate-y-[-2px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)]">{a} →</button>
                     ))}
                   </div>
                 </div>
@@ -559,23 +592,23 @@ export default function AdminPortal() {
             </div>
           )}
 
-          {/* APPLICATIONS */}
-          {activeTab === "applications" && (
+          {/* MEMBER REQUESTS */}
+          {activeTab === "requests" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
-              <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap" }}><input placeholder="Search applications" style={{ flex: 1, minWidth: 200, ...fieldInput }} /><select style={{ ...fieldInput, width: "auto" }}><option>All Statuses</option></select><button style={btnGreen}>Filter</button></div>
-              <div className="sn-table-wrap" style={card}><h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Applications</h2>
+              <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap" }}><input placeholder="Search member requests" style={{ flex: 1, minWidth: 200, ...fieldInput }} /><select style={{ ...fieldInput, width: "auto" }}><option>All Statuses</option></select><button style={btnGreen}>Filter</button></div>
+              <div className="sn-table-wrap" style={card}><h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Member Requests</h2>
                 <div className="sn-desktop-table" style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 600 }}>
                   <thead><tr>{["Name", "Interest", "Date", "Status", "Actions"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
                   <tbody>
-                    {[{ name: "Michael Anderson", interest: "$10,000", date: "May 20", status: "Review" }, { name: "Sophia Martinez", interest: "$25,000", date: "May 19", status: "Review" }, { name: "David Thompson", interest: "$50,000", date: "May 18", status: "Pending" }].map((a, i) => (
+                    {requestRows.map((a, i) => (
                       <tr key={i}><td style={tdS}><b>{a.name}</b></td><td style={{ ...tdS, color: "#bd8e28", fontWeight: 700 }}>{a.interest}</td><td style={{ ...tdS, color: "#667085" }}>{a.date}</td><td style={tdS}><span style={statusBadge(a.status)}>{a.status}</span></td><td style={tdS}><button style={btnOutline}>Approve</button> <button style={{ ...btnOutline, borderColor: "#dc2626", color: "#dc2626", marginLeft: 4 }}>Reject</button></td></tr>
                     ))}
                   </tbody>
                 </table>
                 </div>
                 <div className="sn-mobile-cards" style={{ display: "none" }}>
-                  {[{ name: "Michael Anderson", interest: "$10,000", date: "May 20", status: "Review" }, { name: "Sophia Martinez", interest: "$25,000", date: "May 19", status: "Review" }, { name: "David Thompson", interest: "$50,000", date: "May 18", status: "Pending" }].map((a, i) => (
+                  {requestRows.map((a, i) => (
                     <div key={i}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}><b style={{ fontSize: 15 }}>{a.name}</b><span style={statusBadge(a.status)}>{a.status}</span></div>
                       <div className="sn-m-card-row"><span className="sn-m-label">Interest</span><span className="sn-m-value" style={{ color: "#bd8e28" }}>{a.interest}</span></div>
@@ -597,14 +630,14 @@ export default function AdminPortal() {
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 600 }}>
                   <thead><tr>{["Name", "Status", "Units", "Invested", "Joined", "Action"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
                   <tbody>
-                    {[{ name: "Lorenzo", status: "Active", units: 50, invested: "$5,000", joined: "May 12", role: "Founder", fp: true }, { name: "Maria Santos", status: "Active", units: 25, invested: "$2,500", joined: "May 20", role: "Investor + Builder", fp: true }, { name: "David Chen", status: "Pending", units: 10, invested: "$1,000", joined: "May 22", role: "Investor", fp: true }, { name: "James Wilson", status: "Active", units: 15, invested: "$1,500", joined: "May 28", role: "Builder", fp: true }].map((m, i) => (
+                    {[{ name: "Lorenzo", status: "Active", units: 50, invested: "$5,000", joined: "May 12", role: "Founder", fp: true }, { name: "Maria Santos", status: "Active", units: 25, invested: "$2,500", joined: "May 20", role: "Investor-Builder", fp: true }, { name: "David Chen", status: "Pending", units: 10, invested: "$1,000", joined: "May 22", role: "Investor", fp: true }, { name: "James Wilson", status: "Active", units: 15, invested: "$1,500", joined: "May 28", role: "Builder", fp: true }].map((m, i) => (
                       <tr key={i}><td style={{ ...tdS, fontWeight: 700 }}>{m.name}{m.fp && <span style={{ marginLeft: 6, background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "2px 7px", borderRadius: 4, verticalAlign: "middle" }}>Foundation Partner</span>}</td><td style={tdS}><span style={statusBadge(m.status)}>{m.status}</span></td><td style={tdS}>{m.units}</td><td style={tdS}>{m.invested}</td><td style={{ ...tdS, color: "#667085" }}>{m.joined}</td><td style={tdS}><span style={labelStyle(m.role)}>{m.role}</span> <button style={{ ...btnOutline, marginLeft: 6 }}>View</button></td></tr>
                     ))}
                   </tbody>
                 </table>
                 </div>
                 <div className="sn-mobile-cards" style={{ display: "none" }}>
-                  {[{ name: "Lorenzo", status: "Active", units: 50, invested: "$5,000", joined: "May 12", role: "Founder", fp: true }, { name: "Maria Santos", status: "Active", units: 25, invested: "$2,500", joined: "May 20", role: "Investor + Builder", fp: true }, { name: "David Chen", status: "Pending", units: 10, invested: "$1,000", joined: "May 22", role: "Investor", fp: true }, { name: "James Wilson", status: "Active", units: 15, invested: "$1,500", joined: "May 28", role: "Builder", fp: true }].map((m, i) => (
+                  {[{ name: "Lorenzo", status: "Active", units: 50, invested: "$5,000", joined: "May 12", role: "Founder", fp: true }, { name: "Maria Santos", status: "Active", units: 25, invested: "$2,500", joined: "May 20", role: "Investor-Builder", fp: true }, { name: "David Chen", status: "Pending", units: 10, invested: "$1,000", joined: "May 22", role: "Investor", fp: true }, { name: "James Wilson", status: "Active", units: 15, invested: "$1,500", joined: "May 28", role: "Builder", fp: true }].map((m, i) => (
                     <div key={i}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}><b style={{ fontSize: 15 }}>{m.name}</b><span style={statusBadge(m.status)}>{m.status}</span></div>
                       {m.fp && <div style={{ marginBottom: 8, display: "flex", gap: 5, flexWrap: "wrap" }}><span style={{ background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "3px 8px", borderRadius: 4 }}>Foundation Partner</span> <span style={labelStyle(m.role)}>{m.role}</span></div>}
@@ -704,7 +737,7 @@ export default function AdminPortal() {
                   </button>
                   <div style={{ padding: "22px 24px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <div style={{ color: "#bd8e28", fontSize: 10.5, fontWeight: 900, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 8 }}>Official Document · Shared with Members</div>
-                    <h3 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 21, margin: "0 0 8px" }}>Select Network Compensation Plan</h3>
+                    <h3 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 21, margin: "0 0 8px" }}>The Select Network Member Group Compensation Plan</h3>
                     <p style={{ color: "#667085", fontSize: 13, lineHeight: 1.6, margin: "0 0 14px", maxWidth: 460 }}>Unit investment and quarterly profit distribution overview. Visible in every investor back office under Documents.</p>
                     <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                       <button onClick={() => setCompOpen(true)} style={btnGreen}>View</button>
@@ -725,8 +758,15 @@ export default function AdminPortal() {
             </div>
           )}
 
-          {/* REFERRAL MATRIX */}
+          {/* REFERRAL NETWORK */}
           {activeTab === "matrix" && (
+            <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
+              <ReferralNetwork mode="admin" />
+            </div>
+          )}
+
+          {/* LEGACY REFERRAL NETWORK */}
+          {activeTab === "matrixLegacy" && (
             <div style={{ animation: "fadeIn .5s ease" }}>
               {!matrixFullscreen ? (
                 <div className="sn-mobile-content">
@@ -741,7 +781,7 @@ export default function AdminPortal() {
                     <button onClick={() => setMatrixFullscreen(true)} style={{ ...btnGreen, display: "inline-flex", alignItems: "center", gap: 6 }}>⛶ Expand Full Screen</button>
                   </div>
                   <div style={card}>
-                    <p style={{ margin: "0 0 14px", fontSize: 12.5, color: "#667085", lineHeight: 1.5 }}>Click <b>Expand Full Screen</b> to view the interactive matrix across your full screen with zoom, pan, hover data, and click-to-inspect. The admin matrix has <b>no cap</b> — it shows the entire organization tree.</p>
+                    <p style={{ margin: "0 0 14px", fontSize: 12.5, color: "#667085", lineHeight: 1.5 }}>Click <b>Expand Full Screen</b> to view the interactive referral network across your full screen with zoom, pan, hover data, and click-to-inspect. The admin referral network has <b>no cap</b> — it shows the entire organization tree.</p>
                     {/* Compact preview — L1 through L3 */}
                     <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, opacity: matrixAnimated ? 1 : 0, transform: matrixAnimated ? "translateY(0)" : "translateY(20px)", transition: "all .6s ease" }}>
                       <div style={{ background: "#fff", border: "2px solid #bd8e28", borderRadius: 14, padding: "14px 20px", display: "flex", alignItems: "center", gap: 14, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
@@ -752,13 +792,13 @@ export default function AdminPortal() {
                     <div style={{ height: 24, width: 2, background: "linear-gradient(#bd8e28,#075933)", margin: "0 auto" }} />
                     {/* Level 1 */}
                     <div style={{ marginBottom: 10 }}>
-                      <div style={{ textAlign: "center", fontSize: 12, fontWeight: 900, color: "#075933", marginBottom: 8 }}>Level 1 — 3 Members <span style={{ fontWeight: 400, color: "#667085" }}>(click to view their downline)</span></div>
+                      <div style={{ textAlign: "center", fontSize: 12, fontWeight: 900, color: "#075933", marginBottom: 8 }}>Level 1 — 3 Members <span style={{ fontWeight: 400, color: "#667085" }}>(click to view their referral network)</span></div>
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
                         {matrixL1.filter(m => (matrixFilter === "all" || m.status === matrixFilter) && (!matrixSearch || m.name.toLowerCase().includes(matrixSearch.toLowerCase()))).map((m, i) => (
-                          <div key={i} onClick={() => setViewingDownline(m)} style={{ background: viewingDownline?.name === m.name ? "linear-gradient(135deg,#071a33,#0d3366)" : "#fff", color: viewingDownline?.name === m.name ? "#fff" : "inherit", border: viewingDownline?.name === m.name ? "2px solid #bd8e28" : "1px solid #e7e2d8", borderRadius: 12, padding: 14, cursor: "pointer", transition: ".3s", boxShadow: "0 8px 22px rgba(5,20,45,.06)" }} className="hover:translate-y-[-3px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)] hover:border-[#bd8e28]">
+                          <div key={i} onClick={() => setViewingReferralNetwork(m)} style={{ background: viewingReferralNetwork?.name === m.name ? "linear-gradient(135deg,#071a33,#0d3366)" : "#fff", color: viewingReferralNetwork?.name === m.name ? "#fff" : "inherit", border: viewingReferralNetwork?.name === m.name ? "2px solid #bd8e28" : "1px solid #e7e2d8", borderRadius: 12, padding: 14, cursor: "pointer", transition: ".3s", boxShadow: "0 8px 22px rgba(5,20,45,.06)" }} className="hover:translate-y-[-3px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)] hover:border-[#bd8e28]">
                             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                               <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#075933", fontWeight: 900, fontSize: 14 }}>{m.pic}</div>
-                              <div><b style={{ fontSize: 13 }}>{m.name}</b><br /><small style={{ color: viewingDownline?.name === m.name ? "#c6d2e1" : "#667085", fontSize: 11 }}>{m.invested} | {m.units} Units</small></div>
+                              <div><b style={{ fontSize: 13 }}>{m.name}</b><br /><small style={{ color: viewingReferralNetwork?.name === m.name ? "#c6d2e1" : "#667085", fontSize: 11 }}>{m.invested} | {m.units} Units</small></div>
                             </div>
                             <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 8 }}>
                               <span style={statusBadge(m.status)}>{m.status}</span>
@@ -774,7 +814,7 @@ export default function AdminPortal() {
                       <div style={{ textAlign: "center", fontSize: 12, fontWeight: 900, color: "#075933", marginBottom: 8 }}>Level 2 — 5 Active</div>
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 8 }}>
                         {["Sophia Lee", "Michael Brown", "Emily Davis", "Chris Park", "Ana Torres"].filter(n => !matrixSearch || n.toLowerCase().includes(matrixSearch.toLowerCase())).map((n, i) => (
-                          <div key={i} onClick={() => setViewingDownline({ name: n, pic: n.charAt(0), invested: "$5,000", units: 5, status: "Active", joined: "Jun 2025", location: "US", source: "L1", labels: ["Investor"] })} style={{ background: viewingDownline?.name === n ? "linear-gradient(135deg,#071a33,#0d3366)" : "#fff", color: viewingDownline?.name === n ? "#fff" : "inherit", border: viewingDownline?.name === n ? "2px solid #bd8e28" : "1px solid #e7e2d8", borderRadius: 10, padding: 10, textAlign: "center", fontSize: 12, transition: ".3s", cursor: "pointer" }} className="hover:translate-y-[-2px] hover:border-[#bd8e28]">
+                          <div key={i} onClick={() => setViewingReferralNetwork({ name: n, pic: n.charAt(0), invested: "$5,000", units: 5, status: "Active", joined: "Jun 2025", location: "US", source: "L1", labels: ["Investor"] })} style={{ background: viewingReferralNetwork?.name === n ? "linear-gradient(135deg,#071a33,#0d3366)" : "#fff", color: viewingReferralNetwork?.name === n ? "#fff" : "inherit", border: viewingReferralNetwork?.name === n ? "2px solid #bd8e28" : "1px solid #e7e2d8", borderRadius: 10, padding: 10, textAlign: "center", fontSize: 12, transition: ".3s", cursor: "pointer" }} className="hover:translate-y-[-2px] hover:border-[#bd8e28]">
                             <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#edf6ef", display: "grid", placeItems: "center", margin: "0 auto 4px", fontSize: 11, fontWeight: 900, color: "#075933" }}>{n.charAt(0)}</div>
                             <b style={{ fontSize: 11 }}>{n.split(" ")[0]}</b><br /><span style={{ ...statusBadge("Active"), fontSize: 9 }}>Active</span>
                           </div>
@@ -798,15 +838,15 @@ export default function AdminPortal() {
                       </div>
                     </div>
 
-                    {/* Member Downline Panel — shows when you click a member */}
-                    {viewingDownline && (
+                    {/* Member Referral Network Panel — shows when you click a member */}
+                    {viewingReferralNetwork && (
                       <div style={{ marginTop: 20, background: "#f9f6ef", border: "2px solid #bd8e28", borderRadius: 14, padding: "20px 24px", animation: "fadeIn .3s ease" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 16 }}>{viewingDownline.pic}</div>
-                            <div><b style={{ fontSize: 15 }}>{viewingDownline.name}&apos;s Downline</b><br /><small style={{ color: "#667085" }}>Personal matrix — up to 40 members</small></div>
+                            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 16 }}>{viewingReferralNetwork.pic}</div>
+                            <div><b style={{ fontSize: 15 }}>{viewingReferralNetwork.name}&apos;s Referral Network</b><br /><small style={{ color: "#667085" }}>Personal referral network — up to 40 members</small></div>
                           </div>
-                          <button onClick={() => setViewingDownline(null)} style={btnOutline}>✕ Close</button>
+                          <button onClick={() => setViewingReferralNetwork(null)} style={btnOutline}>✕ Close</button>
                         </div>
                         <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
                           {[
@@ -828,12 +868,12 @@ export default function AdminPortal() {
                             </div>
                           ))}
                         </div>
-                        <p style={{ fontSize: 11.5, color: "#667085", marginTop: 12, marginBottom: 0 }}>This member&apos;s personal downline cap is <b>40 members</b>. {viewingDownline.name} has 3 of 40 slots filled. As admin, you can see all member downlines from the full-screen matrix.</p>
+                        <p style={{ fontSize: 11.5, color: "#667085", marginTop: 12, marginBottom: 0 }}>This member&apos;s personal referral network cap is <b>40 members</b>. {viewingReferralNetwork.name} has 3 of 40 slots filled. As admin, you can see all member referral networks from the full-screen referral network.</p>
                       </div>
                     )}
 
                     <div style={{ textAlign: "center", marginTop: 20 }}>
-                      <button onClick={() => setMatrixFullscreen(true)} style={{ ...btnGreen, padding: "14px 28px", fontSize: 13 }}>⛶ Open Full Interactive Matrix</button>
+                      <button onClick={() => setMatrixFullscreen(true)} style={{ ...btnGreen, padding: "14px 28px", fontSize: 13 }}>⛶ Open Full Referral Network</button>
                     </div>
                   </div>
                 </div>
@@ -843,7 +883,7 @@ export default function AdminPortal() {
                   {/* Toolbar */}
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 24px", borderBottom: "1px solid #e7e2d8", background: "#fff", flexShrink: 0 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                      <h2 style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 400, margin: 0 }}>Full Organization Matrix</h2>
+                      <h2 style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 400, margin: 0 }}>Full Organization Referral Network</h2>
                       <span style={{ fontSize: 12, color: "#667085" }}>128 members · Unlimited depth</span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -1173,7 +1213,7 @@ export default function AdminPortal() {
           {activeTab === "settings" && (
             <div className="sn-mobile-content" style={{ maxWidth: 600, animation: "fadeIn .5s ease" }}>
               <div style={card}><h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>System Settings</h2>
-                {[["Admin Email", "admin@selectnetwork.com"], ["Company Name", "Select Network Private Investors Group LLC"], ["Unit Price", "$100"], ["Total Units", "50,000"]].map(([l, v], i) => (
+                {[["Admin Email", "admin@selectnetwork.com"], ["Company Name", "The Select Network Member Group"], ["Unit Price", "$100"], ["Total Units", "50,000"]].map(([l, v], i) => (
                   <div key={i} style={{ marginBottom: 14 }}><label style={fieldLabel}>{l}</label><input defaultValue={v} style={fieldInput} /></div>
                 ))}
                 <h3 style={{ margin: "20px 0 10px", fontSize: 16 }}>Integrations</h3>
@@ -1277,7 +1317,7 @@ export default function AdminPortal() {
                         { name: "First Investment", req: "1+ units purchased", achieved: 42, status: "Active" },
                         { name: "10 Referrals", req: "10 active referrals", achieved: 12, status: "Active" },
                         { name: "25 Referrals", req: "25 active referrals", achieved: 4, status: "Active" },
-                        { name: "40 Member Cap", req: "Full downline (40)", achieved: 1, status: "Active" },
+                        { name: "40 Member Cap", req: "Full referral network (40)", achieved: 1, status: "Active" },
                         { name: "$1,000 Incentive Earned", req: "Qualified sharing incentive", achieved: 8, status: "Active" },
                         { name: "Foundation Partner", req: "$10,000+ investment", achieved: 12, status: "Active" },
                       ].map((m, i) => (
@@ -1327,14 +1367,14 @@ export default function AdminPortal() {
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 500 }}>
                   <thead><tr>{["Timestamp", "User", "Action", "Details"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
                   <tbody>
-                    {[{ time: "May 28, 10:45 AM", user: "Admin", action: "Approved Application", details: "Michael Anderson" }, { time: "May 27, 3:20 PM", user: "Admin", action: "Published Report", details: "Q2 Financial Snapshot" }, { time: "May 26, 9:00 AM", user: "System", action: "New Application", details: "Sophia Martinez" }].map((l, i) => (
+                    {[{ time: "May 28, 10:45 AM", user: "Admin", action: "Approved Member Request", details: "Michael Anderson" }, { time: "May 27, 3:20 PM", user: "Admin", action: "Published Report", details: "Q2 Financial Snapshot" }, { time: "May 26, 9:00 AM", user: "System", action: "New Member Request", details: "Sophia Martinez" }].map((l, i) => (
                       <tr key={i}><td style={{ ...tdS, color: "#667085" }}>{l.time}</td><td style={tdS}>{l.user}</td><td style={tdS}>{l.action}</td><td style={{ ...tdS, color: "#667085" }}>{l.details}</td></tr>
                     ))}
                   </tbody>
                 </table>
                 </div>
                 <div className="sn-mobile-cards" style={{ display: "none" }}>
-                  {[{ time: "May 28, 10:45 AM", user: "Admin", action: "Approved Application", details: "Michael Anderson" }, { time: "May 27, 3:20 PM", user: "Admin", action: "Published Report", details: "Q2 Financial Snapshot" }, { time: "May 26, 9:00 AM", user: "System", action: "New Application", details: "Sophia Martinez" }].map((l, i) => (
+                  {[{ time: "May 28, 10:45 AM", user: "Admin", action: "Approved Member Request", details: "Michael Anderson" }, { time: "May 27, 3:20 PM", user: "Admin", action: "Published Report", details: "Q2 Financial Snapshot" }, { time: "May 26, 9:00 AM", user: "System", action: "New Member Request", details: "Sophia Martinez" }].map((l, i) => (
                     <div key={i}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}><b style={{ fontSize: 14 }}>{l.action}</b><span style={{ fontSize: 11, color: "#667085" }}>{l.time}</span></div>
                       <div className="sn-m-card-row"><span className="sn-m-label">User</span><span className="sn-m-value">{l.user}</span></div>
@@ -1428,7 +1468,7 @@ export default function AdminPortal() {
               <div style={{ position: "absolute", bottom: 20, left: 20, width: 40, height: 40, borderBottom: "3px solid #d5a83d", borderLeft: "3px solid #d5a83d" }} />
               <div style={{ position: "absolute", bottom: 20, right: 20, width: 40, height: 40, borderBottom: "3px solid #d5a83d", borderRight: "3px solid #d5a83d" }} />
 
-              <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: ".3em", textTransform: "uppercase", color: "#bd8e28", marginBottom: 12 }}>The Select Network Private Investors Group LLC</div>
+              <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: ".3em", textTransform: "uppercase", color: "#bd8e28", marginBottom: 12 }}>The Select Network Member Group</div>
               <h2 style={{ fontFamily: "Georgia, serif", fontSize: 38, fontWeight: 400, color: "#071a33", margin: "0 0 8px", letterSpacing: "-.02em" }}>Certificate of Achievement</h2>
               <div style={{ width: 120, height: 2, background: "linear-gradient(90deg, transparent, #d5a83d, transparent)", margin: "0 auto 24px" }} />
               <p style={{ color: "#667085", fontSize: 14, margin: "0 0 8px" }}>This certifies that</p>
@@ -1436,7 +1476,7 @@ export default function AdminPortal() {
               <p style={{ color: "#667085", fontSize: 14, margin: "16px 0 8px" }}>has been recognized for</p>
               <h3 style={{ fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 400, color: "#bd8e28", margin: "0 0 24px" }}>{viewCert.cert}</h3>
               <p style={{ color: "#4b5563", fontSize: 14, lineHeight: 1.7, maxWidth: 500, margin: "0 auto 28px" }}>
-                Presented in recognition of outstanding commitment to the Select Network community, demonstrating excellence in partnership, growth, and leadership.
+                Presented in recognition of outstanding commitment to The Select Network Member Group community, demonstrating excellence in partnership, growth, and leadership.
               </p>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 32, paddingTop: 20, borderTop: "1px solid #e7e2d8" }}>
                 <div style={{ textAlign: "left" }}>
@@ -1470,7 +1510,7 @@ export default function AdminPortal() {
         <div onClick={() => setCompOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 99999, background: "rgba(7,26,51,.82)", backdropFilter: "blur(4px)", display: "grid", placeItems: "center", padding: 24 }}>
           <button onClick={() => setCompOpen(false)} style={{ position: "absolute", top: 20, right: 20, background: "#fff", border: 0, borderRadius: "50%", width: 44, height: 44, display: "grid", placeItems: "center", cursor: "pointer", fontSize: 22, color: "#071a33", boxShadow: "0 6px 20px rgba(0,0,0,.25)" }} aria-label="Close">✕</button>
           <div onClick={(e) => e.stopPropagation()} style={{ maxWidth: 1100, width: "100%", maxHeight: "88vh", overflow: "auto", borderRadius: 12 }}>
-            <Image src="/assets/select-network/select-network-comp-plan.png" alt="Select Network Compensation Plan" width={1024} height={640} style={{ width: "100%", height: "auto", display: "block", borderRadius: 12 }} />
+            <Image src="/assets/select-network/select-network-comp-plan.png" alt="The Select Network Member Group Compensation Plan" width={1024} height={640} style={{ width: "100%", height: "auto", display: "block", borderRadius: 12 }} />
           </div>
         </div>
       )}

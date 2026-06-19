@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════════
--- Select Network — Announcements + Support Tables Migration
+-- The Select Network Member Group — Announcements + Support Tables Migration
 -- Run this in Supabase SQL Editor
 -- ═══════════════════════════════════════════════════════════════════════════════
 

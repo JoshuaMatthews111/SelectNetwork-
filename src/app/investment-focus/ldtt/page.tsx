@@ -79,7 +79,7 @@ export default function LDTTOpportunityPage() {
               <span style={{ color: GREEN }}>Dog Rescue</span>, and the Future of the Pet Industry
             </h1>
             <p style={{ fontSize: 15, lineHeight: 1.75, color: "#3d4a57", margin: "0 0 28px", maxWidth: 540 }}>
-              Lorenzo&apos;s Dog Training Team is the first current investment focus inside Select Network. This opportunity highlights a growing dog training brand connected to systems, expansion, service impact, and long-term business development.
+              Lorenzo&apos;s Dog Training Team is the first current investment focus inside The Select Network Member Group. This opportunity highlights a growing dog training brand connected to systems, expansion, service impact, and long-term business development.
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
               <Link
@@ -296,7 +296,7 @@ export default function LDTTOpportunityPage() {
                 <h3 style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400, fontSize: 42, lineHeight: 1, margin: "0 0 8px", color: "#b87522", whiteSpace: "nowrap" }}>Lorenzo Miller</h3>
                 <span style={{ fontFamily: "'Montserrat', 'Inter', sans-serif", fontSize: 13, fontWeight: 700, letterSpacing: "1.4px", textTransform: "uppercase", color: "#001b5d", display: "block", marginBottom: 10 }}>Founder &amp; CEO</span>
                 <p style={{ fontSize: 12, lineHeight: 1.55, color: "#4b5563", margin: "0 0 14px", fontStyle: "italic" }}>
-                  &ldquo;At The Select Network, we believe wealth is more than numbers—it&apos;s impact, legacy, and freedom of choice. Our mission is to connect exceptional investors with exceptional opportunities.&rdquo;
+                  &ldquo;At The Select Network Member Group, we believe wealth is more than numbers—it&apos;s impact, legacy, and freedom of choice. Our mission is to connect exceptional investors with exceptional opportunities.&rdquo;
                 </p>
                 <Link href="/about" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "10px 18px", borderRadius: 8, background: "#005c2f", color: "#fff", fontWeight: 700, fontSize: 12, letterSpacing: "0.8px", textTransform: "uppercase", textDecoration: "none" }}>
                   Learn More

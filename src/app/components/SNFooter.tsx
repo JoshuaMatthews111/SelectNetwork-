@@ -43,9 +43,9 @@ export default function SNFooter() {
         }}
       >
         <div>
-          <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network" width={220} height={54} style={{ width: 210, height: "auto" }} />
+          <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={220} height={54} style={{ width: 210, height: "auto" }} />
           <p style={{ marginTop: 16, color: "#9fb1c7", fontSize: 13, lineHeight: 1.7, maxWidth: 360 }}>
-            The Select Network Private Investors Group LLC is a private, invitation-only investor
+            The Select Network Member Group is a private, invitation-only investor
             platform. Lorenzo&apos;s Dog Training Team is the operating company whose historical
             business record is referenced for due diligence.
           </p>
@@ -92,7 +92,7 @@ export default function SNFooter() {
         }}
       >
         <span style={{ color: "#7e90a8", fontSize: 12 }}>
-          © {new Date().getFullYear()} The Select Network Private Investors Group LLC. All rights reserved.
+          © {new Date().getFullYear()} The Select Network Member Group. All rights reserved.
         </span>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "#7e90a8", fontSize: 12 }}>
           <ShieldCheck size={14} color="#d5a83d" /> Secure by design · Privacy protected

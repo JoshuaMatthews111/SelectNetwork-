@@ -72,7 +72,7 @@ export default function JoinPage() {
           <Reveal>
             <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 18, padding: 34, boxShadow: "0 14px 40px rgba(5,20,45,.07)" }}>
               <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 26, margin: "0 0 6px" }}>Your Information</h2>
-              <p style={{ color: "#667085", fontSize: 13.5, margin: "0 0 24px" }}>Complete the form below to get started with The Select Network.</p>
+              <p style={{ color: "#667085", fontSize: 13.5, margin: "0 0 24px" }}>Complete the form below to get started with The Select Network Member Group.</p>
 
               {submitted ? (
                 <div style={{ background: "#edf6ef", border: "1px solid #c7e2d0", borderRadius: 12, padding: "28px 24px", textAlign: "center" }}>

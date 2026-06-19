@@ -19,12 +19,12 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="sn-section-pad" style={{ background: "linear-gradient(135deg,#061a33,#030b17)", color: "#fff", padding: "70px 0" }}>
         <div className="sn-shell" style={{ textAlign: "center" }}>
-          <div style={{ color: GOLD, fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>About The Select Network</div>
+          <div style={{ color: GOLD, fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>About The Select Network Member Group</div>
           <h1 className="sn-page-hero-h1" style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 42, lineHeight: 1.15, margin: "0 auto", maxWidth: 820 }}>
             Invest With Purpose. <span style={{ color: GOLD }}>Back a Vision Built on Results.</span>
           </h1>
           <p style={{ color: "#c6d2e1", maxWidth: 680, margin: "20px auto 0", lineHeight: 1.7, fontSize: 16 }}>
-            The Select Network is a private investor platform connecting qualified members to opportunities built on integrity, leadership, and long-term value.
+            The Select Network Member Group is a private investor platform connecting qualified members to opportunities built on integrity, leadership, and long-term value.
           </p>
         </div>
       </section>
@@ -54,7 +54,7 @@ export default function AboutPage() {
                 </p>
               </div>
               <p style={{ color: "#667085", fontSize: 13.5, marginTop: 16, lineHeight: 1.7 }}>
-                Lorenzo&apos;s Dog Training Team is the operating company whose historical business record demonstrates the proven track record connected to this opportunity. The Select Network is the private investor platform built around it.
+                Lorenzo&apos;s Dog Training Team is the operating company whose historical business record demonstrates the proven track record connected to this opportunity. The Select Network Member Group is the private investor platform built around it.
               </p>
             </div>
           </Reveal>

@@ -24,7 +24,7 @@ export default function InvestmentFocusPage() {
             Current Investment Opportunities
           </h1>
           <p style={{ color: "#c6d2e1", maxWidth: 660, margin: "20px auto 0", lineHeight: 1.7, fontSize: 16 }}>
-            Select Network identifies and develops high-impact, purpose-driven opportunities designed to create sustainable long-term growth for our members.
+            The Select Network Member Group identifies and develops high-impact, purpose-driven opportunities designed to create sustainable long-term growth for our members.
           </p>
         </div>
       </section>
@@ -36,7 +36,7 @@ export default function InvestmentFocusPage() {
             <div style={{ textAlign: "center", marginBottom: 40 }}>
               <div style={{ width: 40, height: 3, background: GOLD, margin: "0 auto 18px" }} />
               <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 30, margin: "0 0 8px" }}>Current Investment Focus</h2>
-              <p style={{ color: "#5b6675", fontSize: 14.5, margin: 0 }}>Our first investment opportunity inside Select Network.</p>
+              <p style={{ color: "#5b6675", fontSize: 14.5, margin: 0 }}>Our first investment opportunity inside The Select Network Member Group.</p>
             </div>
           </Reveal>
 
@@ -66,7 +66,7 @@ export default function InvestmentFocusPage() {
                   <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: ".12em", textTransform: "uppercase", color: GOLD, marginBottom: 10, display: "block" }}>First Investment Focus</span>
                   <h3 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 14px", color: NAVY }}>Lorenzo&apos;s Dog Training Team</h3>
                   <p style={{ fontSize: 15, lineHeight: 1.75, color: "#3d4a57", margin: "0 0 22px" }}>
-                    Lorenzo&apos;s Dog Training Team is the first current investment focus inside Select Network. This opportunity highlights a growing dog training brand connected to systems, expansion, service impact, and long-term business development.
+                    Lorenzo&apos;s Dog Training Team is the first current investment focus inside The Select Network Member Group. This opportunity highlights a growing dog training brand connected to systems, expansion, service impact, and long-term business development.
                   </p>
                   <span style={{
                     display: "inline-flex",

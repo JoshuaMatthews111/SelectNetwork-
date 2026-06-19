@@ -24,7 +24,7 @@ export default function ReportsPage() {
     { icon: <BarChart3 size={24} />, title: "Revenue Performance Overview", desc: "Total sales and category revenue from Lorenzo's Dog Training Team historical records, 2016–2025.", pdf: null },
     { icon: <TrendingUp size={24} />, title: "Profit & Margin Summary", desc: "Operating profit and margin by year from the client-provided LDTT record.", pdf: null },
     { icon: <PieChart size={24} />, title: "Category Sales Breakdown", desc: "Training, boarding, equipment/misc, and tuition totals across all years.", pdf: null },
-    { icon: <Network size={24} />, title: "Trainer Hierarchy 2026", desc: "Visual overview of LDTT's trainer network and leadership structure. Separate from the investor referral matrix.", pdf: "/reports/trainer-hierarchy-2026.png", viewHref: "/reports/trainer-hierarchy-2026.png" },
+    { icon: <Network size={24} />, title: "Trainer Hierarchy 2026", desc: "Visual overview of LDTT's trainer network and leadership structure. Separate from the investor referral network.", pdf: "/reports/trainer-hierarchy-2026.png", viewHref: "/reports/trainer-hierarchy-2026.png" },
     { icon: <FileText size={24} />, title: "Explaining the Drop & Rebuild", desc: "A detailed explanation of why LDTT's sales volume declined and the current recovery and growth strategy moving forward.", pdf: "/reports/explaining-the-drop-and-rebuild.pages", viewHref: "#live-charts", dropDoc: true },
     { icon: <CalendarClock size={24} />, title: "Quarterly Investor Updates", desc: "Full quarterly updates, communications, and financial summaries are available exclusively inside the investor dashboard after participation is completed.", pdf: null, portal: true },
   ];
@@ -41,7 +41,7 @@ export default function ReportsPage() {
             Transparency You Can Trust
           </h1>
           <p style={{ color: "#c6d2e1", maxWidth: 760, margin: "20px auto 0", lineHeight: 1.8, fontSize: 15.5 }}>
-            At The Select Network, we believe informed investors make confident decisions. Our investment reports provide clear, consistent, and data-driven visibility into the historical operating performance of Lorenzo&apos;s Dog Training Team so qualified investors can review the business record with confidence.
+            At The Select Network Member Group, we believe informed investors make confident decisions. Our investment reports provide clear, consistent, and data-driven visibility into the historical operating performance of Lorenzo&apos;s Dog Training Team so qualified investors can review the business record with confidence.
           </p>
         </div>
       </section>
@@ -85,7 +85,7 @@ export default function ReportsPage() {
               <div className="sn-comp-doc" style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 0, alignItems: "stretch" }}>
                 {/* Thumbnail */}
                 <button onClick={() => setCompOpen(true)} style={{ position: "relative", border: 0, padding: 0, cursor: "pointer", background: "#0a2240", display: "block", minHeight: 220, overflow: "hidden" }} aria-label="Open compensation plan preview">
-                  <Image src="/assets/select-network/select-network-comp-plan.png" alt="Select Network Compensation Plan" width={640} height={400} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.96 }} />
+                  <Image src="/assets/select-network/select-network-comp-plan.png" alt="The Select Network Member Group Compensation Plan" width={640} height={400} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.96 }} />
                   <span style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", background: "rgba(7,26,51,.32)", color: "#fff", transition: ".25s" }}>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(7,26,51,.7)", padding: "10px 16px", borderRadius: 99, fontSize: 12, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".04em", border: "1px solid rgba(213,168,61,.5)" }}><Eye size={14} /> Click to View</span>
                   </span>
@@ -93,11 +93,11 @@ export default function ReportsPage() {
                 {/* Details */}
                 <div style={{ padding: "30px 32px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                   <div style={{ display: "inline-flex", alignItems: "center", gap: 8, color: GOLD, fontSize: 11, fontWeight: 900, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 12 }}>
-                    <FileText size={15} /> Official Select Network Document
+                    <FileText size={15} /> Official The Select Network Member Group Document
                   </div>
-                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 10px" }}>Select Network Compensation Plan</h2>
+                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 10px" }}>The Select Network Member Group Compensation Plan</h2>
                   <p style={{ color: "#5b6675", lineHeight: 1.7, fontSize: 14.5, margin: "0 0 22px", maxWidth: 560 }}>
-                    Review the official unit investment and quarterly profit distribution overview. A Unit is a proportional participation allocation within the Select Network investment structure, used to determine an investor&apos;s share of designated company distributions and growth-based revenue participation. This document illustrates how units are purchased ($100 per unit) and how available quarterly profit is distributed across all units.
+                    Review the official unit investment and quarterly profit distribution overview. A Unit is a proportional participation allocation within The Select Network Member Group investment structure, used to determine an investor&apos;s share of designated company distributions and growth-based revenue participation. This document illustrates how units are purchased ($100 per unit) and how available quarterly profit is distributed across all units.
                   </p>
                   <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                     <button onClick={() => setCompOpen(true)} style={btnGreen}><Eye size={15} /> View Document</button>
@@ -226,7 +226,7 @@ export default function ReportsPage() {
         <div onClick={() => setCompOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 99999, background: "rgba(7,26,51,.82)", backdropFilter: "blur(4px)", display: "grid", placeItems: "center", padding: 24, animation: "snFade .2s ease" }}>
           <button onClick={() => setCompOpen(false)} style={{ position: "absolute", top: 20, right: 20, background: "#fff", border: 0, borderRadius: "50%", width: 44, height: 44, display: "grid", placeItems: "center", cursor: "pointer", boxShadow: "0 6px 20px rgba(0,0,0,.25)" }} aria-label="Close"><X size={22} color={NAVY} /></button>
           <div onClick={(e) => e.stopPropagation()} style={{ maxWidth: 1100, width: "100%", maxHeight: "88vh", overflow: "auto", borderRadius: 12, boxShadow: "0 30px 80px rgba(0,0,0,.4)" }}>
-            <Image src="/assets/select-network/select-network-comp-plan.png" alt="Select Network Compensation Plan" width={1024} height={640} style={{ width: "100%", height: "auto", display: "block", borderRadius: 12 }} />
+            <Image src="/assets/select-network/select-network-comp-plan.png" alt="The Select Network Member Group Compensation Plan" width={1024} height={640} style={{ width: "100%", height: "auto", display: "block", borderRadius: 12 }} />
           </div>
         </div>
       )}

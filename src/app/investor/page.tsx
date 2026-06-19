@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { LayoutDashboard, Star, TrendingUp, FolderOpen, Wallet, Network, Megaphone, Settings, Bell, Mail, Diamond, CheckCircle, FileText, CircleDot, Menu, LogOut, MessageSquare, Award, Target } from "lucide-react";
+import { Binoculars, Star, TrendingUp, FolderOpen, Wallet, Network, TreePine, Megaphone, Settings, Bell, Mail, Diamond, CheckCircle, FileText, CircleDot, Menu, LogOut, MessageSquare, Award, Target, Ribbon } from "lucide-react";
+import ReferralNetwork from "../components/ReferralNetwork";
 
 /* ─── Count-up hook ─── */
 function useCountUp(target: number, duration = 1200) {
@@ -28,13 +29,13 @@ function useCountUp(target: number, duration = 1200) {
 const matrixMembers = {
   self: { name: "Lorenzo", pic: "L", joined: "May 19, 2025", invested: "$50,000", units: 50, location: "Cleveland, OH", source: "Founder", status: "Active", label: "Founder Member" },
   l1: [
-    { name: "Maria Santos", pic: "M", joined: "May 20, 2025", invested: "$25,000", units: 25, location: "Miami, FL", source: "Lorenzo", status: "Active", label: "Investor + Builder" },
+    { name: "Maria Santos", pic: "M", joined: "May 20, 2025", invested: "$25,000", units: 25, location: "Miami, FL", source: "Lorenzo", status: "Active", label: "Investor-Builder" },
     { name: "David Chen", pic: "D", joined: "May 22, 2025", invested: "$10,000", units: 10, location: "New York, NY", source: "Lorenzo", status: "Pending", label: "Investor" },
     { name: "James Wilson", pic: "J", joined: "May 28, 2025", invested: "$15,000", units: 15, location: "Dallas, TX", source: "Lorenzo", status: "Active", label: "Builder" },
   ],
   l2: [
     { name: "Sophia Lee", pic: "S", status: "Active", invested: "$5,000", units: 5, joined: "Jun 1, 2025", location: "LA, CA", source: "Maria Santos", label: "Investor" },
-    { name: "Michael Brown", pic: "M", status: "Active", invested: "$8,000", units: 8, joined: "Jun 5, 2025", location: "Chicago, IL", source: "Maria Santos", label: "Investor + Builder" },
+    { name: "Michael Brown", pic: "M", status: "Active", invested: "$8,000", units: 8, joined: "Jun 5, 2025", location: "Chicago, IL", source: "Maria Santos", label: "Investor-Builder" },
     { name: "Emily Davis", pic: "E", status: "Pending", invested: "$3,000", units: 3, joined: "Jun 8, 2025", location: "Houston, TX", source: "Maria Santos", label: "Early Access Member" },
     { name: "Chris Park", pic: "C", status: "Active", invested: "$12,000", units: 12, joined: "Jun 10, 2025", location: "Atlanta, GA", source: "David Chen", label: "Investor" },
     { name: "Ana Torres", pic: "A", status: "Active", invested: "$6,000", units: 6, joined: "Jun 12, 2025", location: "San Diego, CA", source: "David Chen", label: "Builder" },
@@ -45,16 +46,16 @@ const matrixMembers = {
 const MEMBER_ROLE: "Investor" | "Builder" = "Investor";
 
 const allTabs = [
-  { id: "overview", label: "Overview", ico: <LayoutDashboard size={20} />, roles: ["Investor", "Builder"] },
-  { id: "units", label: "Founder Units", ico: <Star size={20} />, roles: ["Investor", "Builder"] },
+  { id: "overview", label: "Overview", ico: <Binoculars size={20} />, roles: ["Investor", "Builder"] },
+  { id: "units", label: "Units", ico: <Star size={20} />, roles: ["Investor", "Builder"] },
   { id: "reports", label: "Reports & Documents", ico: <TrendingUp size={20} />, roles: ["Investor", "Builder"] },
   { id: "docs", label: "Documents", ico: <FolderOpen size={20} />, roles: ["Investor", "Builder"] },
   { id: "withdrawals", label: "Withdrawals", ico: <Wallet size={20} />, roles: ["Investor", "Builder"] },
-  { id: "matrix", label: "Referral Matrix", ico: <Network size={20} />, roles: ["Builder"] },
+  { id: "matrix", label: "My Referrals", ico: <TreePine size={20} />, roles: ["Investor", "Builder"] },
   { id: "announcements", label: "Announcements", ico: <Megaphone size={20} />, roles: ["Investor", "Builder"] },
   { id: "chat", label: "Support / Chat", ico: <MessageSquare size={20} />, roles: ["Investor", "Builder"] },
   { id: "milestones", label: "Milestones", ico: <Award size={20} />, roles: ["Investor", "Builder"] },
-  { id: "certificates", label: "Certificates", ico: <FileText size={20} />, roles: ["Investor", "Builder"] },
+  { id: "certificates", label: "Certificates", ico: <Ribbon size={20} />, roles: ["Investor", "Builder"] },
   { id: "settings", label: "Settings", ico: <Settings size={20} />, roles: ["Investor", "Builder"] },
 ];
 
@@ -153,7 +154,7 @@ export default function InvestorPortal() {
       "Founder Member": { bg: "#fff3d6", fg: "#8a5a00" },
       "Investor": { bg: "#e3f5eb", fg: "#087345" },
       "Builder": { bg: "#e7f0ff", fg: "#1e4fa3" },
-      "Investor + Builder": { bg: "#efe7ff", fg: "#5b34a3" },
+      "Investor-Builder": { bg: "#efe7ff", fg: "#5b34a3" },
       "Early Access Member": { bg: "#fde8f3", fg: "#a3346e" },
     };
     const c = map[label || ""] || { bg: "#f0f2f5", fg: "#667085" };
@@ -169,7 +170,7 @@ export default function InvestorPortal() {
         {/* ─── Sidebar ─── */}
         <aside className={`sn-sidebar ${sidebarOpen ? "open" : ""}`} style={{ background: "linear-gradient(180deg,#fff 0%,#fbf8f1 54%,#edf6ef 100%)", borderRight: "1px solid #e7e2d8", padding: "24px 18px", position: "sticky", top: 0, height: "100vh", overflow: "auto" }}>
           <div style={{ marginBottom: 28 }}>
-            <Link href=""><Image src="/assets/select-network/select-network-logo.png" alt="Select Network" width={245} height={60} style={{ width: 220, height: "auto", display: "block" }} /></Link>
+            <Link href=""><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={220} height={110} priority style={{ width: 220, height: "auto", display: "block" }} /></Link>
           </div>
           <nav style={{ display: "grid", gap: 7 }}>
             {tabs.map((t) => (
@@ -232,7 +233,7 @@ export default function InvestorPortal() {
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
                     {[
                       { title: "Overview", desc: "KPIs, charts, portfolio at a glance", highlight: true },
-                      { title: "Founder Units", desc: "Track your unit value & allocation", highlight: false },
+                      { title: "Units", desc: "Track your unit value & allocation", highlight: false },
                       { title: "Certificates", desc: "View & download your certificates", highlight: true },
                       { title: "Support", desc: "Contact our team directly", highlight: false },
                     ].map((t, i) => (
@@ -248,7 +249,7 @@ export default function InvestorPortal() {
               <div className="sn-kpi-grid-6" style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 14, marginBottom: 22 }}>
                 {[
                   { ico: <Diamond size={20} />, label: "Member Status", value: "Active", color: "#075933" },
-                  { ico: <Star size={20} />, label: "Founder Units", value: String(units), color: "#071a33" },
+                  { ico: <Star size={20} />, label: "Units", value: String(units), color: "#071a33" },
                   { ico: <Wallet size={20} />, label: "Unit Price", value: "$100", color: "#071a33" },
                   { ico: <CheckCircle size={20} />, label: "KYC Status", value: "Verified", color: "#075933" },
                   { ico: <FileText size={20} />, label: "Reports", value: String(reports), color: "#071a33" },
@@ -281,15 +282,15 @@ export default function InvestorPortal() {
                     ))}
                   </div>
                   <div style={{ marginTop: 14, borderLeft: "3px solid #bd8e28", background: "#fffaf0", color: "#604b17", padding: "10px 14px", fontSize: 12, borderRadius: "0 6px 6px 0", lineHeight: 1.5 }}>
-                    Distribution values are posted quarterly when profits are available through The Select Network reporting system.
+                    Distribution values are posted quarterly when profits are available through The Select Network Member Group reporting system.
                   </div>
                 </div>
                 <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)", textAlign: "center" }}>
-                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 16px" }}>Founder Units</h2>
+                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 16px" }}>Units</h2>
                   <div style={{ width: 170, height: 170, border: "22px solid #075933", borderTopColor: "#d5a83d", borderRadius: "50%", display: "grid", placeItems: "center", margin: "20px auto", transition: "transform 1s ease", transform: donutAnim ? "rotate(360deg)" : "rotate(0deg)" }}>
                     <div style={{ textAlign: "center" }}><b style={{ fontSize: 34 }}>{units}</b><br /><small>Total Units</small></div>
                   </div>
-                  <button onClick={() => setActiveTab("units")} style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", color: "#a46a00", border: "1px solid #bd8e28", borderRadius: 8, padding: "10px 16px", fontWeight: 900, textTransform: "uppercase", fontSize: 12, letterSpacing: ".04em", cursor: "pointer", transition: ".25s" }} className="hover:translate-y-[-2px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)]">View Founder Units →</button>
+                  <button onClick={() => setActiveTab("units")} style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", color: "#a46a00", border: "1px solid #bd8e28", borderRadius: 8, padding: "10px 16px", fontWeight: 900, textTransform: "uppercase", fontSize: 12, letterSpacing: ".04em", cursor: "pointer", transition: ".25s" }} className="hover:translate-y-[-2px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)]">View Units →</button>
                 </div>
               </div>
 
@@ -323,7 +324,7 @@ export default function InvestorPortal() {
               <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", borderRadius: 14, padding: "20px 24px", marginBottom: 22, display: "flex", gap: 14, alignItems: "flex-start" }}>
                 <Star size={22} color="#ffd46f" style={{ flexShrink: 0, marginTop: 2 }} />
                 <p style={{ margin: 0, color: "#c6d2e1", fontSize: 13.5, lineHeight: 1.7 }}>
-                  <b style={{ color: "#ffd46f" }}>What is a Unit?</b> A Unit is a proportional participation allocation within the Select Network investment structure, used to determine an investor&apos;s share of designated company distributions and growth-based revenue participation.
+                  <b style={{ color: "#ffd46f" }}>What is a Unit?</b> A Unit is a proportional participation allocation within The Select Network Member Group investment structure, used to determine an investor&apos;s share of designated company distributions and growth-based revenue participation.
                 </p>
               </div>
               <div className="sn-kpi-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 22 }}>
@@ -340,12 +341,12 @@ export default function InvestorPortal() {
                   <div className="sn-desktop-table">
                     <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                       <thead><tr style={{ borderBottom: "1px solid #e9edf3" }}>{["Date", "Type", "Units", "Amount", "Status"].map(h => <th key={h} style={{ textAlign: "left", padding: 10, color: "#667085", fontSize: 11, textTransform: "uppercase", fontWeight: 900 }}>{h}</th>)}</tr></thead>
-                      <tbody><tr style={{ borderBottom: "1px solid #eef2f6" }}><td style={{ padding: 12 }}>May 19, 2025</td><td style={{ padding: 12 }}>Initial Founder Units</td><td style={{ padding: 12 }}>50</td><td style={{ padding: 12 }}>$5,000</td><td style={{ padding: 12 }}><span style={{ padding: "4px 10px", borderRadius: 99, background: "#e3f5eb", color: "#087345", fontSize: 11, fontWeight: 900 }}>Active</span></td></tr></tbody>
+                      <tbody><tr style={{ borderBottom: "1px solid #eef2f6" }}><td style={{ padding: 12 }}>May 19, 2025</td><td style={{ padding: 12 }}>Initial Units</td><td style={{ padding: 12 }}>50</td><td style={{ padding: 12 }}>$5,000</td><td style={{ padding: 12 }}><span style={{ padding: "4px 10px", borderRadius: 99, background: "#e3f5eb", color: "#087345", fontSize: 11, fontWeight: 900 }}>Active</span></td></tr></tbody>
                     </table>
                   </div>
                   <div className="sn-mobile-cards" style={{ display: "none" }}>
                     <div>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}><b style={{ fontSize: 15 }}>Initial Founder Units</b><span style={{ padding: "4px 10px", borderRadius: 99, background: "#e3f5eb", color: "#087345", fontSize: 11, fontWeight: 900 }}>Active</span></div>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}><b style={{ fontSize: 15 }}>Initial Units</b><span style={{ padding: "4px 10px", borderRadius: 99, background: "#e3f5eb", color: "#087345", fontSize: 11, fontWeight: 900 }}>Active</span></div>
                       <div className="sn-m-card-row"><span className="sn-m-label">Date</span><span className="sn-m-value">May 19, 2025</span></div>
                       <div className="sn-m-card-row"><span className="sn-m-label">Units</span><span className="sn-m-value">50</span></div>
                       <div className="sn-m-card-row"><span className="sn-m-label">Amount</span><span className="sn-m-value">$5,000</span></div>
@@ -354,7 +355,7 @@ export default function InvestorPortal() {
                 </div>
                 <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Unit Timeline</h2>
-                  <p style={{ color: "#667085", lineHeight: 1.7 }}>Payment submitted → agreement signed → founder units assigned → dashboard activated automatically.</p>
+                  <p style={{ color: "#667085", lineHeight: 1.7 }}>Payment submitted → agreement signed → units assigned → dashboard activated automatically.</p>
                   <div style={{ marginTop: 16, height: 8, background: "#edf6ef", borderRadius: 99, overflow: "hidden" }}><div style={{ height: "100%", width: "100%", background: "linear-gradient(90deg,#075933,#d5a83d)", borderRadius: 99 }} /></div>
                 </div>
               </div>
@@ -461,12 +462,12 @@ export default function InvestorPortal() {
               <div style={{ background: "linear-gradient(135deg,#fbf9f4,#fff)", border: "1px solid #e7d9b6", borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 30px rgba(5,20,45,.07)", marginBottom: 18 }}>
                 <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 0, alignItems: "stretch" }}>
                   <button onClick={() => setCompOpen(true)} style={{ position: "relative", border: 0, padding: 0, cursor: "pointer", background: "#0a2240", minHeight: 180, overflow: "hidden" }} aria-label="Open compensation plan">
-                    <Image src="/assets/select-network/select-network-comp-plan.png" alt="Select Network Compensation Plan" width={520} height={340} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <Image src="/assets/select-network/select-network-comp-plan.png" alt="The Select Network Member Group Compensation Plan" width={520} height={340} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     <span style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", background: "rgba(7,26,51,.3)" }}><span style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(7,26,51,.7)", color: "#fff", padding: "8px 14px", borderRadius: 99, fontSize: 11, fontWeight: 800, textTransform: "uppercase", border: "1px solid rgba(213,168,61,.5)" }}>View</span></span>
                   </button>
                   <div style={{ padding: "24px 26px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <div style={{ display: "inline-flex", alignItems: "center", gap: 7, color: "#bd8e28", fontSize: 10.5, fontWeight: 900, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 10 }}><FileText size={14} /> Official Document</div>
-                    <h3 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 22, margin: "0 0 8px" }}>Select Network Compensation Plan</h3>
+                    <h3 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 22, margin: "0 0 8px" }}>The Select Network Member Group Compensation Plan</h3>
                     <p style={{ color: "#667085", fontSize: 13, lineHeight: 1.6, margin: "0 0 16px", maxWidth: 480 }}>Official unit investment and quarterly profit distribution overview. $100 per unit; available quarterly profit distributed equally across all units.</p>
                     <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                       <button onClick={() => setCompOpen(true)} style={{ background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", border: 0, borderRadius: 8, padding: "10px 16px", fontWeight: 900, fontSize: 11, textTransform: "uppercase", letterSpacing: ".04em", cursor: "pointer" }}>View Document</button>
@@ -524,11 +525,18 @@ export default function InvestorPortal() {
             </div>
           )}
 
-          {/* ─── REFERRAL MATRIX ─── */}
+          {/* ─── REFERRALS ─── */}
           {activeTab === "matrix" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
+              <ReferralNetwork mode="investor" />
+            </div>
+          )}
+
+          {/* ─── LEGACY REFERRAL NETWORK ─── */}
+          {activeTab === "matrixLegacy" && (
+            <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
               <div className="sn-kpi-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 18 }}>
-                {[{ ico: <Network size={20} />, label: "My Network", value: String(referrals) }, { ico: <Network size={20} />, label: "Direct Referrals", value: "3" }, { ico: <CheckCircle size={20} />, label: "Active Members", value: String(referrals) }, { ico: <Network size={20} />, label: "Downline Capacity", value: `${referrals} / 40` }].map((k, i) => (
+                {[{ ico: <Network size={20} />, label: "My Network", value: String(referrals) }, { ico: <Network size={20} />, label: "Direct Referrals", value: "3" }, { ico: <CheckCircle size={20} />, label: "Active Members", value: String(referrals) }, { ico: <Network size={20} />, label: "Referral Capacity", value: `${referrals} / 40` }].map((k, i) => (
                   <div key={i} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: "18px 16px", boxShadow: "0 8px 24px rgba(5,20,45,.06)", display: "flex", alignItems: "center", gap: 14 }}>
                     <div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div>
                     <div><small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase" }}>{k.label}</small><br /><b style={{ fontSize: 18 }}>{k.value}</b></div>
@@ -541,23 +549,23 @@ export default function InvestorPortal() {
                 {["All", "Active", "Pending", "Paused"].map(f => (
                   <button key={f} style={{ background: "#fff", color: "#a46a00", border: "1px solid #bd8e28", borderRadius: 8, padding: "8px 14px", fontWeight: 900, fontSize: 11, cursor: "pointer", transition: ".25s" }} className="hover:translate-y-[-2px]">{f}</button>
                 ))}
-                <button onClick={() => setMatrixFull(true)} style={{ background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", border: 0, borderRadius: 8, padding: "8px 16px", fontWeight: 900, fontSize: 11, cursor: "pointer", transition: ".25s" }} className="hover:translate-y-[-2px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)]">View Full Matrix</button>
+                <button onClick={() => setMatrixFull(true)} style={{ background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", border: 0, borderRadius: 8, padding: "8px 16px", fontWeight: 900, fontSize: 11, cursor: "pointer", transition: ".25s" }} className="hover:translate-y-[-2px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)]">View Full Referral Network</button>
               </div>
 
               {/* Matrix Board */}
               <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)", overflow: "auto" }}>
                 <h2 className="serif" style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 22, margin: "0 0 6px" }}>My Referral Network</h2>
-                <p style={{ margin: "0 0 14px", fontSize: 12.5, color: "#667085", lineHeight: 1.5 }}>The Select Network investor referral matrix. As an individual member, your personal downline participation is capped at <b>40 members</b>. The structure below expands in depth and width as your team grows, up to your personal cap. This is separate from Lorenzo&apos;s Dog Training Team trainer hierarchy shown under Investment Reports.</p>
-                {/* Downline Capacity Tracker */}
+                <p style={{ margin: "0 0 14px", fontSize: 12.5, color: "#667085", lineHeight: 1.5 }}>The Select Network Member Group investor referral network. As an individual member, your personal referral network participation is capped at <b>40 members</b>. The structure below expands in depth and width as your team grows, up to your personal cap. This is separate from Lorenzo&apos;s Dog Training Team trainer hierarchy shown under Investment Reports.</p>
+                {/* Referral Capacity Tracker */}
                 <div style={{ background: "#fbf9f4", border: "1px solid #eee7d8", borderRadius: 12, padding: "14px 18px", marginBottom: 18 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <small style={{ fontSize: 11.5, fontWeight: 900, color: "#075933", textTransform: "uppercase", letterSpacing: ".04em" }}>Personal Downline Capacity</small>
+                    <small style={{ fontSize: 11.5, fontWeight: 900, color: "#075933", textTransform: "uppercase", letterSpacing: ".04em" }}>Personal Referral Capacity</small>
                     <b style={{ fontSize: 13, color: "#075933" }}>{referrals} / 40 used</b>
                   </div>
                   <div style={{ height: 10, borderRadius: 99, background: "#e7e2d8", overflow: "hidden" }}>
                     <div style={{ height: "100%", width: `${Math.min(100, (referrals / 40) * 100)}%`, borderRadius: 99, background: "linear-gradient(90deg,#0d6d42,#bd8e28)", transition: "width .8s ease" }} />
                   </div>
-                  <p style={{ margin: "8px 0 0", fontSize: 11.5, color: "#667085" }}>{40 - referrals} participation slots remaining in your personal downline. Once your cap is reached, new members are placed in your extended organization but no longer count toward your personal participation limit.</p>
+                  <p style={{ margin: "8px 0 0", fontSize: 11.5, color: "#667085" }}>{40 - referrals} participation slots remaining in your personal referral network. Once your cap is reached, new members are placed in your extended organization but no longer count toward your personal participation limit.</p>
                 </div>
                 {/* Self */}
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, opacity: matrixAnimated ? 1 : 0, transform: matrixAnimated ? "translateY(0)" : "translateY(20px)", transition: "all .6s ease" }}>
@@ -646,7 +654,7 @@ export default function InvestorPortal() {
                 <Megaphone size={26} color="#ffd46f" />
                 <div>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: 0 }}>Announcements</h2>
-                  <p style={{ margin: "4px 0 0", fontSize: 12.5, color: "#c6d2e1" }}>Official announcements from the Select Network team. {announcements.length > 0 ? `${announcements.length} announcement${announcements.length > 1 ? "s" : ""}.` : ""}</p>
+                  <p style={{ margin: "4px 0 0", fontSize: 12.5, color: "#c6d2e1" }}>Official announcements from The Select Network Member Group team. {announcements.length > 0 ? `${announcements.length} announcement${announcements.length > 1 ? "s" : ""}.` : ""}</p>
                 </div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -663,7 +671,7 @@ export default function InvestorPortal() {
                         <div style={{ width: 38, height: 38, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 13, flexShrink: 0 }}>SN</div>
                         <div>
                           <b style={{ fontSize: 15 }}>{a.title}</b>
-                          <div style={{ fontSize: 11.5, color: "#667085", margin: "2px 0 8px" }}>Select Network Team · {a.published_at ? new Date(a.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recently"}</div>
+                          <div style={{ fontSize: 11.5, color: "#667085", margin: "2px 0 8px" }}>The Select Network Member Group Team · {a.published_at ? new Date(a.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recently"}</div>
                           {a.message && <p style={{ margin: 0, fontSize: 13.5, color: "#3d4a57", lineHeight: 1.6, maxWidth: 640 }}>{a.message}</p>}
                         </div>
                       </div>
@@ -685,7 +693,7 @@ export default function InvestorPortal() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
                   <div>
                     <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 4px" }}>Support / Chat</h2>
-                    <p style={{ color: "#667085", fontSize: 12.5, margin: 0 }}>Contact the Select Network support team. All conversations are private.</p>
+                    <p style={{ color: "#667085", fontSize: 12.5, margin: 0 }}>Contact The Select Network Member Group support team. All conversations are private.</p>
                   </div>
                   <button onClick={() => setShowNewTicket(true)} style={{ background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", border: 0, borderRadius: 8, padding: "10px 16px", fontWeight: 900, fontSize: 12, textTransform: "uppercase", cursor: "pointer" }}>+ New Ticket</button>
                 </div>
@@ -755,15 +763,15 @@ export default function InvestorPortal() {
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
               <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
                 <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 22, margin: "0 0 14px" }}>Milestones & Progress</h2>
-                <p style={{ color: "#667085", fontSize: 13, marginBottom: 18 }}>Track your journey through Select Network achievements.</p>
+                <p style={{ color: "#667085", fontSize: 13, marginBottom: 18 }}>Track your journey through The Select Network Member Group achievements.</p>
                 {[
                   { title: "Payment Completed", desc: "Your payment was confirmed and your investor dashboard was activated automatically.", done: true },
-                  { title: "First Investment Completed", desc: "Successfully purchased your first founder units.", done: true },
+                  { title: "First Investment Completed", desc: "Successfully purchased your first units.", done: true },
                   { title: "First Referral Made", desc: "Referred your first member to the network.", done: true },
-                  { title: "10 Active Referrals", desc: "Built a team of 10 active members in your downline.", done: true },
+                  { title: "10 Active Referrals", desc: "Built a team of 10 active members in your referral network.", done: true },
                   { title: "25 Active Referrals", desc: "Reached 25 active members — growing strong.", done: true },
                   { title: "$1,000 Sharing Incentive", desc: "Qualified for the sharing incentive program.", done: false },
-                  { title: "40 Member Downline Cap", desc: "Maximum personal downline achieved.", done: false },
+                  { title: "40 Member Referral Cap", desc: "Maximum personal referral network achieved.", done: false },
                 ].map((m, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 0", borderBottom: "1px solid #eef2f6" }}>
                     <div style={{ width: 36, height: 36, borderRadius: "50%", background: m.done ? "#e3f5eb" : "#f0f2f5", display: "grid", placeItems: "center", color: m.done ? "#087345" : "#9aa0ab", flexShrink: 0 }}>{m.done ? <CheckCircle size={18} /> : <Target size={18} />}</div>
@@ -814,7 +822,7 @@ export default function InvestorPortal() {
                     <div style={{ textAlign: "center" }}>
                       {/* Logo area */}
                       <div style={{ marginBottom: 20 }}>
-                        <Image src="/assets/select-network/select-network-logo.png" alt="Select Network" width={280} height={70} style={{ width: 240, height: "auto", margin: "0 auto", display: "block" }} />
+                        <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={280} height={70} style={{ width: 240, height: "auto", margin: "0 auto", display: "block" }} />
                       </div>
                       <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: ".2em", textTransform: "uppercase", color: "#bd8e28", marginBottom: 8 }}>Certificate of Investment</div>
                       <div style={{ width: 80, height: 2, background: "linear-gradient(90deg,transparent,#d5a83d,transparent)", margin: "0 auto 20px" }} />
@@ -822,11 +830,11 @@ export default function InvestorPortal() {
                       <p style={{ fontSize: 14, color: "#667085", margin: "0 0 12px" }}>This certifies that</p>
                       <h1 style={{ fontFamily: "Georgia, serif", fontSize: 36, fontWeight: 400, color: "#071a33", margin: "0 0 12px", borderBottom: "2px solid #e7e2d8", display: "inline-block", padding: "0 30px 8px" }}>{certName}</h1>
                       <p style={{ fontSize: 14, color: "#667085", margin: "16px 0 8px" }}>has successfully invested in</p>
-                      <div style={{ fontSize: 48, fontWeight: 900, color: "#075933", margin: "8px 0" }}>{certUnits} Founder Units</div>
+                      <div style={{ fontSize: 48, fontWeight: 900, color: "#075933", margin: "8px 0" }}>{certUnits} Units</div>
                       <p style={{ fontSize: 16, color: "#071a33", margin: "4px 0 24px" }}>valued at <b style={{ color: "#bd8e28" }}>${(certUnits * 100).toLocaleString()}</b></p>
                       <div style={{ width: 60, height: 2, background: "linear-gradient(90deg,transparent,#d5a83d,transparent)", margin: "0 auto 20px" }} />
                       
-                      <p style={{ fontSize: 13, color: "#667085", margin: "0 0 8px" }}>through The Select Network investment structure</p>
+                      <p style={{ fontSize: 13, color: "#667085", margin: "0 0 8px" }}>through The Select Network Member Group investment structure</p>
                       <p style={{ fontSize: 12, color: "#9aa0ab", margin: "0 0 24px" }}>Issued: {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>
                       
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 30, paddingTop: 20, borderTop: "1px solid #eef2f6" }}>
@@ -911,12 +919,12 @@ export default function InvestorPortal() {
       {matrixFull && (
         <div style={{ position: "fixed", inset: 0, zIndex: 9999, background: "#fcfbf8", overflow: "auto", padding: 40, animation: "fadeIn .3s ease" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 400, margin: 0 }}>Full Referral Matrix</h2>
+            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 400, margin: 0 }}>Full Referral Network</h2>
             <button onClick={() => setMatrixFull(false)} style={{ background: "linear-gradient(135deg,#075933,#0b7346)", color: "#fff", border: 0, borderRadius: 8, padding: "12px 20px", fontWeight: 900, fontSize: 12, cursor: "pointer" }}>✕ Close</button>
           </div>
-          <p style={{ color: "#667085", marginBottom: 24 }}>Your personal downline participation is capped at <b>40 members</b> ({referrals} of 40 currently used). The view below is your starting structure; deeper levels appear as your organization expands, up to your personal cap.</p>
+          <p style={{ color: "#667085", marginBottom: 24 }}>Your personal referral participation is capped at <b>40 members</b> ({referrals} of 40 currently used). The view below is your starting structure; deeper levels appear as your organization expands, up to your personal cap.</p>
           <div style={{ textAlign: "center" }}>
-            <p style={{ color: "#667085" }}>Full interactive matrix view — connects to live data and reflects your 40-member personal participation cap.</p>
+            <p style={{ color: "#667085" }}>Full interactive referral network view — connects to live data and reflects your 40-member personal participation cap.</p>
           </div>
         </div>
       )}
@@ -926,7 +934,7 @@ export default function InvestorPortal() {
         <div onClick={() => setCompOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 99999, background: "rgba(7,26,51,.82)", backdropFilter: "blur(4px)", display: "grid", placeItems: "center", padding: 24 }}>
           <button onClick={() => setCompOpen(false)} style={{ position: "absolute", top: 20, right: 20, background: "#fff", border: 0, borderRadius: "50%", width: 44, height: 44, display: "grid", placeItems: "center", cursor: "pointer", fontSize: 22, color: "#071a33", boxShadow: "0 6px 20px rgba(0,0,0,.25)" }} aria-label="Close">✕</button>
           <div onClick={(e) => e.stopPropagation()} style={{ maxWidth: 1100, width: "100%", maxHeight: "88vh", overflow: "auto", borderRadius: 12 }}>
-            <Image src="/assets/select-network/select-network-comp-plan.png" alt="Select Network Compensation Plan" width={1024} height={640} style={{ width: "100%", height: "auto", display: "block", borderRadius: 12 }} />
+            <Image src="/assets/select-network/select-network-comp-plan.png" alt="The Select Network Member Group Compensation Plan" width={1024} height={640} style={{ width: "100%", height: "auto", display: "block", borderRadius: 12 }} />
           </div>
         </div>
       )}

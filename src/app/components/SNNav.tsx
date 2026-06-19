@@ -64,7 +64,7 @@ export default function SNNav() {
           <Link href="" style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
             <Image
               src="/assets/select-network/select-network-logo.png"
-              alt="The Select Network Private Investors Group LLC"
+              alt="The Select Network Member Group"
               width={230}
               height={56}
               style={{ width: 220, height: "auto", display: "block" }}
@@ -168,7 +168,7 @@ export default function SNNav() {
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 26 }}>
-              <Image src="/assets/select-network/select-network-logo.png" alt="Select Network" width={150} height={36} style={{ width: 150, height: "auto" }} />
+              <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={150} height={36} style={{ width: 150, height: "auto" }} />
               <button onClick={() => setOpen(false)} aria-label="Close menu" style={{ background: "none", border: "none", color: "#0d2845", cursor: "pointer" }}>
                 <X size={26} />
               </button>

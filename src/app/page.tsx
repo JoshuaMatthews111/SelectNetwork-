@@ -35,7 +35,7 @@ export default function SelectNetworkHomePage() {
       <header className="sn-header">
         <nav className="sn-nav-bar">
           <Link href="/" className="sn-brand">
-            <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Private Investors Group LLC" width={320} height={80} priority style={{ height: 74, width: "auto" }} />
+            <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={320} height={80} priority style={{ height: 74, width: "auto" }} />
           </Link>
           <div className="sn-nav-links">
             <Link href="/about">About</Link>
@@ -55,7 +55,7 @@ export default function SelectNetworkHomePage() {
           <div className="sn-mobile-drawer-bg" onClick={() => setMobileOpen(false)} />
           <div className="sn-mobile-drawer">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-              <Image src="/assets/select-network/select-network-logo.png" alt="Select Network" width={160} height={40} style={{ width: 160, height: "auto" }} />
+              <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={160} height={40} style={{ width: 160, height: "auto" }} />
               <button onClick={() => setMobileOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "#071a33" }}><X size={24} /></button>
             </div>
             <nav style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -70,7 +70,7 @@ export default function SelectNetworkHomePage() {
 
       {/* ═══ HERO ═══ */}
       <main className="sn-page">
-        <section className="sn-hero" aria-label="Select Network homepage hero">
+        <section className="sn-hero" aria-label="The Select Network Member Group homepage hero">
           {/* Left — Copy */}
           <div className="sn-hero-copy">
             <div className="sn-editorial-kicker">Private investors.<br />Strategic partners.<br />Lasting impact.</div>
@@ -88,11 +88,11 @@ export default function SelectNetworkHomePage() {
             </h1>
             <div className="sn-gold-rule"><span className="sn-rule-diamond">◇</span></div>
             <h2 className="sn-hero-subtitle">Building the Next Wave of Private Investment Opportunities</h2>
-            <p className="sn-hero-paragraph">Select Network exists to connect capital with vision, strong company systems, and strategic private investment opportunities designed to create sustainable long-term growth.</p>
+            <p className="sn-hero-paragraph">The Select Network Member Group exists to connect capital with vision, strong company systems, and strategic private investment opportunities designed to create sustainable long-term growth.</p>
           </div>
 
           {/* Center — Video Header */}
-          <div className="sn-showcase-wrap" aria-label="Select Network video header">
+          <div className="sn-showcase-wrap" aria-label="The Select Network Member Group video header">
             <div className="sn-video-frame">
               <video
                 className="sn-hero-video"
@@ -101,12 +101,12 @@ export default function SelectNetworkHomePage() {
                 muted
                 playsInline
                 preload="auto"
-                aria-label="Select Network brand motion video"
+                aria-label="The Select Network Member Group brand motion video"
               >
                 <source src="/assets/select-network/hero-video.mp4" type="video/mp4" />
               </video>
               <div className="sn-video-fallback" aria-hidden="true">
-                <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network" width={320} height={80} priority style={{ width: "60%", maxWidth: 280, height: "auto", opacity: 0.85 }} />
+                <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={320} height={80} priority style={{ width: "60%", maxWidth: 280, height: "auto", opacity: 0.85 }} />
               </div>
               <div className="sn-video-ring" aria-hidden="true"></div>
               <div className="sn-video-caption"><span>TRUST · PRIVACY · EXCELLENCE</span></div>
@@ -114,7 +114,7 @@ export default function SelectNetworkHomePage() {
           </div>
 
           {/* Right — Focus Cards */}
-          <aside className="sn-focus-panel" aria-label="Rotating Select Network focus areas">
+          <aside className="sn-focus-panel" aria-label="Rotating The Select Network Member Group focus areas">
             {[
               { icon: <Users size={24} />, label: "Private Investor Group" },
               { icon: <Target size={24} />, label: "Strategic Opportunities" },
@@ -132,8 +132,8 @@ export default function SelectNetworkHomePage() {
         </section>
 
         {/* ═══ HOW SELECT NETWORK WORKS ═══ */}
-        <section className="sn-works" id="about" aria-label="How Select Network works">
-          <h2 className="sn-section-title"><span>How Select Network Works</span></h2>
+        <section className="sn-works" id="about" aria-label="How The Select Network Member Group works">
+          <h2 className="sn-section-title"><span>How The Select Network Member Group Works</span></h2>
           <div className="sn-work-grid">
             <article className="sn-work-card">
               <div className="sn-icon-ring"><Sun size={38} /></div>
@@ -166,7 +166,7 @@ export default function SelectNetworkHomePage() {
           <div className="sn-money-copy">
             <h2>GROW YOUR MONEY NOW</h2>
             <div className="sn-small-rule"></div>
-            <p>Explore our current investment focus and discover how Select Network is creating value across real private investment opportunities.</p>
+            <p>Explore our current investment focus and discover how The Select Network Member Group is creating value across real private investment opportunities.</p>
             <Link href="/investment-focus" className="sn-btn-gold">View Investment Focus <ArrowRight size={16} /></Link>
           </div>
           <div className="sn-chart" aria-label="Illustrative platform growth visualization">

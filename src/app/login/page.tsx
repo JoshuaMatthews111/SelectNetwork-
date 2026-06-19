@@ -26,7 +26,7 @@ export default function LoginPage() {
     e.preventDefault();
     setApplyLoading(true);
     try {
-      const res = await fetch("/api/applications", {
+      const res = await fetch("/api/member-requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -50,9 +50,9 @@ export default function LoginPage() {
   const renderApply = () => (
     <div style={{ maxWidth: 520, width: "100%" }}>
       <div style={{ textAlign: "center", marginBottom: 30 }}>
-        <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="Select Network" width={200} height={50} className="sn-glow" style={{ height: 45, width: "auto", margin: "0 auto 20px", display: "block" }} /></Link>
+        <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={200} height={50} className="sn-glow" style={{ height: 45, width: "auto", margin: "0 auto 20px", display: "block" }} /></Link>
         <h1 style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 400, margin: "0 0 8px", color: "#071a33" }}>Complete Your Participation</h1>
-        <p style={{ color: "#667085", fontSize: 14, margin: 0 }}>Submit your information to get started with The Select Network</p>
+        <p style={{ color: "#667085", fontSize: 14, margin: 0 }}>Submit your information to get started with The Select Network Member Group</p>
       </div>
       <div style={{ background: "#fff", border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", padding: 32, borderRadius: 6 }}>
         {applySuccess ? (
@@ -136,7 +136,7 @@ export default function LoginPage() {
   const renderLogin = () => (
     <div style={{ maxWidth: 420, width: "100%" }}>
       <div style={{ textAlign: "center", marginBottom: 30 }}>
-        <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="Select Network" width={200} height={50} className="sn-glow" style={{ height: 45, width: "auto", margin: "0 auto 20px", display: "block" }} /></Link>
+        <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={200} height={50} className="sn-glow" style={{ height: 45, width: "auto", margin: "0 auto 20px", display: "block" }} /></Link>
         <h1 style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 400, margin: "0 0 8px", color: "#071a33" }}>{mode === "investor" ? "Investor Login" : "Staff / Admin Login"}</h1>
         <p style={{ color: "#667085", fontSize: 14, margin: 0 }}>{mode === "investor" ? "Access your private member dashboard" : "Access the admin back office"}</p>
       </div>
@@ -161,7 +161,7 @@ export default function LoginPage() {
   const renderChoice = () => (
     <div style={{ maxWidth: 700, width: "100%" }}>
       <div style={{ textAlign: "center", marginBottom: 36 }}>
-        <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="Select Network" width={240} height={60} className="sn-glow" style={{ height: 55, width: "auto", margin: "0 auto 24px", display: "block" }} /></Link>
+        <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={240} height={60} className="sn-glow" style={{ height: 55, width: "auto", margin: "0 auto 24px", display: "block" }} /></Link>
         <h1 style={{ fontFamily: "Georgia, serif", fontSize: 32, fontWeight: 400, margin: "0 0 8px", color: "#071a33" }}>Member Access</h1>
         <p style={{ color: "#667085", fontSize: 15, margin: 0 }}>Select your login type below</p>
       </div>
@@ -169,13 +169,13 @@ export default function LoginPage() {
         <button onClick={() => setMode("investor")} style={{ textAlign: "left", background: "#fff", border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", padding: 28, borderRadius: 10, cursor: "pointer", transition: ".35s" }} className="hover:translate-y-[-4px] hover:border-[#bd8e28]">
           <div style={{ width: 56, height: 56, borderRadius: "50%", border: "1px solid #bd8e28", display: "grid", placeItems: "center", color: "#bd8e28", marginBottom: 16, background: "linear-gradient(135deg,#fffaf0,#fff3d6)" }}><TrendingUp size={26} /></div>
           <b style={{ display: "block", fontSize: 20, color: "#071a33", marginBottom: 8 }}>Investor Portal</b>
-          <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: "0 0 12px" }}>Access your private dashboard, founder units, growth chart, documents, referrals, and account updates.</p>
+          <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: "0 0 12px" }}>Access your private dashboard, units, growth chart, documents, referrals, and account updates.</p>
           <span style={{ fontSize: 11, color: "#bd8e28", fontWeight: 800, textTransform: "uppercase", letterSpacing: ".04em" }}>Demo: demo@investor.com / investor123</span>
         </button>
         <button onClick={() => setMode("staff")} style={{ textAlign: "left", background: "#fff", border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", padding: 28, borderRadius: 10, cursor: "pointer", transition: ".35s" }} className="hover:translate-y-[-4px] hover:border-[#075933]">
           <div style={{ width: 56, height: 56, borderRadius: "50%", border: "1px solid #075933", display: "grid", placeItems: "center", color: "#075933", marginBottom: 16, background: "linear-gradient(135deg,#e3f5eb,#d4eddf)" }}><ShieldCheck size={26} /></div>
           <b style={{ display: "block", fontSize: 20, color: "#071a33", marginBottom: 8 }}>Staff / Admin Portal</b>
-          <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: "0 0 12px" }}>Access the back office to manage members, applications, payments, documents, reports, and the referral matrix.</p>
+          <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: "0 0 12px" }}>Access the back office to manage members, requests, payments, documents, reports, and the referral network.</p>
           <span style={{ fontSize: 11, color: "#075933", fontWeight: 800, textTransform: "uppercase", letterSpacing: ".04em" }}>Demo: admin@selectnetwork.com / admin123</span>
         </button>
       </div>
@@ -183,7 +183,7 @@ export default function LoginPage() {
         <Link href="/invest-now" style={{ background: "none", border: "none", color: "#bd8e28", fontSize: 13, fontWeight: 800, cursor: "pointer", textDecoration: "none", display: "inline-block" }}>Not a member? Complete Your Participation →</Link>
       </div>
       <div style={{ textAlign: "center", marginTop: 10 }}>
-        <Link href="/" style={{ color: "#667085", fontSize: 12 }}>← Back to Select Network</Link>
+        <Link href="/" style={{ color: "#667085", fontSize: 12 }}>← Back to The Select Network Member Group</Link>
       </div>
     </div>
   );

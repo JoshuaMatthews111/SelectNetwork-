@@ -3,7 +3,7 @@
  * ------------------------------------------------------------------
  * IMPORTANT: This data represents client-provided Lorenzo's Dog Training Team
  * historical SALES and OPERATING PERFORMANCE records (2016–2025).
- * It is NOT Select Network profit, Select Network revenue, or any
+ * It is NOT The Select Network Member Group profit, The Select Network Member Group revenue, or any
  * guaranteed / projected investor return. It is presented for informational
  * and due-diligence purposes only.
  */
@@ -90,4 +90,4 @@ export const categoryMeta = [
 
 /* ─── Standard investor-facing disclaimer ─── */
 export const ldttDisclaimer =
-  "These figures are based on client-provided Lorenzo's Dog Training Team historical sales and operating records. They are presented for informational and due diligence purposes only and should not be interpreted as guaranteed returns, investment projections, or Select Network profit.";
+  "These figures are based on client-provided Lorenzo's Dog Training Team historical sales and operating records. They are presented for informational and due diligence purposes only and should not be interpreted as guaranteed returns, investment projections, or The Select Network Member Group profit.";

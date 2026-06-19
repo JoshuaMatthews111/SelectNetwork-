@@ -1,6 +1,6 @@
-# Select Network - Private Investors Platform
+# The Select Network Member Group - Private Investors Platform
 
-A premium private investor platform for The Select Network Private Investors Group LLC.
+A premium private investor platform for The Select Network Member Group.
 
 ## Domain
 **Production:** https://tsnpiggybank.com
@@ -48,7 +48,7 @@ src/
 │   ├── admin/             # Admin portal
 │   ├── login/             # Login page
 │   ├── investor/          # Investor portal
-│   ├── investor-builder/  # Investor+Builder portal
+│   ├── investor-builder/  # Investor-Builder portal
 │   ├── builder/           # Builder portal
 │   ├── reports/           # Investment reports
 │   ├── invest-now/        # Investment flow
@@ -65,11 +65,11 @@ See `supabase-schema.sql` for the complete database schema.
 
 Key tables:
 - `members` - Platform members
-- `applications` - Investment applications
+- `applications` - Member request records
 - `prospects` - CRM prospects
 - `payments` - Payment records
 - `certificates` - Member certificates
-- `referrals` - Referral matrix
+- `referrals` - Referral network
 
 ## Deployment
 This project is configured for Vercel deployment. Push to main branch to trigger automatic deployment.

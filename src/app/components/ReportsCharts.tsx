@@ -553,7 +553,7 @@ export default function ReportsCharts() {
         )}
 
         {tab === "hierarchy" && (
-          <ChartCard title="Trainer Hierarchy 2026" subtitle="A visual overview of Lorenzo's Dog Training Team's current trainer network and leadership structure. This is separate from the Select Network investor referral matrix.">
+          <ChartCard title="Trainer Hierarchy 2026" subtitle="A visual overview of Lorenzo's Dog Training Team's current trainer network and leadership structure. This is separate from The Select Network Member Group investor referral network.">
             <div style={{ background: "#f9f7f2", border: "1px solid #eee", borderRadius: 12, padding: 14, marginBottom: 16 }}>
               <div className="sn-table-wrap">
                 <img src="/reports/trainer-hierarchy-2026.png" alt="Lorenzo's Dog Training Team Trainer Hierarchy 2026" style={{ width: "100%", minWidth: 520, borderRadius: 8, display: "block" }} />
