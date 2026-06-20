@@ -171,7 +171,7 @@ export default function BuilderPortal() {
         {/* ─── Sidebar ─── */}
         <aside className={`sn-sidebar ${sidebarOpen ? "open" : ""}`} style={{ background: "linear-gradient(180deg,#fff 0%,#fbf8f1 54%,#edf6ef 100%)", borderRight: "1px solid #e7e2d8", padding: "24px 18px", position: "sticky", top: 0, height: "100vh", overflow: "auto" }}>
           <div style={{ marginBottom: 28 }}>
-            <Link href=""><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={220} height={110} priority style={{ width: 220, height: "auto", display: "block" }} /></Link>
+            <Link href=""><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={260} height={127} priority style={{ width: 260, height: "auto", display: "block" }} /></Link>
           </div>
           <nav style={{ display: "grid", gap: 7 }}>
             {tabs.map((t) => (
@@ -191,10 +191,11 @@ export default function BuilderPortal() {
         <main style={{ padding: "28px 30px 48px", minWidth: 0 }}>
           {/* ── MOBILE APP HEADER (hidden on desktop via CSS) ── */}
           <div className="sn-app-topbar" style={{ display: "none" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div className="sn-mobile-brand-lockup" style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <button className="sn-mobile-toggle" onClick={() => setSidebarOpen(true)}><Menu size={22} /></button>
-              <div>
-                <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: ".1em", color: "#bd8e28", textTransform: "uppercase" }}>Investor Portal</div>
+              <Image className="sn-mobile-header-logo" src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={120} height={59} priority style={{ width: 96, height: "auto", display: "block", flexShrink: 0 }} />
+              <div className="sn-mobile-title-copy">
+                <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: ".1em", color: "#bd8e28", textTransform: "uppercase" }}>Builder Portal</div>
                 <div style={{ fontSize: 16, fontWeight: 700 }}>{tabs.find(t => t.id === activeTab)?.label || "Overview"}</div>
               </div>
             </div>
@@ -231,7 +232,7 @@ export default function BuilderPortal() {
                   <button onClick={() => setShowTutorial(false)} style={{ position: "absolute", top: 12, right: 16, background: "none", border: "none", color: "#ffd46f", fontSize: 18, cursor: "pointer", fontWeight: 900 }}>✕</button>
                   <h3 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, color: "#fff", margin: "0 0 4px" }}>Welcome to Your Builder Dashboard!</h3>
                   <p style={{ color: "#c6d2e1", fontSize: 12.5, margin: "0 0 16px" }}>You have full investor access plus referral network tools. Here&apos;s a quick guide:</p>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
+                  <div className="sn-tutorial-grid" style={{ display: "grid", gap: 10 }}>
                     {[
                       { title: "Overview", desc: "KPIs, charts, portfolio at a glance", highlight: false },
                       { title: "Referral Tree", desc: "Your referrals and builder tools", highlight: true },
@@ -247,7 +248,7 @@ export default function BuilderPortal() {
                 </div>
               )}
               {/* KPIs */}
-              <div className="sn-kpi-grid-6" style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 14, marginBottom: 22 }}>
+              <div className="sn-kpi-grid-6" style={{ display: "grid", gap: 14, marginBottom: 22 }}>
                 {[
                   { ico: <Diamond size={20} />, label: "Member Status", value: "Active", color: "#075933" },
                   { ico: <Star size={20} />, label: "Units", value: String(units), color: "#071a33" },
@@ -268,7 +269,7 @@ export default function BuilderPortal() {
                 <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 4px" }}>Quarterly Distribution Overview</h2>
                   <p style={{ fontSize: 12, color: "#667085", margin: "0 0 16px" }}>Placeholder values — updated each quarter when distributions are posted.</p>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
+                  <div className="sn-quarter-grid" style={{ display: "grid", gap: 10 }}>
                     {[
                       { q: "Q1", val: "$0", note: "Baseline" },
                       { q: "Q2", val: "$0", note: "Baseline" },
@@ -328,7 +329,7 @@ export default function BuilderPortal() {
                   <b style={{ color: "#ffd46f" }}>What is a Unit?</b> A Unit is a proportional participation allocation within The Select Network Member Group investment structure, used to determine an investor&apos;s share of designated company distributions and growth-based revenue participation.
                 </p>
               </div>
-              <div className="sn-kpi-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 22 }}>
+              <div className="sn-kpi-grid-4" style={{ display: "grid", gap: 14, marginBottom: 22 }}>
                 {[{ ico: <Star size={20} />, label: "Total Owned", value: "50" }, { ico: <Wallet size={20} />, label: "Unit Price", value: "$100" }, { ico: <CheckCircle size={20} />, label: "Active Units", value: "50" }, { ico: <CircleDot size={20} />, label: "Pending Units", value: "0" }].map((k, i) => (
                   <div key={i} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: "18px 16px", boxShadow: "0 8px 24px rgba(5,20,45,.06)", display: "flex", alignItems: "center", gap: 14 }}>
                     <div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div>
@@ -536,7 +537,7 @@ export default function BuilderPortal() {
           {/* ─── LEGACY REFERRAL NETWORK ─── */}
           {activeTab === "matrixLegacy" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
-              <div className="sn-kpi-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 18 }}>
+              <div className="sn-kpi-grid-4" style={{ display: "grid", gap: 14, marginBottom: 18 }}>
                 {[{ ico: <Network size={20} />, label: "My Network", value: String(referrals) }, { ico: <Network size={20} />, label: "Direct Referrals", value: "3" }, { ico: <CheckCircle size={20} />, label: "Active Members", value: String(referrals) }, { ico: <Network size={20} />, label: "Referral Capacity", value: `${referrals} / 40` }].map((k, i) => (
                   <div key={i} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: "18px 16px", boxShadow: "0 8px 24px rgba(5,20,45,.06)", display: "flex", alignItems: "center", gap: 14 }}>
                     <div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div>

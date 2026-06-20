@@ -50,7 +50,7 @@ export default function LoginPage() {
   const renderApply = () => (
     <div style={{ maxWidth: 520, width: "100%" }}>
       <div style={{ textAlign: "center", marginBottom: 30 }}>
-        <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={200} height={50} className="sn-glow" style={{ height: 45, width: "auto", margin: "0 auto 20px", display: "block" }} /></Link>
+        <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={250} height={120} className="sn-glow" style={{ height: 57, width: "auto", margin: "0 auto 20px", display: "block" }} /></Link>
         <h1 style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 400, margin: "0 0 8px", color: "#071a33" }}>Complete Your Participation</h1>
         <p style={{ color: "#667085", fontSize: 14, margin: 0 }}>Submit your information to get started with The Select Network Member Group</p>
       </div>
@@ -67,7 +67,7 @@ export default function LoginPage() {
         ) : (
         <>
         <form onSubmit={handleApply}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+          <div className="sn-apply-name-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
             <div><label style={fieldLabel}>First Name</label><input required value={applyForm.firstName} onChange={(e) => setApplyForm({...applyForm, firstName: e.target.value})} style={fieldInput} /></div>
             <div><label style={fieldLabel}>Last Name</label><input required value={applyForm.lastName} onChange={(e) => setApplyForm({...applyForm, lastName: e.target.value})} style={fieldInput} /></div>
           </div>
@@ -136,7 +136,7 @@ export default function LoginPage() {
   const renderLogin = () => (
     <div style={{ maxWidth: 420, width: "100%" }}>
       <div style={{ textAlign: "center", marginBottom: 30 }}>
-        <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={200} height={50} className="sn-glow" style={{ height: 45, width: "auto", margin: "0 auto 20px", display: "block" }} /></Link>
+        <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={250} height={120} className="sn-glow" style={{ height: 57, width: "auto", margin: "0 auto 20px", display: "block" }} /></Link>
         <h1 style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 400, margin: "0 0 8px", color: "#071a33" }}>{mode === "investor" ? "Investor Login" : "Staff / Admin Login"}</h1>
         <p style={{ color: "#667085", fontSize: 14, margin: 0 }}>{mode === "investor" ? "Access your private member dashboard" : "Access the admin back office"}</p>
       </div>
@@ -161,11 +161,11 @@ export default function LoginPage() {
   const renderChoice = () => (
     <div style={{ maxWidth: 700, width: "100%" }}>
       <div style={{ textAlign: "center", marginBottom: 36 }}>
-        <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={240} height={60} className="sn-glow" style={{ height: 55, width: "auto", margin: "0 auto 24px", display: "block" }} /></Link>
+        <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={300} height={145} className="sn-glow" style={{ height: 70, width: "auto", margin: "0 auto 24px", display: "block" }} /></Link>
         <h1 style={{ fontFamily: "Georgia, serif", fontSize: 32, fontWeight: 400, margin: "0 0 8px", color: "#071a33" }}>Member Access</h1>
         <p style={{ color: "#667085", fontSize: 15, margin: 0 }}>Select your login type below</p>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
+      <div className="sn-login-choice-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
         <button onClick={() => setMode("investor")} style={{ textAlign: "left", background: "#fff", border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", padding: 28, borderRadius: 10, cursor: "pointer", transition: ".35s" }} className="hover:translate-y-[-4px] hover:border-[#bd8e28]">
           <div style={{ width: 56, height: 56, borderRadius: "50%", border: "1px solid #bd8e28", display: "grid", placeItems: "center", color: "#bd8e28", marginBottom: 16, background: "linear-gradient(135deg,#fffaf0,#fff3d6)" }}><TrendingUp size={26} /></div>
           <b style={{ display: "block", fontSize: 20, color: "#071a33", marginBottom: 8 }}>Investor Portal</b>
@@ -195,6 +195,12 @@ export default function LoginPage() {
         @keyframes spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
+        }
+        @media (max-width: 640px) {
+          .sn-login-choice-grid,
+          .sn-apply-name-grid {
+            grid-template-columns: 1fr !important;
+          }
         }
       `}</style>
     </div>

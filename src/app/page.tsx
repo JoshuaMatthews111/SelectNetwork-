@@ -35,7 +35,7 @@ export default function SelectNetworkHomePage() {
       <header className="sn-header">
         <nav className="sn-nav-bar">
           <Link href="/" className="sn-brand">
-            <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={320} height={80} priority style={{ height: 74, width: "auto" }} />
+            <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={410} height={200} priority style={{ height: 94, width: "auto" }} />
           </Link>
           <div className="sn-nav-links">
             <Link href="/about">About</Link>
@@ -91,22 +91,11 @@ export default function SelectNetworkHomePage() {
             <p className="sn-hero-paragraph">The Select Network Member Group exists to connect capital with vision, strong company systems, and strategic private investment opportunities designed to create sustainable long-term growth.</p>
           </div>
 
-          {/* Center — Video Header */}
-          <div className="sn-showcase-wrap" aria-label="The Select Network Member Group video header">
+          {/* Center — Brand Header */}
+          <div className="sn-showcase-wrap" aria-label="The Select Network Member Group brand header">
             <div className="sn-video-frame">
-              <video
-                className="sn-hero-video"
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="auto"
-                aria-label="The Select Network Member Group brand motion video"
-              >
-                <source src="/assets/select-network/hero-video.mp4" type="video/mp4" />
-              </video>
-              <div className="sn-video-fallback" aria-hidden="true">
-                <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={320} height={80} priority style={{ width: "60%", maxWidth: 280, height: "auto", opacity: 0.85 }} />
+              <div className="sn-video-fallback sn-current-brand-showcase" aria-hidden="true">
+                <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={420} height={205} priority style={{ width: "74%", maxWidth: 330, height: "auto" }} />
               </div>
               <div className="sn-video-ring" aria-hidden="true"></div>
               <div className="sn-video-caption"><span>TRUST · PRIVACY · EXCELLENCE</span></div>
@@ -427,7 +416,7 @@ export default function SelectNetworkHomePage() {
         .sn-gold-rule { width: 80%; max-width: 420px; height: 1px; background: linear-gradient(90deg, var(--gold), rgba(196,134,40,.15), transparent); margin: 8px 0 20px; position: relative; }
         .sn-rule-diamond { position: absolute; left: 49%; top: -10px; color: var(--gold); font-size: 18px; background: var(--ivory-2); padding: 0 8px; }
 
-        /* ─── VIDEO HEADER ─── */
+        /* ─── BRAND HEADER ─── */
         .sn-showcase-wrap { height: 420px; position: relative; display: flex; align-items: center; justify-content: center; }
         .sn-video-frame {
           position: relative;
@@ -456,11 +445,43 @@ export default function SelectNetworkHomePage() {
         .sn-video-fallback {
           position: absolute;
           inset: 0;
-          z-index: 1;
+          z-index: 2;
           display: flex;
           align-items: center;
           justify-content: center;
           background: radial-gradient(circle at 50% 40%, rgba(224,180,97,.12), transparent 60%), linear-gradient(160deg, #061d3d, #05203f);
+        }
+        .sn-current-brand-showcase {
+          background:
+            radial-gradient(circle at 50% 34%, rgba(255,255,255,.96) 0%, rgba(251,248,241,.9) 45%, rgba(236,216,168,.72) 67%, rgba(7,26,51,.14) 100%),
+            linear-gradient(160deg, #fbf8f1 0%, #fffaf0 52%, #edf6ef 100%);
+        }
+        .sn-current-brand-showcase::before {
+          content: "";
+          position: absolute;
+          width: 82%;
+          height: 40%;
+          bottom: 20%;
+          border-radius: 999px;
+          border: 1px solid rgba(189,142,40,.45);
+          box-shadow: 0 0 42px rgba(213,168,61,.24), inset 0 0 24px rgba(255,255,255,.55);
+          animation: snRingPulse 4.5s ease-in-out infinite;
+        }
+        .sn-current-brand-showcase::after {
+          content: "";
+          position: absolute;
+          inset: 12%;
+          border-radius: 18px;
+          border: 1px solid rgba(7,89,51,.16);
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,.42), transparent);
+          transform: translateX(-90%);
+          animation: snBrandSheen 5s ease-in-out infinite;
+        }
+        .sn-current-brand-showcase img {
+          position: relative;
+          z-index: 2;
+          filter: drop-shadow(0 14px 20px rgba(7,26,51,.2));
+          animation: snLogoFloat 5.5s ease-in-out infinite;
         }
         .sn-video-ring {
           position: absolute;
@@ -490,6 +511,13 @@ export default function SelectNetworkHomePage() {
           border: 1px solid rgba(224,180,97,.4);
         }
         @keyframes snVideoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes snLogoFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-4px) scale(1.012); } }
+        @keyframes snRingPulse { 0%, 100% { opacity: .58; transform: scale(.96); } 50% { opacity: 1; transform: scale(1.04); } }
+        @keyframes snBrandSheen {
+          0%, 45% { transform: translateX(-90%); opacity: 0; }
+          55% { opacity: .65; }
+          72%, 100% { transform: translateX(90%); opacity: 0; }
+        }
 
         /* ─── FOCUS PANEL ─── */
         .sn-focus-panel { border-left: 1px solid rgba(196,134,40,.26); padding-left: 32px; align-self: center; display: flex; flex-direction: column; gap: 14px; }
@@ -637,7 +665,7 @@ export default function SelectNetworkHomePage() {
         /* ─── RESPONSIVE: MOBILE ─── */
         @media (max-width: 760px) {
           .sn-top-line { font-size: 10px; letter-spacing: .18em; }
-          .sn-brand img { height: 56px !important; }
+          .sn-brand img { height: 70px !important; }
           .sn-nav-links, .sn-hide-mobile { display: none !important; }
           .sn-hamburger { display: flex; }
           .sn-nav-bar { padding: 14px 16px; }

@@ -112,6 +112,10 @@
   .sn-admin-grid { grid-template-columns: 1fr !important; }
 }
 
+@media (max-width: 1320px) {
+  .sn-portal-grid .sn-kpi-grid-6 { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
 @media (max-width: 768px) {
   .sn-kpi-grid-6 { grid-template-columns: repeat(2, 1fr) !important; }
   .sn-kpi-grid-4 { grid-template-columns: 1fr 1fr !important; }
@@ -169,6 +173,22 @@
 /* Smooth transitions for all interactive elements */
 * { -webkit-tap-highlight-color: transparent; }
 button, a, .sn-btn { touch-action: manipulation; }
+
+.sn-kpi-grid-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+.sn-kpi-grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.sn-analytics-grid,
+.sn-tutorial-grid,
+.sn-quarter-grid,
+.sn-member-mini-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.sn-overview-stack-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
 
 /* Referral network surface */
 .sn-ref-panel {
@@ -598,7 +618,10 @@ button, a, .sn-btn { touch-action: manipulation; }
 }
 
 /* Sidebar slide-in base */
-.sn-sidebar { transition: left .35s cubic-bezier(.4,0,.2,1) !important; }
+.sn-sidebar {
+  box-sizing: border-box;
+  transition: left .35s cubic-bezier(.4,0,.2,1) !important;
+}
 
 /* KPI card interaction */
 .sn-kpi-grid-6 > div,
@@ -696,6 +719,23 @@ button, a, .sn-btn { touch-action: manipulation; }
     border-color: rgba(255,255,255,.2) !important;
     color: #ffd46f !important;
   }
+  .sn-mobile-brand-lockup {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+  .sn-mobile-header-logo {
+    width: 96px !important;
+    height: auto !important;
+  }
+  .sn-mobile-title-copy {
+    min-width: 0;
+  }
+  .sn-mobile-title-copy > div:last-child {
+    max-width: 126px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .sn-app-topbar .sn-topbar-right { display: flex; align-items: center; gap: 12px; }
   .sn-app-topbar .sn-topbar-right .sn-avatar-sm {
     width: 34px; height: 34px; border-radius: 50%;
@@ -728,6 +768,10 @@ button, a, .sn-btn { touch-action: manipulation; }
   /* ── ADMIN GRID — single column ── */
   .sn-admin-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
   .sn-analytics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .sn-tutorial-grid,
+  .sn-quarter-grid,
+  .sn-member-mini-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .sn-overview-stack-grid { grid-template-columns: 1fr !important; }
 
   /* ── 2-COL & 3-COL GRIDS → single column ── */
   .sn-grid-2 { grid-template-columns: 1fr !important; gap: 14px !important; }
@@ -791,10 +835,14 @@ button, a, .sn-btn { touch-action: manipulation; }
    ██  PORTAL MOBILE — 480px (Small phones)
    ═══════════════════════════════════════════════════════════════════ */
 @media (max-width: 480px) {
-  .sn-kpi-grid-6 { grid-template-columns: 1fr !important; }
-  .sn-kpi-grid-4 { grid-template-columns: 1fr !important; }
-  .sn-kpi-grid-6 > div,
-  .sn-kpi-grid-4 > div {
+  .sn-portal-grid .sn-kpi-grid-6,
+  .sn-portal-grid .sn-kpi-grid-4 {
+    grid-template-columns: 1fr !important;
+    max-width: 100% !important;
+  }
+  .sn-portal-grid .sn-kpi-grid-6 > div,
+  .sn-portal-grid .sn-kpi-grid-4 > div {
+    min-width: 0 !important;
     flex-direction: row !important;
     align-items: center !important;
     padding: 12px !important;
@@ -804,8 +852,21 @@ button, a, .sn-btn { touch-action: manipulation; }
   .sn-matrix-l3 { grid-template-columns: repeat(2, 1fr) !important; }
   .sn-mobile-content { padding: 12px 10px !important; }
   .sn-app-topbar { padding: 12px 12px; }
+  .sn-mobile-brand-lockup { gap: 8px !important; }
+  .sn-mobile-header-logo { width: 98px !important; }
+  .sn-mobile-title-copy > div:first-child { display: none; }
+  .sn-mobile-title-copy > div:last-child { max-width: 86px; font-size: 14px !important; }
+  .sn-app-topbar .sn-topbar-right { gap: 8px !important; }
   .sn-sidebar { width: 90vw !important; }
   .sn-analytics-grid { grid-template-columns: 1fr !important; }
+  .sn-tutorial-grid,
+  .sn-quarter-grid,
+  .sn-member-mini-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   .sn-drawer { width: 100% !important; max-width: 100% !important; padding: 20px 16px !important; }
   .sn-calendar-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 360px) {
+  .sn-mobile-header-logo { width: 82px !important; }
+  .sn-mobile-title-copy { display: none; }
 }

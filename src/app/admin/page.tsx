@@ -365,7 +365,7 @@ export default function AdminPortal() {
       <div className="sn-portal-grid" style={{ display: "grid", gridTemplateColumns: "296px 1fr", minHeight: "100vh" }}>
         {/* Sidebar */}
         <aside className={`sn-sidebar ${sidebarOpen ? "open" : ""}`} style={{ background: "linear-gradient(180deg,#fff 0%,#fbf8f1 54%,#edf6ef 100%)", borderRight: "1px solid #e7e2d8", padding: "24px 18px", position: "sticky", top: 0, height: "100vh", overflow: "auto" }}>
-          <div style={{ marginBottom: 28 }}><Link href=""><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={245} height={122} priority style={{ width: 245, height: "auto" }} /></Link></div>
+          <div style={{ marginBottom: 28 }}><Link href=""><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={260} height={127} priority style={{ width: 260, height: "auto" }} /></Link></div>
           <nav style={{ display: "grid", gap: 7 }}>
             {adminTabs.map((t) => (
               <button key={t.id} onClick={() => switchTab(t.id)} style={{ display: "flex", alignItems: "center", gap: 14, textAlign: "left", padding: "14px 16px", border: 0, borderRadius: 12, background: activeTab === t.id ? "linear-gradient(135deg,#075933,#0d6d42)" : "transparent", color: activeTab === t.id ? "#fff" : "#10233b", fontWeight: 800, fontSize: 14, transition: ".25s", transform: activeTab === t.id ? "translateX(3px)" : "none", boxShadow: activeTab === t.id ? "0 0 22px rgba(213,168,61,.55)" : "none", cursor: "pointer" }}>
@@ -384,9 +384,10 @@ export default function AdminPortal() {
         <main style={{ padding: "28px 30px 48px", minWidth: 0 }}>
           {/* ── MOBILE APP HEADER (hidden on desktop via CSS) ── */}
           <div className="sn-app-topbar" style={{ display: "none" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div className="sn-mobile-brand-lockup" style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <button className="sn-mobile-toggle" onClick={() => setSidebarOpen(true)}><Menu size={22} /></button>
-              <div>
+              <Image className="sn-mobile-header-logo" src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={120} height={59} priority style={{ width: 96, height: "auto", display: "block", flexShrink: 0 }} />
+              <div className="sn-mobile-title-copy">
                 <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: ".1em", color: "#bd8e28", textTransform: "uppercase" }}>Admin Portal</div>
                 <div style={{ fontSize: 16, fontWeight: 700 }}>{adminTabs.find(t => t.id === activeTab)?.label || "Overview"}</div>
               </div>
@@ -414,7 +415,7 @@ export default function AdminPortal() {
           {activeTab === "overview" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
               {/* KPI Row */}
-              <div className="sn-kpi-grid-6" style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 14, marginBottom: 22 }}>
+              <div className="sn-kpi-grid-6" style={{ display: "grid", gap: 14, marginBottom: 22 }}>
                 {[{ ico: <Users size={20} />, label: "Active Members", value: String(membersCount) }, { ico: <UserRoundPlus size={20} />, label: "New Requests", value: String(apps) }, { ico: <Star size={20} />, label: "Units Issued", value: issued.toLocaleString() }, { ico: <CircleDot size={20} />, label: "Remaining", value: remaining.toLocaleString() }, { ico: <CreditCard size={20} />, label: "Revenue (MTD)", value: "$84,200" }, { ico: <TrendingUp size={20} />, label: "Growth", value: "+18.4%" }].map((k, i) => (
                   <div key={i} style={kpiBox} className="hover:translate-y-[-3px] hover:shadow-[0_16px_40px_rgba(5,20,45,.10)]">
                     <div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div>
@@ -432,7 +433,7 @@ export default function AdminPortal() {
                   </div>
                   <span style={{ fontSize: 12, color: "#c6d2e1" }}>Members with $10,000+ investment</span>
                 </div>
-                <div className="sn-kpi-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12 }}>
+                <div className="sn-kpi-grid-4" style={{ display: "grid", gap: 12 }}>
                   {[
                     { label: "Foundation Partners", value: "12", c: "#ffd46f" },
                     { label: "Total Members", value: "87", c: "#fff" },
@@ -456,7 +457,7 @@ export default function AdminPortal() {
                     <span style={{ fontSize: 11, color: "#667085" }}>Last 6 months</span>
                   </div>
                 </div>
-                <div className="sn-analytics-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 18 }}>
+                <div className="sn-analytics-grid" style={{ display: "grid", gap: 14, marginBottom: 18 }}>
                   {[
                     { label: "Total Revenue", value: "$345,000", change: "+22%" },
                     { label: "New Members (MTD)", value: "18", change: "+12%" },
@@ -559,7 +560,7 @@ export default function AdminPortal() {
               </div>
 
               {/* Financial Summary + Prospects + Upcoming */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+              <div className="sn-overview-stack-grid" style={{ display: "grid", gap: 18 }}>
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Financial Summary</h2>
                   {[
@@ -655,7 +656,7 @@ export default function AdminPortal() {
           {/* FOUNDER UNITS */}
           {activeTab === "units" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
-              <div className="sn-kpi-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 22 }}>
+              <div className="sn-kpi-grid-4" style={{ display: "grid", gap: 14, marginBottom: 22 }}>
                 {[{ ico: <Star size={20} />, label: "Total Planned", value: "50,000" }, { ico: <CheckCircle size={20} />, label: "Issued", value: "3,450" }, { ico: <CircleDot size={20} />, label: "Remaining", value: "46,550" }, { ico: <Wallet size={20} />, label: "Unit Price", value: "$100" }].map((k, i) => (
                   <div key={i} style={kpiBox}><div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div><div><small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase" }}>{k.label}</small><br /><b style={{ fontSize: 18 }}>{k.value}</b></div></div>
                 ))}
@@ -770,7 +771,7 @@ export default function AdminPortal() {
             <div style={{ animation: "fadeIn .5s ease" }}>
               {!matrixFullscreen ? (
                 <div className="sn-mobile-content">
-                  <div className="sn-kpi-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14, marginBottom: 18 }}>
+                  <div className="sn-kpi-grid-4" style={{ display: "grid", gap: 14, marginBottom: 18 }}>
                     {[{ ico: <Network size={20} />, label: "Total Organization", value: "128" }, { ico: <Users size={20} />, label: "Max Depth", value: "Unlimited" }, { ico: <CheckCircle size={20} />, label: "Active", value: "117" }, { ico: <CircleDot size={20} />, label: "Pending", value: "11" }].map((k, i) => (
                       <div key={i} style={kpiBox}><div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div><div><small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase" }}>{k.label}</small><br /><b style={{ fontSize: 18 }}>{k.value}</b></div></div>
                     ))}
@@ -848,7 +849,7 @@ export default function AdminPortal() {
                           </div>
                           <button onClick={() => setViewingReferralNetwork(null)} style={btnOutline}>✕ Close</button>
                         </div>
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
+                        <div className="sn-member-mini-grid" style={{ display: "grid", gap: 10 }}>
                           {[
                             { name: "Sub Member 1", status: "Active", units: 3 },
                             { name: "Sub Member 2", status: "Active", units: 5 },
