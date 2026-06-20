@@ -170,13 +170,13 @@ export default function LoginPage() {
           <div style={{ width: 56, height: 56, borderRadius: "50%", border: "1px solid #bd8e28", display: "grid", placeItems: "center", color: "#bd8e28", marginBottom: 16, background: "linear-gradient(135deg,#fffaf0,#fff3d6)" }}><TrendingUp size={26} /></div>
           <b style={{ display: "block", fontSize: 20, color: "#071a33", marginBottom: 8 }}>Investor Portal</b>
           <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: "0 0 12px" }}>Access your private dashboard, units, growth chart, documents, referrals, and account updates.</p>
-          <span style={{ fontSize: 11, color: "#bd8e28", fontWeight: 800, textTransform: "uppercase", letterSpacing: ".04em" }}>Demo: demo@investor.com / investor123</span>
+          <span style={{ fontSize: 11, color: "#bd8e28", fontWeight: 800, textTransform: "uppercase", letterSpacing: ".04em" }}>Demo: demo / demo</span>
         </button>
         <button onClick={() => setMode("staff")} style={{ textAlign: "left", background: "#fff", border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", padding: 28, borderRadius: 10, cursor: "pointer", transition: ".35s" }} className="hover:translate-y-[-4px] hover:border-[#075933]">
           <div style={{ width: 56, height: 56, borderRadius: "50%", border: "1px solid #075933", display: "grid", placeItems: "center", color: "#075933", marginBottom: 16, background: "linear-gradient(135deg,#e3f5eb,#d4eddf)" }}><ShieldCheck size={26} /></div>
           <b style={{ display: "block", fontSize: 20, color: "#071a33", marginBottom: 8 }}>Staff / Admin Portal</b>
           <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: "0 0 12px" }}>Access the back office to manage members, requests, payments, documents, reports, and the referral network.</p>
-          <span style={{ fontSize: 11, color: "#075933", fontWeight: 800, textTransform: "uppercase", letterSpacing: ".04em" }}>Demo: admin@selectnetwork.com / admin123</span>
+          <span style={{ fontSize: 11, color: "#075933", fontWeight: 800, textTransform: "uppercase", letterSpacing: ".04em" }}>Admin email: tmillerk999@gmail.com</span>
         </button>
       </div>
       <div style={{ textAlign: "center", marginTop: 24 }}>

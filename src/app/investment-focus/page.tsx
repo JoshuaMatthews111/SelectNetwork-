@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, GraduationCap, Users, BookOpen, Building2, Handshake, Home, TrendingUp, DollarSign, PawPrint, CheckCircle2 } from "lucide-react";
 import SNNav from "../components/SNNav";
+import SNBrandVideo from "../components/SNBrandVideo";
 import SNFooter from "../components/SNFooter";
 import Reveal from "../components/Reveal";
 
@@ -15,6 +16,7 @@ export default function InvestmentFocusPage() {
   return (
     <div style={{ fontFamily: "Inter, Arial, sans-serif", color: NAVY, background: "#fff" }}>
       <SNNav />
+      <SNBrandVideo />
 
       {/* Hero */}
       <section className="sn-section-pad" style={{ background: "linear-gradient(135deg,#061a33,#030b17)", color: "#fff", padding: "70px 0" }}>

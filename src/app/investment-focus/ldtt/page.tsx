@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, Phone, Clock, Heart, PawPrint, TrendingUp, ShieldCheck, EyeOff, BadgeCheck, Building2, Plus, Minus, ChevronDown, ChevronUp, Info } from "lucide-react";
 import SNNav from "../../components/SNNav";
+import SNBrandVideo from "../../components/SNBrandVideo";
 import SNFooter from "../../components/SNFooter";
 import Reveal from "../../components/Reveal";
 
@@ -26,6 +27,7 @@ export default function LDTTOpportunityPage() {
   return (
     <div style={{ fontFamily: "Inter, Arial, sans-serif", color: NAVY, background: "#fff" }}>
       <SNNav />
+      <SNBrandVideo />
 
       {/* ══════════════════════════════════════════════════════
           HERO SECTION

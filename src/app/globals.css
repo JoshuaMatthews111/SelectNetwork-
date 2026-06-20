@@ -479,13 +479,15 @@ button, a, .sn-btn { touch-action: manipulation; }
 .sn-member-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(7,67,31,.3); }
 
 /* ─── Header / footer responsive ─── */
-@media (max-width: 960px) {
+@media (max-width: 1120px) {
   .sn-desktop-nav { display: none !important; }
   .sn-burger { display: flex !important; }
 }
 @media (max-width: 768px) {
   .sn-member-btn { display: none !important; }
   .sn-shell { padding: 0 22px; }
+  .sn-front-nav-logo { width: min(270px, calc(100vw - 120px)) !important; }
+  .sn-header-inner { gap: 12px !important; }
   .sn-footer-inner { grid-template-columns: 1fr !important; gap: 28px !important; padding: 36px 24px !important; }
 }
 

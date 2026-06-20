@@ -91,9 +91,21 @@ export default function SelectNetworkHomePage() {
             <p className="sn-hero-paragraph">The Select Network Member Group exists to connect capital with vision, strong company systems, and strategic private investment opportunities designed to create sustainable long-term growth.</p>
           </div>
 
-          {/* Center — Brand Header */}
-          <div className="sn-showcase-wrap" aria-label="The Select Network Member Group brand header">
+          {/* Center — Video Header */}
+          <div className="sn-showcase-wrap" aria-label="The Select Network Member Group video header">
             <div className="sn-video-frame">
+              <video
+                className="sn-hero-video"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                poster="/assets/select-network/hero-video-poster.jpg"
+                aria-label="The Select Network Member Group brand motion video"
+              >
+                <source src="/assets/select-network/hero-video.mp4" type="video/mp4" />
+              </video>
               <div className="sn-video-fallback sn-current-brand-showcase" aria-hidden="true">
                 <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={420} height={205} priority style={{ width: "74%", maxWidth: 330, height: "auto" }} />
               </div>
@@ -235,8 +247,8 @@ export default function SelectNetworkHomePage() {
       <style jsx global>{`
         /* ─── ROOT ─── */
         .sn-home {
-          --ivory: #fbf4e8;
-          --ivory-2: #fffaf1;
+          --ivory: #ffffff;
+          --ivory-2: #fffdf8;
           --navy: #051f45;
           --navy-2: #082d61;
           --gold: #c48628;
@@ -251,8 +263,8 @@ export default function SelectNetworkHomePage() {
           font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
           color: var(--ink);
           background:
-            radial-gradient(circle at 50% 0%, rgba(255,255,255,.96) 0 20%, transparent 52%),
-            linear-gradient(180deg, #fffaf2 0%, #fbf4e8 48%, #fffaf3 100%);
+            radial-gradient(circle at 50% 0%, rgba(255,255,255,.98) 0 28%, transparent 58%),
+            linear-gradient(180deg, #ffffff 0%, #fffdf9 52%, #fbf8f1 100%);
           overflow-x: hidden;
           position: relative;
         }
@@ -279,7 +291,7 @@ export default function SelectNetworkHomePage() {
           color: #9b650c;
           font-weight: 800;
           font-size: 12px;
-          background: rgba(255,255,255,.42);
+          background: rgba(255,255,255,.82);
           border-bottom: 1px solid rgba(196,134,40,.14);
         }
 
@@ -288,7 +300,7 @@ export default function SelectNetworkHomePage() {
           position: sticky;
           top: 0;
           z-index: 50;
-          background: rgba(255,250,241,.9);
+          background: rgba(255,255,255,.94);
           backdrop-filter: blur(18px);
           border-bottom: 1px solid rgba(196,134,40,.18);
         }
@@ -416,7 +428,7 @@ export default function SelectNetworkHomePage() {
         .sn-gold-rule { width: 80%; max-width: 420px; height: 1px; background: linear-gradient(90deg, var(--gold), rgba(196,134,40,.15), transparent); margin: 8px 0 20px; position: relative; }
         .sn-rule-diamond { position: absolute; left: 49%; top: -10px; color: var(--gold); font-size: 18px; background: var(--ivory-2); padding: 0 8px; }
 
-        /* ─── BRAND HEADER ─── */
+        /* ─── VIDEO HEADER ─── */
         .sn-showcase-wrap { height: 420px; position: relative; display: flex; align-items: center; justify-content: center; }
         .sn-video-frame {
           position: relative;
@@ -445,7 +457,7 @@ export default function SelectNetworkHomePage() {
         .sn-video-fallback {
           position: absolute;
           inset: 0;
-          z-index: 2;
+          z-index: 1;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -521,9 +533,9 @@ export default function SelectNetworkHomePage() {
 
         /* ─── FOCUS PANEL ─── */
         .sn-focus-panel { border-left: 1px solid rgba(196,134,40,.26); padding-left: 32px; align-self: center; display: flex; flex-direction: column; gap: 14px; }
-        .sn-focus-card { display: flex; align-items: center; gap: 14px; border: 1px solid rgba(196,134,40,.35); background: rgba(255,250,241,.72); border-radius: 10px; padding: 13px 14px; color: var(--navy); font-weight: 850; box-shadow: 0 8px 20px rgba(86,58,11,.05); position: relative; overflow: hidden; transition: all .32s ease; }
+        .sn-focus-card { display: flex; align-items: center; gap: 14px; min-width: 0; border: 1px solid rgba(196,134,40,.35); background: rgba(255,250,241,.72); border-radius: 10px; padding: 13px 14px; color: var(--navy); font-weight: 850; box-shadow: 0 8px 20px rgba(86,58,11,.05); position: relative; overflow: hidden; transition: all .32s ease; }
         .sn-focus-icon { color: #bd7723; flex: 0 0 auto; transition: .32s ease; display: flex; }
-        .sn-focus-label { font-size: 14px; white-space: nowrap; }
+        .sn-focus-label { font-size: 13px; line-height: 1.25; white-space: normal; min-width: 0; }
         .sn-focus-card.active { background: linear-gradient(180deg, #fff, #fff6df); box-shadow: 0 14px 30px rgba(196,134,40,.16); border-color: rgba(196,134,40,.72); }
         .sn-focus-card.active:before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,221,144,.48), transparent); animation: snShutter 1.2s ease both; }
         .sn-focus-card.active .sn-focus-icon { transform: scale(1.13); color: #0a6b3b; filter: drop-shadow(0 0 7px rgba(224,180,97,.55)); }
@@ -664,7 +676,11 @@ export default function SelectNetworkHomePage() {
 
         /* ─── RESPONSIVE: MOBILE ─── */
         @media (max-width: 760px) {
+          .sn-home {
+            background: linear-gradient(180deg, #ffffff 0%, #ffffff 62%, #fbf8f1 100%);
+          }
           .sn-top-line { font-size: 10px; letter-spacing: .18em; }
+          .sn-header { background: rgba(255,255,255,.97); }
           .sn-brand img { height: 70px !important; }
           .sn-nav-links, .sn-hide-mobile { display: none !important; }
           .sn-hamburger { display: flex; }
@@ -675,8 +691,8 @@ export default function SelectNetworkHomePage() {
           .sn-home h1 { font-size: 36px; }
           .sn-static-headline { font-size: 36px; }
           .sn-hero-subtitle { font-size: 17px; }
-          .sn-showcase-wrap { padding: 6px 0 16px; }
-          .sn-video-frame { width: 100%; max-width: 360px; }
+          .sn-showcase-wrap { padding: 6px 0 18px; }
+          .sn-video-frame { width: 100%; max-width: 360px; border-radius: 16px; }
           .sn-focus-panel { grid-template-columns: 1fr; }
           .sn-work-card { grid-template-columns: 72px 1fr; padding: 8px 0; }
           .sn-money h2 { font-size: 30px; }

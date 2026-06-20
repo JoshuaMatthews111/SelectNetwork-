@@ -1214,7 +1214,7 @@ export default function AdminPortal() {
           {activeTab === "settings" && (
             <div className="sn-mobile-content" style={{ maxWidth: 600, animation: "fadeIn .5s ease" }}>
               <div style={card}><h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>System Settings</h2>
-                {[["Admin Email", "admin@selectnetwork.com"], ["Company Name", "The Select Network Member Group"], ["Unit Price", "$100"], ["Total Units", "50,000"]].map(([l, v], i) => (
+                {[["Admin Email", "tmillerk999@gmail.com"], ["Company Name", "The Select Network Member Group"], ["Unit Price", "$100"], ["Total Units", "50,000"]].map(([l, v], i) => (
                   <div key={i} style={{ marginBottom: 14 }}><label style={fieldLabel}>{l}</label><input defaultValue={v} style={fieldInput} /></div>
                 ))}
                 <h3 style={{ margin: "20px 0 10px", fontSize: 16 }}>Integrations</h3>
