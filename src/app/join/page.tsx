@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useState } from "react";
 import { FileText, FileSignature, PhoneCall, CheckCircle2, Star, Target, BarChart3, Lock, Building2 } from "lucide-react";
 import SNNav from "../components/SNNav";
-import SNBrandVideo from "../components/SNBrandVideo";
 import SNFooter from "../components/SNFooter";
 import Reveal from "../components/Reveal";
 
@@ -30,7 +29,6 @@ export default function JoinPage() {
   return (
     <div style={{ fontFamily: "Inter, Arial, sans-serif", color: NAVY, background: "#fff" }}>
       <SNNav />
-      <SNBrandVideo />
 
       {/* Hero */}
       <section className="sn-section-pad" style={{ background: "linear-gradient(135deg,#061a33,#030b17)", color: "#fff", padding: "70px 0" }}>

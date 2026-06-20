@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { ArrowRight, Info } from "lucide-react";
 import SNNav from "../components/SNNav";
-import SNBrandVideo from "../components/SNBrandVideo";
 import SNFooter from "../components/SNFooter";
 
 const NAVY = "#071a33";
@@ -14,7 +13,6 @@ export default function CompPlanPage() {
   return (
     <div style={{ fontFamily: "Inter, Arial, sans-serif", color: NAVY, background: "#fff" }}>
       <SNNav />
-      <SNBrandVideo />
 
       {/* Hero */}
       <section style={{ background: "linear-gradient(135deg,#061a33,#030b17)", color: "#fff", padding: "70px 0" }}>

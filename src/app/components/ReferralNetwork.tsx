@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChevronUp, Expand, TreePine, UserRoundSearch, Users, X } from "lucide-react";
+import { ChevronUp, Expand, RotateCcw, TreePine, UserRoundSearch, Users, X } from "lucide-react";
 
 type RoleMode = "admin" | "investor" | "builder";
 
@@ -77,23 +77,45 @@ export default function ReferralNetwork({
   const [rootId, setRootId] = useState("lorenzo");
   const [uplineId, setUplineId] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const isLimitedView = mode !== "admin";
+  const visiblePeople = useMemo(() => {
+    if (!isLimitedView) return people;
+    return people.filter((person) => person.level <= 3).slice(0, 40);
+  }, [isLimitedView]);
+  const visibleById = useMemo(() => new Map(visiblePeople.map((person) => [person.id, person])), [visiblePeople]);
+  const getChildren = (id: string) => visiblePeople.filter((person) => person.sponsorId === id);
+  const getDescendants = (id: string) => {
+    const result: ReferralPerson[] = [];
+    const visit = (parentId: string) => {
+      getChildren(parentId).forEach((child) => {
+        if (isLimitedView && result.length >= 39) return;
+        result.push(child);
+        visit(child.id);
+      });
+    };
+    visit(id);
+    return result;
+  };
 
-  const root = byId.get(rootId) || people[0];
+  const root = visibleById.get(rootId) || visiblePeople[0] || people[0];
   const visibleChildren = useMemo(() => {
-    const direct = childrenOf(root.id);
+    const direct = getChildren(root.id);
     if (direct.length) return direct;
-    return descendantsOf(root.id).slice(0, 6);
-  }, [root.id]);
+    return getDescendants(root.id).slice(0, 6);
+  }, [root.id, visiblePeople]);
   const nextLevel = useMemo(() => {
-    return visibleChildren.flatMap((child) => childrenOf(child.id)).filter((person) => person.id !== root.id);
-  }, [visibleChildren, root.id]);
+    return visibleChildren.flatMap((child) => getChildren(child.id)).filter((person) => person.id !== root.id);
+  }, [visibleChildren, root.id, visiblePeople]);
+  const thirdLevel = useMemo(() => {
+    return nextLevel.flatMap((child) => getChildren(child.id)).filter((person) => person.id !== root.id);
+  }, [nextLevel, root.id, visiblePeople]);
 
   const memberTitle = mode === "investor" ? "My Referrals" : "My Referral Network";
-  const openLabel = mode === "admin" ? "Open Full Referral Network" : "Open My Referral Network";
+  const openLabel = mode === "admin" ? "View Full Organization Tree" : "View Full Referral Network";
   const scopeCopy = mode === "admin"
     ? "Admin can see the full organization and open any person to review their referrals."
-    : "This is your referral view. Select a person to open their referrals, or press View Upline to see who brought them in.";
-  const totalCount = mode === "admin" ? 128 : 28;
+    : "This is your referral view. Select a person to open their referrals, or press View Upline to see who brought them in. Builder visibility is capped at L1-L3 and 40 total people including you.";
+  const totalCount = mode === "admin" ? 128 : Math.min(visiblePeople.length, 40);
 
   const showUpline = (person: ReferralPerson) => {
     setUplineId(person.id);
@@ -104,8 +126,8 @@ export default function ReferralNetwork({
     setUplineId(null);
   };
 
-  const sponsor = uplineId ? byId.get(byId.get(uplineId)?.sponsorId || "") : null;
-  const uplinePerson = uplineId ? byId.get(uplineId) : null;
+  const sponsor = uplineId ? visibleById.get(visibleById.get(uplineId)?.sponsorId || "") : null;
+  const uplinePerson = uplineId ? visibleById.get(uplineId) : null;
 
   const renderPerson = (person: ReferralPerson, isRoot = false) => (
     <button
@@ -157,6 +179,7 @@ export default function ReferralNetwork({
         </button>
         {root.id !== "lorenzo" ? (
           <button type="button" onClick={() => setRootId("lorenzo")} className="sn-ref-light">
+            <RotateCcw size={15} />
             Back To Main Network
           </button>
         ) : null}
@@ -166,11 +189,24 @@ export default function ReferralNetwork({
 
       {uplinePerson ? (
         <div className="sn-ref-upline-panel">
-          <UserRoundSearch size={16} />
-          <span>
-            <b>{uplinePerson.name}</b>{" "}
-            {sponsor ? `was brought in by ${sponsor.name}.` : "is the top of this referral network."}
-          </span>
+          <img src={uplinePerson.photo} alt={`${uplinePerson.name} profile`} className="sn-ref-upline-photo" />
+          <div className="sn-ref-upline-copy">
+            <span className="sn-ref-upline-kicker"><UserRoundSearch size={14} /> Upline View</span>
+            <b>{uplinePerson.name}</b>
+            {sponsor ? (
+              <span className="sn-ref-upline-sponsor">
+                <img src={sponsor.photo} alt={`${sponsor.name} profile`} />
+                was brought in by <b>{sponsor.name}</b>
+              </span>
+            ) : (
+              <span>is the top of this referral network.</span>
+            )}
+          </div>
+          <div className="sn-ref-upline-actions">
+            <button type="button" onClick={() => openPerson(uplinePerson)}>Open Their Referrals</button>
+            {sponsor ? <button type="button" onClick={() => openPerson(sponsor)}>Open Upline Tree</button> : null}
+            <button type="button" onClick={() => setExpanded(true)}>View Full Tree</button>
+          </div>
         </div>
       ) : null}
 
@@ -194,6 +230,15 @@ export default function ReferralNetwork({
             </div>
           </>
         ) : null}
+        {thirdLevel.length ? (
+          <>
+            <div className="sn-ref-line" />
+            <div className="sn-ref-level-title">L3 Referrals</div>
+            <div className="sn-ref-level-row sn-ref-compact-row">
+              {thirdLevel.map((person) => renderPerson(person))}
+            </div>
+          </>
+        ) : null}
       </div>
     </>
   );
@@ -207,7 +252,7 @@ export default function ReferralNetwork({
         </div>
         <div className="sn-ref-stats">
           <span><Users size={16} /> {totalCount} people</span>
-          <span><TreePine size={16} /> {mode === "admin" ? "Full tree" : "40 max"}</span>
+          <span><TreePine size={16} /> {mode === "admin" ? "Full tree" : "L1-L3 · 40 max"}</span>
         </div>
       </div>
 
@@ -218,7 +263,7 @@ export default function ReferralNetwork({
           <div className="sn-ref-fullbar">
             <div>
               <h2>{memberTitle}</h2>
-              <p>{mode === "admin" ? "Expanded admin referral network." : "Expanded personal referral network."}</p>
+              <p>{mode === "admin" ? "Expanded admin referral network with no cap." : "Expanded personal referral network capped at L1-L3 and 40 total people including you."}</p>
             </div>
             <button type="button" onClick={() => setExpanded(false)}>
               <X size={18} />

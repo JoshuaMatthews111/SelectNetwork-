@@ -61,7 +61,7 @@ export default function SNNav() {
             gap: 24,
           }}
         >
-          <Link href="" style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+          <Link href="/" style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
             <Image
               className="sn-front-nav-logo"
               src="/assets/select-network/select-network-logo.png"
@@ -169,7 +169,9 @@ export default function SNNav() {
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 26 }}>
-              <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={200} height={98} style={{ width: 190, height: "auto" }} />
+              <Link href="/" onClick={() => setOpen(false)} style={{ display: "flex", alignItems: "center" }}>
+                <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={200} height={98} style={{ width: 190, height: "auto" }} />
+              </Link>
               <button onClick={() => setOpen(false)} aria-label="Close menu" style={{ background: "none", border: "none", color: "#0d2845", cursor: "pointer" }}>
                 <X size={26} />
               </button>

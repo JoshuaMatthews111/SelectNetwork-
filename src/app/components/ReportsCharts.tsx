@@ -480,8 +480,8 @@ export default function ReportsCharts() {
   return (
     <div>
       {/* Tabs */}
-      <div className="sn-table-wrap" style={{ marginBottom: 22 }}>
-        <div style={{ display: "inline-flex", gap: 6, background: "#f1ede3", padding: 6, borderRadius: 12 }}>
+      <div className="sn-chart-tabs-wrap sn-table-wrap" style={{ marginBottom: 22 }}>
+        <div className="sn-chart-tabs" style={{ display: "inline-flex", gap: 6, background: "#f1ede3", padding: 6, borderRadius: 12 }}>
           {TABS.map((t) => (
             <button
               key={t.id}
@@ -556,7 +556,7 @@ export default function ReportsCharts() {
           <ChartCard title="Trainer Hierarchy 2026" subtitle="A visual overview of Lorenzo's Dog Training Team's current trainer network and leadership structure. This is separate from The Select Network Member Group investor referral network.">
             <div style={{ background: "#f9f7f2", border: "1px solid #eee", borderRadius: 12, padding: 14, marginBottom: 16 }}>
               <div className="sn-table-wrap">
-                <img src="/reports/trainer-hierarchy-2026.png" alt="Lorenzo's Dog Training Team Trainer Hierarchy 2026" style={{ width: "100%", minWidth: 520, borderRadius: 8, display: "block" }} />
+                <img src="/reports/trainer-hierarchy-2026.png" alt="Lorenzo's Dog Training Team Trainer Hierarchy 2026" style={{ width: "100%", minWidth: 0, borderRadius: 8, display: "block" }} />
               </div>
             </div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
@@ -590,6 +590,25 @@ export default function ReportsCharts() {
         @keyframes arrowBounce {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.45; }
+        }
+        .sn-chart-tabs-wrap {
+          max-width: 100%;
+          overflow-x: auto !important;
+          -webkit-overflow-scrolling: touch;
+        }
+        @media (max-width: 760px) {
+          .sn-chart-tabs {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            width: 100% !important;
+          }
+          .sn-chart-tabs button {
+            min-width: 0;
+            white-space: normal !important;
+            line-height: 1.2;
+            padding: 10px 8px !important;
+            text-align: center;
+          }
         }
       `}</style>
     </div>

@@ -171,7 +171,7 @@ export default function BuilderPortal() {
         {/* ─── Sidebar ─── */}
         <aside className={`sn-sidebar ${sidebarOpen ? "open" : ""}`} style={{ background: "linear-gradient(180deg,#fff 0%,#fbf8f1 54%,#edf6ef 100%)", borderRight: "1px solid #e7e2d8", padding: "24px 18px", position: "sticky", top: 0, height: "100vh", overflow: "auto" }}>
           <div style={{ marginBottom: 28 }}>
-            <Link href=""><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={260} height={127} priority style={{ width: 260, height: "auto", display: "block" }} /></Link>
+            <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={260} height={127} priority style={{ width: 260, height: "auto", display: "block" }} /></Link>
           </div>
           <nav style={{ display: "grid", gap: 7 }}>
             {tabs.map((t) => (
@@ -193,7 +193,9 @@ export default function BuilderPortal() {
           <div className="sn-app-topbar" style={{ display: "none" }}>
             <div className="sn-mobile-brand-lockup" style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <button className="sn-mobile-toggle" onClick={() => setSidebarOpen(true)}><Menu size={22} /></button>
-              <Image className="sn-mobile-header-logo" src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={120} height={59} priority style={{ width: 96, height: "auto", display: "block", flexShrink: 0 }} />
+              <Link href="/" style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+                <Image className="sn-mobile-header-logo" src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={120} height={59} priority style={{ width: 96, height: "auto", display: "block", flexShrink: 0 }} />
+              </Link>
               <div className="sn-mobile-title-copy">
                 <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: ".1em", color: "#bd8e28", textTransform: "uppercase" }}>Builder Portal</div>
                 <div style={{ fontSize: 16, fontWeight: 700 }}>{tabs.find(t => t.id === activeTab)?.label || "Overview"}</div>

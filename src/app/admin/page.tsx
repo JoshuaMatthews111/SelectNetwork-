@@ -365,7 +365,7 @@ export default function AdminPortal() {
       <div className="sn-portal-grid" style={{ display: "grid", gridTemplateColumns: "296px 1fr", minHeight: "100vh" }}>
         {/* Sidebar */}
         <aside className={`sn-sidebar ${sidebarOpen ? "open" : ""}`} style={{ background: "linear-gradient(180deg,#fff 0%,#fbf8f1 54%,#edf6ef 100%)", borderRight: "1px solid #e7e2d8", padding: "24px 18px", position: "sticky", top: 0, height: "100vh", overflow: "auto" }}>
-          <div style={{ marginBottom: 28 }}><Link href=""><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={260} height={127} priority style={{ width: 260, height: "auto" }} /></Link></div>
+          <div style={{ marginBottom: 28 }}><Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={260} height={127} priority style={{ width: 260, height: "auto" }} /></Link></div>
           <nav style={{ display: "grid", gap: 7 }}>
             {adminTabs.map((t) => (
               <button key={t.id} onClick={() => switchTab(t.id)} style={{ display: "flex", alignItems: "center", gap: 14, textAlign: "left", padding: "14px 16px", border: 0, borderRadius: 12, background: activeTab === t.id ? "linear-gradient(135deg,#075933,#0d6d42)" : "transparent", color: activeTab === t.id ? "#fff" : "#10233b", fontWeight: 800, fontSize: 14, transition: ".25s", transform: activeTab === t.id ? "translateX(3px)" : "none", boxShadow: activeTab === t.id ? "0 0 22px rgba(213,168,61,.55)" : "none", cursor: "pointer" }}>
@@ -386,7 +386,9 @@ export default function AdminPortal() {
           <div className="sn-app-topbar" style={{ display: "none" }}>
             <div className="sn-mobile-brand-lockup" style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <button className="sn-mobile-toggle" onClick={() => setSidebarOpen(true)}><Menu size={22} /></button>
-              <Image className="sn-mobile-header-logo" src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={120} height={59} priority style={{ width: 96, height: "auto", display: "block", flexShrink: 0 }} />
+              <Link href="/" style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+                <Image className="sn-mobile-header-logo" src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={120} height={59} priority style={{ width: 96, height: "auto", display: "block", flexShrink: 0 }} />
+              </Link>
               <div className="sn-mobile-title-copy">
                 <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: ".1em", color: "#bd8e28", textTransform: "uppercase" }}>Admin Portal</div>
                 <div style={{ fontSize: 16, fontWeight: 700 }}>{adminTabs.find(t => t.id === activeTab)?.label || "Overview"}</div>

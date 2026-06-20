@@ -55,7 +55,9 @@ export default function SelectNetworkHomePage() {
           <div className="sn-mobile-drawer-bg" onClick={() => setMobileOpen(false)} />
           <div className="sn-mobile-drawer">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-              <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={160} height={40} style={{ width: 160, height: "auto" }} />
+              <Link href="/" onClick={() => setMobileOpen(false)} style={{ display: "flex", alignItems: "center" }}>
+                <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={160} height={40} style={{ width: 160, height: "auto" }} />
+              </Link>
               <button onClick={() => setMobileOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "#071a33" }}><X size={24} /></button>
             </div>
             <nav style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -261,7 +263,9 @@ export default function SelectNetworkHomePage() {
           --shadow: 0 24px 65px rgba(14,32,58,.12);
           --soft: 0 14px 32px rgba(122,82,18,.12);
           font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          color-scheme: light;
           color: var(--ink);
+          background-color: #fff !important;
           background:
             radial-gradient(circle at 50% 0%, rgba(255,255,255,.98) 0 28%, transparent 58%),
             linear-gradient(180deg, #ffffff 0%, #fffdf9 52%, #fbf8f1 100%);
@@ -677,7 +681,20 @@ export default function SelectNetworkHomePage() {
         /* ─── RESPONSIVE: MOBILE ─── */
         @media (max-width: 760px) {
           .sn-home {
-            background: linear-gradient(180deg, #ffffff 0%, #ffffff 62%, #fbf8f1 100%);
+            --ink: #071a34;
+            --navy: #051f45;
+            --ivory: #ffffff;
+            color: #071a34 !important;
+            background-color: #ffffff !important;
+            background: linear-gradient(180deg, #ffffff 0%, #ffffff 62%, #fbf8f1 100%) !important;
+          }
+          .sn-home:before { opacity: .55; background-image: linear-gradient(90deg, rgba(196,134,40,.035) 1px, transparent 1px), linear-gradient(0deg, rgba(196,134,40,.025) 1px, transparent 1px); }
+          .sn-home .sn-rp-navy,
+          .sn-home .sn-hero-paragraph,
+          .sn-home .sn-focus-label,
+          .sn-home .sn-work-card h3,
+          .sn-home .sn-trust-item h4 {
+            color: #071a34 !important;
           }
           .sn-top-line { font-size: 10px; letter-spacing: .18em; }
           .sn-header { background: rgba(255,255,255,.97); }
