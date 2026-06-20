@@ -41,7 +41,7 @@ export default function LDTTOpportunityPage() {
       >
         <Image
           className="sn-hero-dog"
-          src="/hero-dog.jpg"
+          src="/assets/select-network/lorenzo-team.jpg"
           alt=""
           width={1400}
           height={900}
