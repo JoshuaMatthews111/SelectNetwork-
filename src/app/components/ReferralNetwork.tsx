@@ -33,28 +33,25 @@ const people: ReferralPerson[] = [
   { id: "ryan", name: "Ryan Scott", role: "Investor", status: "Review", level: 3, units: 2, invested: "$2,500", joined: "Jun 25, 2025", sponsorId: "michael", photo: "https://i.pravatar.cc/120?img=15" },
 ];
 
-const byId = new Map(people.map((person) => [person.id, person]));
-
-function childrenOf(id: string) {
-  return people.filter((person) => person.sponsorId === id);
-}
-
-function descendantsOf(id: string) {
-  const result: ReferralPerson[] = [];
-  const visit = (parentId: string) => {
-    childrenOf(parentId).forEach((child) => {
-      result.push(child);
-      visit(child.id);
-    });
+const adminPlaceholderPeople: ReferralPerson[] = Array.from({ length: 7 }, (_, index) => {
+  const level = index + 4;
+  const sponsorId = level === 4 ? "tyler" : `future-l${level - 1}`;
+  return {
+    id: `future-l${level}`,
+    name: `Future Level ${level}`,
+    role: "Placeholder",
+    status: "Review",
+    level,
+    units: 0,
+    invested: "$0",
+    joined: "Future growth",
+    sponsorId,
+    photo: `https://i.pravatar.cc/120?img=${38 + index}`,
   };
-  visit(id);
-  return result;
-}
+});
 
-function levelLabel(person: ReferralPerson, rootId: string) {
-  if (person.id === rootId) return "L0";
-  const root = byId.get(rootId);
-  if (!root) return `L${person.level}`;
+function levelLabel(person: ReferralPerson, root: ReferralPerson) {
+  if (person.id === root.id) return "L0";
   const relative = Math.max(1, person.level - root.level);
   return `L${relative}`;
 }
@@ -79,41 +76,38 @@ export default function ReferralNetwork({
   const [expanded, setExpanded] = useState(false);
   const isLimitedView = mode !== "admin";
   const visiblePeople = useMemo(() => {
-    if (!isLimitedView) return people;
+    if (!isLimitedView) return [...people, ...adminPlaceholderPeople];
     return people.filter((person) => person.level <= 3).slice(0, 40);
   }, [isLimitedView]);
   const visibleById = useMemo(() => new Map(visiblePeople.map((person) => [person.id, person])), [visiblePeople]);
   const getChildren = (id: string) => visiblePeople.filter((person) => person.sponsorId === id);
-  const getDescendants = (id: string) => {
-    const result: ReferralPerson[] = [];
-    const visit = (parentId: string) => {
-      getChildren(parentId).forEach((child) => {
-        if (isLimitedView && result.length >= 39) return;
-        result.push(child);
-        visit(child.id);
-      });
-    };
-    visit(id);
-    return result;
-  };
 
   const root = visibleById.get(rootId) || visiblePeople[0] || people[0];
-  const visibleChildren = useMemo(() => {
-    const direct = getChildren(root.id);
-    if (direct.length) return direct;
-    return getDescendants(root.id).slice(0, 6);
-  }, [root.id, visiblePeople]);
-  const nextLevel = useMemo(() => {
-    return visibleChildren.flatMap((child) => getChildren(child.id)).filter((person) => person.id !== root.id);
-  }, [visibleChildren, root.id, visiblePeople]);
-  const thirdLevel = useMemo(() => {
-    return nextLevel.flatMap((child) => getChildren(child.id)).filter((person) => person.id !== root.id);
-  }, [nextLevel, root.id, visiblePeople]);
+  const levelRows = useMemo(() => {
+    const rows: ReferralPerson[][] = [];
+    const visited = new Set<string>([root.id]);
+    let current = getChildren(root.id);
+    let visibleCount = 1;
+
+    while (current.length) {
+      const unique = current.filter((person) => !visited.has(person.id));
+      const availableSlots = isLimitedView ? Math.max(0, 40 - visibleCount) : unique.length;
+      const row = isLimitedView ? unique.slice(0, availableSlots) : unique;
+      if (!row.length) break;
+
+      row.forEach((person) => visited.add(person.id));
+      rows.push(row);
+      visibleCount += row.length;
+      current = row.flatMap((person) => getChildren(person.id));
+    }
+
+    return rows;
+  }, [root.id, visiblePeople, isLimitedView]);
 
   const memberTitle = mode === "investor" ? "My Referrals" : "My Referral Network";
   const openLabel = mode === "admin" ? "View Full Organization Tree" : "View Full Referral Network";
   const scopeCopy = mode === "admin"
-    ? "Admin can see the full organization and open any person to review their referrals."
+    ? "Admin can see the full organization, including 10 placeholder levels now. Live data can keep expanding past L10 without changing this view."
     : "This is your referral view. Select a person to open their referrals, or press View Upline to see who brought them in. Builder visibility is capped at L1-L3 and 40 total people including you.";
   const totalCount = mode === "admin" ? 128 : Math.min(visiblePeople.length, 40);
 
@@ -136,7 +130,7 @@ export default function ReferralNetwork({
       onClick={() => openPerson(person)}
       className={`sn-ref-node ${isRoot ? "sn-ref-root" : ""}`}
     >
-      <span className="sn-ref-level">{levelLabel(person, root.id)}</span>
+      <span className="sn-ref-level">{levelLabel(person, root)}</span>
       <img src={person.photo} alt={`${person.name} profile`} className="sn-ref-photo" />
       <strong>{person.name}</strong>
       <small>{person.role}</small>
@@ -214,31 +208,20 @@ export default function ReferralNetwork({
         <div className="sn-ref-level-row sn-ref-root-row">
           {renderPerson(root, true)}
         </div>
-        <div className="sn-ref-line" />
-        <div className="sn-ref-level-title">L1 Referrals</div>
-        <div className="sn-ref-level-row">
-          {visibleChildren.length ? visibleChildren.map((person) => renderPerson(person)) : (
+        {levelRows.length ? levelRows.map((row, index) => (
+          <div key={`level-${index + 1}`}>
+            <div className="sn-ref-line" />
+            <div className="sn-ref-level-title">L{index + 1} Referrals</div>
+            <div className={`sn-ref-level-row ${index > 0 ? "sn-ref-compact-row" : ""}`}>
+              {row.map((person) => renderPerson(person))}
+            </div>
+          </div>
+        )) : (
+          <>
+            <div className="sn-ref-line" />
             <div className="sn-ref-empty">No referrals under this person yet.</div>
-          )}
-        </div>
-        {nextLevel.length ? (
-          <>
-            <div className="sn-ref-line" />
-            <div className="sn-ref-level-title">L2 Referrals</div>
-            <div className="sn-ref-level-row sn-ref-compact-row">
-              {nextLevel.map((person) => renderPerson(person))}
-            </div>
           </>
-        ) : null}
-        {thirdLevel.length ? (
-          <>
-            <div className="sn-ref-line" />
-            <div className="sn-ref-level-title">L3 Referrals</div>
-            <div className="sn-ref-level-row sn-ref-compact-row">
-              {thirdLevel.map((person) => renderPerson(person))}
-            </div>
-          </>
-        ) : null}
+        )}
       </div>
     </>
   );
@@ -252,7 +235,7 @@ export default function ReferralNetwork({
         </div>
         <div className="sn-ref-stats">
           <span><Users size={16} /> {totalCount} people</span>
-          <span><TreePine size={16} /> {mode === "admin" ? "Full tree" : "L1-L3 · 40 max"}</span>
+          <span><TreePine size={16} /> {mode === "admin" ? "L10+ ready" : "L1-L3 · 40 max"}</span>
         </div>
       </div>
 

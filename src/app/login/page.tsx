@@ -16,7 +16,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
 
   const fieldLabel: React.CSSProperties = { display: "block", fontSize: 11, fontWeight: 900, color: "#667085", textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 6 };
-  const fieldInput: React.CSSProperties = { width: "100%", background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 4, padding: "14px 16px", fontSize: 14, outline: "none", color: "#071a33" };
+  const fieldInput: React.CSSProperties = { width: "100%", boxSizing: "border-box", background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 4, padding: "14px 16px", fontSize: 14, outline: "none", color: "#071a33" };
 
   const [applyForm, setApplyForm] = useState({ firstName: "", lastName: "", email: "", phone: "", amount: "", referral: "", message: "" });
   const [applyLoading, setApplyLoading] = useState(false);
@@ -101,9 +101,10 @@ export default function LoginPage() {
       return;
     }
     
+    const normalizedEmail = email.trim().toLowerCase() === "tkmillerk999@gmail.com" ? "tmillerk999@gmail.com" : email.trim().toLowerCase();
     const supabase = getSupabaseBrowser();
     const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
+      email: normalizedEmail,
       password,
     });
     
@@ -119,7 +120,7 @@ export default function LoginPage() {
       const { data: profile } = await supabase
         .from('members')
         .select('role')
-        .eq('email', email)
+        .eq('email', normalizedEmail)
         .single() as { data: { role?: string } | null };
       
       if (profile?.role === 'admin') {
@@ -149,7 +150,12 @@ export default function LoginPage() {
         <form onSubmit={handleLogin}>
           <div style={{ marginBottom: 16 }}><label style={fieldLabel}>Email</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="name@example.com" style={fieldInput} /></div>
           <div style={{ marginBottom: 20 }}><label style={fieldLabel}>Password</label><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" style={fieldInput} /></div>
-          <button type="submit" disabled={loading} className="sn-btn-gold sn-btn" style={{ width: "100%", padding: "16px 0", opacity: loading ? 0.7 : 1 }}>
+          {mode === "staff" && (
+            <div style={{ background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 6, color: "#604b17", fontSize: 12, lineHeight: 1.5, padding: "10px 12px", margin: "0 0 16px" }}>
+              Use <b>tmillerk999@gmail.com</b>. If you typed <b>tkmillerk999@gmail.com</b>, the system will correct that common typo for this login.
+            </div>
+          )}
+          <button type="submit" disabled={loading} className="sn-btn-gold sn-btn" style={{ width: "100%", boxSizing: "border-box", padding: "16px 0", opacity: loading ? 0.7 : 1 }}>
             {loading ? <><Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} /> Signing In...</> : "Sign In →"}
           </button>
         </form>
@@ -169,7 +175,7 @@ export default function LoginPage() {
         <button onClick={() => setMode("investor")} style={{ textAlign: "left", background: "#fff", border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", padding: 28, borderRadius: 10, cursor: "pointer", transition: ".35s" }} className="hover:translate-y-[-4px] hover:border-[#bd8e28]">
           <div style={{ width: 56, height: 56, borderRadius: "50%", border: "1px solid #bd8e28", display: "grid", placeItems: "center", color: "#bd8e28", marginBottom: 16, background: "linear-gradient(135deg,#fffaf0,#fff3d6)" }}><TrendingUp size={26} /></div>
           <b style={{ display: "block", fontSize: 20, color: "#071a33", marginBottom: 8 }}>Investor Portal</b>
-          <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: "0 0 12px" }}>Access your private dashboard, units, growth chart, documents, referrals, and account updates.</p>
+          <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: "0 0 12px" }}>Access your private dashboard, units, growth chart, documents, earnings, and account updates.</p>
           <span style={{ fontSize: 11, color: "#bd8e28", fontWeight: 800, textTransform: "uppercase", letterSpacing: ".04em" }}>Demo: demo / demo</span>
         </button>
         <button onClick={() => setMode("staff")} style={{ textAlign: "left", background: "#fff", border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", padding: 28, borderRadius: 10, cursor: "pointer", transition: ".35s" }} className="hover:translate-y-[-4px] hover:border-[#075933]">

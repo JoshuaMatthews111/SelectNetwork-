@@ -22,7 +22,7 @@ const adminTabs = [
   { id: "payments", label: "Payments", ico: "credit" },
   { id: "crm", label: "Prospect CRM", ico: "contact" },
   { id: "scheduler", label: "Scheduler", ico: "calendar" },
-  { id: "reports", label: "Reports", ico: "chart" },
+  { id: "reports", label: "Upload Reports", ico: "chart" },
   { id: "docs", label: "Documents", ico: "folder" },
   { id: "matrix", label: "My Referral Network", ico: "tree" },
   { id: "announcements", label: "Updates", ico: "megaphone" },
@@ -57,6 +57,14 @@ const meetings = [
   { id: 2, title: "Onboarding - Sophia Martinez", date: "Jun 4, 2025", time: "2:00 PM", type: "Onboarding Call", status: "Pending", zoom: "" },
   { id: 3, title: "Follow-up - David Thompson", date: "Jun 6, 2025", time: "11:30 AM", type: "Follow-up", status: "Confirmed", zoom: "https://zoom.us/j/123456789" },
   { id: 4, title: "Quarterly Review - Lorenzo", date: "Jun 10, 2025", time: "9:00 AM", type: "Zoom Presentation", status: "Confirmed", zoom: "https://zoom.us/j/111222333" },
+];
+
+const quarterlyRows = [
+  { name: "Lorenzo", role: "Investor-Builder", units: 50, invested: "$50,000", suggested: "$1,250", email: "lorenzo@selectnetwork.com" },
+  { name: "Maria Santos", role: "Investor-Builder", units: 25, invested: "$25,000", suggested: "$625", email: "maria@email.com" },
+  { name: "David Chen", role: "Investor", units: 10, invested: "$10,000", suggested: "$250", email: "david@email.com" },
+  { name: "James Wilson", role: "Builder", units: 15, invested: "$15,000", suggested: "$375", email: "james@email.com" },
+  { name: "Sophia Lee", role: "Investor", units: 5, invested: "$5,000", suggested: "$125", email: "sophia@email.com" },
 ];
 
 export default function AdminPortal() {
@@ -199,7 +207,7 @@ export default function AdminPortal() {
   const btnGold: React.CSSProperties = { background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", border: 0, borderRadius: 8, padding: "12px 16px", fontWeight: 900, fontSize: 12, textTransform: "uppercase", letterSpacing: ".04em", cursor: "pointer", transition: ".25s" };
   const btnOutline: React.CSSProperties = { background: "#fff", color: "#a46a00", border: "1px solid #bd8e28", borderRadius: 8, padding: "8px 14px", fontWeight: 900, fontSize: 11, cursor: "pointer", transition: ".25s" };
   const fieldLabel: React.CSSProperties = { display: "block", fontSize: 11, fontWeight: 900, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 6 };
-  const fieldInput: React.CSSProperties = { width: "100%", background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 8, padding: "12px 16px", fontSize: 14, outline: "none" };
+  const fieldInput: React.CSSProperties = { width: "100%", boxSizing: "border-box", background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 8, padding: "12px 16px", fontSize: 14, outline: "none" };
   const statusBadge = (s: string) => ({ padding: "4px 10px", borderRadius: 99, background: s === "Active" || s === "Published" || s === "Confirmed" ? "#e3f5eb" : s === "Pending" || s === "Review" ? "#fffaf0" : "#f5f7fb", color: s === "Active" || s === "Published" || s === "Confirmed" ? "#087345" : s === "Pending" || s === "Review" ? "#bd8e28" : "#667085", fontSize: 11, fontWeight: 900 as const, textTransform: "uppercase" as const });
 
   const labelStyle = (label: string): React.CSSProperties => {
@@ -554,8 +562,8 @@ export default function AdminPortal() {
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Quick Actions</h2>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                    {["Review Requests", "Approve Reports", "Schedule Meeting", "Export Data", "Add Member", "Upload CSV", "Send Update", "Open Referrals"].map((a, i) => (
-                      <button key={i} onClick={() => { if (a === "Review Requests") switchTab("requests"); if (a === "Approve Reports") switchTab("reports"); if (a === "Schedule Meeting") switchTab("scheduler"); if (a === "Open Referrals") switchTab("matrix"); }} style={{ padding: "10px 8px", background: i % 2 === 0 ? "#f9f6ef" : "#edf6ef", border: "1px solid #e7e2d8", borderRadius: 8, fontSize: 11, fontWeight: 800, cursor: "pointer", transition: ".25s", color: "#071a33" }} className="hover:translate-y-[-2px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)]">{a} →</button>
+                    {["Review Requests", "Upload Reports", "Schedule Meeting", "Export Data", "Add Member", "Upload CSV", "Send Update", "Open Referrals"].map((a, i) => (
+                      <button key={i} onClick={() => { if (a === "Review Requests") switchTab("requests"); if (a === "Upload Reports" || a === "Upload CSV") switchTab("reports"); if (a === "Schedule Meeting") switchTab("scheduler"); if (a === "Open Referrals") switchTab("matrix"); }} style={{ padding: "10px 8px", background: i % 2 === 0 ? "#f9f6ef" : "#edf6ef", border: "1px solid #e7e2d8", borderRadius: 8, fontSize: 11, fontWeight: 800, cursor: "pointer", transition: ".25s", color: "#071a33" }} className="hover:translate-y-[-2px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)]">{a} →</button>
                     ))}
                   </div>
                 </div>
@@ -705,25 +713,90 @@ export default function AdminPortal() {
             </div>
           )}
 
-          {/* FINANCIAL REPORTS */}
+          {/* UPLOAD REPORTS */}
           {activeTab === "reports" && (
-            <div className="sn-mobile-content sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, animation: "fadeIn .5s ease" }}>
-              <div style={card}><h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Upload Financial Report</h2>
-                <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                  <div><label style={fieldLabel}>Title</label><input placeholder="Q2 Financial Snapshot" style={fieldInput} /></div>
-                  <div><label style={fieldLabel}>Category</label><select style={fieldInput}><option>Monthly Financials</option><option>Quarterly Progress</option><option>Annual Report</option><option>Major Win</option><option>Investor Notice</option></select></div>
-                </div>
-                <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Summary</label><textarea rows={3} style={{ ...fieldInput, resize: "none" as const }} /></div>
-                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}><button style={btnGreen}>Save Draft</button><button style={btnGold}>Publish</button></div>
-                <div style={{ marginTop: 14, borderLeft: "4px solid #bd8e28", background: "#fffaf0", color: "#604b17", padding: "12px 14px", fontSize: 12, borderRadius: "0 6px 6px 0" }}>Reports must be approved before investors can see them.</div>
-              </div>
-              <div style={card}><h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Reports Pending Approval</h2>
-                {[{ title: "Q2 Financial Report", date: "May 20" }, { title: "Expansion Milestone", date: "May 18" }].map((r, i) => (
-                  <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderBottom: "1px solid #eef2f6", flexWrap: "wrap", gap: 8 }}>
-                    <div><b style={{ fontSize: 14 }}>{r.title}</b><br /><small style={{ color: "#667085" }}>Submitted {r.date}</small></div>
-                    <div style={{ display: "flex", gap: 6 }}><span style={statusBadge("Pending")}>Pending</span><button style={btnOutline}>Approve</button></div>
+            <div className="sn-mobile-content" style={{ display: "grid", gap: 18, animation: "fadeIn .5s ease" }}>
+              <div style={{ ...card, background: "linear-gradient(135deg,#071a33,#0d3366)", color: "#fff" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 18, flexWrap: "wrap", alignItems: "flex-start" }}>
+                  <div>
+                    <div style={{ color: "#ffd46f", fontSize: 11, fontWeight: 900, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 8 }}>Upload Reports</div>
+                    <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 25, margin: "0 0 8px" }}>Quarterly Earnings Publisher</h2>
+                    <p style={{ color: "#c6d2e1", maxWidth: 760, lineHeight: 1.7, margin: 0, fontSize: 13.5 }}>
+                      Upload a CSV or document, review every member&apos;s units and invested amount, enter quarterly returns, then publish the result to investor and builder dashboards in real time.
+                    </p>
                   </div>
-                ))}
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    <button style={btnGold}>Save Draft</button>
+                    <button style={{ ...btnGreen, background: "#fff", color: "#075933" }}>Publish Earnings</button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+                <div style={card}>
+                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>1. Upload CSV or Report</h2>
+                  <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+                    <div><label style={fieldLabel}>Quarter</label><select style={fieldInput}><option>Q2 2026</option><option>Q1 2026</option><option>Q4 2025</option><option>Q3 2025</option></select></div>
+                    <div><label style={fieldLabel}>Report Type</label><select style={fieldInput}><option>Quarterly Earnings</option><option>Monthly Financials</option><option>Tax Document</option><option>Investor Notice</option></select></div>
+                  </div>
+                  <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Upload File</label><input type="file" accept=".csv,.xlsx,.pdf,.doc,.docx" style={fieldInput} /></div>
+                  <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Member CSV Columns</label><input value="email, name, units, invested, quarter_return, notes" readOnly style={{ ...fieldInput, color: "#667085" }} /></div>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}><button style={btnGreen}>Preview Upload</button><button style={btnOutline}>Download CSV Template</button></div>
+                </div>
+
+                <div style={card}>
+                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>2. Quarterly Return Calculator</h2>
+                  <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+                    <div><label style={fieldLabel}>Profit Pool</label><input defaultValue="$2,625" style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Return Method</label><select style={fieldInput}><option>By Units Owned</option><option>Custom Per Member</option><option>Flat Percent</option></select></div>
+                  </div>
+                  <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Publish Message</label><textarea rows={3} defaultValue="Q2 earnings have been posted to your member dashboard." style={{ ...fieldInput, resize: "none" as const }} /></div>
+                  <div style={{ borderLeft: "4px solid #bd8e28", background: "#fffaf0", color: "#604b17", padding: "12px 14px", fontSize: 12, borderRadius: "0 6px 6px 0" }}>
+                    Draft first, review totals, then publish. Published earnings appear in investor and builder dashboards.
+                  </div>
+                </div>
+              </div>
+
+              <div style={card}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "center", marginBottom: 14 }}>
+                  <div>
+                    <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 4px" }}>3. Review Member Earnings</h2>
+                    <p style={{ margin: 0, color: "#667085", fontSize: 13 }}>Admin can edit any quarterly return before publishing.</p>
+                  </div>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}><span style={statusBadge("Pending")}>Draft</span><button style={btnGold}>Publish To Dashboards</button></div>
+                </div>
+                <div className="sn-desktop-table" style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                    <thead><tr>{["Member", "Role", "Units", "Invested", "Quarter Return", "Status"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
+                    <tbody>
+                      {quarterlyRows.map((member, index) => (
+                        <tr key={member.email}>
+                          <td style={tdS}><b>{member.name}</b><br /><small style={{ color: "#667085" }}>{member.email}</small></td>
+                          <td style={tdS}>{member.role}</td>
+                          <td style={tdS}>{member.units}</td>
+                          <td style={tdS}>{member.invested}</td>
+                          <td style={tdS}><input defaultValue={member.suggested} style={{ ...fieldInput, maxWidth: 150, padding: "9px 10px" }} /></td>
+                          <td style={tdS}><span style={statusBadge(index < 2 ? "Review" : "Pending")}>{index < 2 ? "Review" : "Pending"}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="sn-mobile-cards" style={{ display: "none" }}>
+                  {quarterlyRows.map((member) => (
+                    <div key={member.email}>
+                      <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 8 }}>
+                        <b>{member.name}</b>
+                        <span style={statusBadge("Pending")}>Draft</span>
+                      </div>
+                      <div className="sn-m-card-row"><span className="sn-m-label">Role</span><span className="sn-m-value">{member.role}</span></div>
+                      <div className="sn-m-card-row"><span className="sn-m-label">Units</span><span className="sn-m-value">{member.units}</span></div>
+                      <div className="sn-m-card-row"><span className="sn-m-label">Invested</span><span className="sn-m-value">{member.invested}</span></div>
+                      <label style={{ ...fieldLabel, marginTop: 10 }}>Quarter Return</label>
+                      <input defaultValue={member.suggested} style={fieldInput} />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}

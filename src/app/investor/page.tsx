@@ -3,8 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { Binoculars, Star, TrendingUp, FolderOpen, Wallet, Network, TreePine, Megaphone, Settings, Bell, Mail, Diamond, CheckCircle, FileText, CircleDot, Menu, LogOut, MessageSquare, Award, Target, Ribbon } from "lucide-react";
-import ReferralNetwork from "../components/ReferralNetwork";
+import { Binoculars, Star, TrendingUp, FolderOpen, Wallet, Network, Megaphone, Settings, Bell, Mail, Diamond, CheckCircle, FileText, CircleDot, Menu, LogOut, MessageSquare, Award, Target, Ribbon } from "lucide-react";
 
 /* ─── Count-up hook ─── */
 function useCountUp(target: number, duration = 1200) {
@@ -51,7 +50,6 @@ const allTabs = [
   { id: "reports", label: "Reports & Documents", ico: <TrendingUp size={20} />, roles: ["Investor", "Builder"] },
   { id: "docs", label: "Documents", ico: <FolderOpen size={20} />, roles: ["Investor", "Builder"] },
   { id: "withdrawals", label: "Withdrawals", ico: <Wallet size={20} />, roles: ["Investor", "Builder"] },
-  { id: "matrix", label: "My Referrals", ico: <TreePine size={20} />, roles: ["Investor", "Builder"] },
   { id: "announcements", label: "Announcements", ico: <Megaphone size={20} />, roles: ["Investor", "Builder"] },
   { id: "chat", label: "Support / Chat", ico: <MessageSquare size={20} />, roles: ["Investor", "Builder"] },
   { id: "milestones", label: "Milestones", ico: <Award size={20} />, roles: ["Investor", "Builder"] },
@@ -374,6 +372,28 @@ export default function InvestorPortal() {
                   <b style={{ color: "#ffd46f" }}>Member Reports &amp; Documents</b> — This is where you can view unlocked reports, financial summaries, quarterly updates, tax-related documents, and company performance information that are not available on the public report page. Access is provided here because your participation has been completed.
                 </p>
               </div>
+              <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)", marginBottom: 18 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 14, flexWrap: "wrap", alignItems: "flex-start", marginBottom: 16 }}>
+                  <div>
+                    <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 6px" }}>Quarterly Earnings</h2>
+                    <p style={{ color: "#667085", fontSize: 13, lineHeight: 1.6, margin: 0 }}>When admin publishes quarterly returns, your amount and report will appear here.</p>
+                  </div>
+                  <span style={{ padding: "5px 10px", borderRadius: 99, background: "#e3f5eb", color: "#087345", fontSize: 11, fontWeight: 900 }}>Latest Published</span>
+                </div>
+                <div className="sn-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
+                  {[
+                    { label: "Q2 2026 Return", value: "$1,250", note: "Pending final admin publish" },
+                    { label: "Units Counted", value: "50", note: "Used for return calculation" },
+                    { label: "Report File", value: "Ready", note: "Download after publish" },
+                  ].map((item) => (
+                    <div key={item.label} style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 10, padding: "14px 16px" }}>
+                      <small style={{ display: "block", color: "#667085", fontSize: 11, fontWeight: 900, textTransform: "uppercase", marginBottom: 6 }}>{item.label}</small>
+                      <b style={{ display: "block", fontSize: 22, color: "#071a33", marginBottom: 4 }}>{item.value}</b>
+                      <span style={{ color: "#667085", fontSize: 12 }}>{item.note}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
               <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap" as const }}>
                 <input placeholder="Search reports" style={{ flex: 1, background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "12px 16px", fontSize: 14, outline: "none" }} />
                 <select style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "12px 16px", fontSize: 14, outline: "none" }}><option>All Types</option><option>Monthly</option><option>Quarterly</option><option>Annual</option><option>Tax</option></select>
@@ -525,13 +545,6 @@ export default function InvestorPortal() {
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-
-          {/* ─── REFERRALS ─── */}
-          {activeTab === "matrix" && (
-            <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
-              <ReferralNetwork mode="investor" />
             </div>
           )}
 
