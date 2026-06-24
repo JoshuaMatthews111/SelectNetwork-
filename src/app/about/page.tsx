@@ -21,10 +21,10 @@ export default function AboutPage() {
         <div className="sn-shell" style={{ textAlign: "center" }}>
           <div style={{ color: GOLD, fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>About The Select Network Member Group</div>
           <h1 className="sn-page-hero-h1" style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 42, lineHeight: 1.15, margin: "0 auto", maxWidth: 820 }}>
-            Invest With Purpose. <span style={{ color: GOLD }}>Back a Vision Built on Results.</span>
+            Participate With Purpose. <span style={{ color: GOLD }}>Back a Vision Built on Results.</span>
           </h1>
           <p style={{ color: "#c6d2e1", maxWidth: 680, margin: "20px auto 0", lineHeight: 1.7, fontSize: 16 }}>
-            The Select Network Member Group is a private investor platform connecting qualified members to opportunities built on integrity, leadership, and long-term value.
+            The Select Network Member Group is a private member platform connecting qualified members to opportunities built on integrity, leadership, and long-term value.
           </p>
         </div>
       </section>
@@ -37,7 +37,7 @@ export default function AboutPage() {
               <Image src="/assets/select-network/lorenzo-team.jpg" alt="Lorenzo Miller and Team" width={760} height={620} style={{ width: "100%", height: "auto", borderRadius: 16, border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", objectFit: "cover" }} />
               <div style={{ marginTop: 16, background: "#fbf9f4", border: "1px solid #eee7d8", borderRadius: 12, padding: "18px 20px" }}>
                 <b style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 22, display: "block" }}>Lorenzo Miller</b>
-                <span style={{ color: GOLD, fontSize: 13, fontWeight: 700 }}>Founder · Entrepreneur · Investor · Visionary</span>
+                <span style={{ color: GOLD, fontSize: 13, fontWeight: 700 }}>Founder · Entrepreneur · Select Member · Visionary</span>
               </div>
             </div>
           </Reveal>
@@ -54,7 +54,7 @@ export default function AboutPage() {
                 </p>
               </div>
               <p style={{ color: "#667085", fontSize: 13.5, marginTop: 16, lineHeight: 1.7 }}>
-                Lorenzo&apos;s Dog Training Team is the operating company whose historical business record demonstrates the proven track record connected to this opportunity. The Select Network Member Group is the private investor platform built around it.
+                Lorenzo&apos;s Dog Training Team is the operating company whose historical business record demonstrates the proven track record connected to this opportunity. The Select Network Member Group is the private member platform built around it.
               </p>
             </div>
           </Reveal>
@@ -68,7 +68,7 @@ export default function AboutPage() {
             {[
               { icon: <Target size={28} />, title: "Our Mission", desc: "To deliver financial return, build critical infrastructure, and create measurable impact across the pet industry and the communities we serve." },
               { icon: <Sparkles size={28} />, title: "What Makes This Different", desc: "A disciplined, purpose-driven approach backed by a proven operating record, experienced leadership, and systems built to scale responsibly." },
-              { icon: <HandCoins size={28} />, title: "Why Investors Join", desc: "Qualified members gain private access to vetted opportunities, transparent reporting, and alignment focused on long-term value creation." },
+              { icon: <HandCoins size={28} />, title: "Why Select Members Join", desc: "Qualified members gain private access to vetted opportunities, transparent reporting, and alignment focused on long-term value creation." },
             ].map((b, i) => (
               <Reveal key={i} delay={i * 100}>
                 <div style={{ background: "#fbf9f4", border: "1px solid #eee7d8", borderRadius: 16, padding: 30, height: "100%" }}>
@@ -111,7 +111,7 @@ export default function AboutPage() {
           <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 18px" }}>Ready to learn more?</h2>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/join" className="sn-btn" style={{ background: `linear-gradient(135deg,#0b5b34,#08431f)` }}>Apply For Membership <ArrowRight size={16} /></Link>
-            <Link href="/reports" className="sn-btn sn-btn-outline">View Investment Reports</Link>
+            <Link href="/reports" className="sn-btn sn-btn-outline">View Network Performance Reports</Link>
           </div>
         </div>
       </section>

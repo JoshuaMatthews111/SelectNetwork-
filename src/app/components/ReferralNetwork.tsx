@@ -12,25 +12,25 @@ type ReferralPerson = {
   status: "Active" | "Pending" | "Review";
   level: number;
   units: number;
-  invested: string;
+  capitalCommitted: string;
   joined: string;
   sponsorId?: string;
   photo: string;
 };
 
 const people: ReferralPerson[] = [
-  { id: "lorenzo", name: "Lorenzo", role: "Origin", status: "Active", level: 0, units: 50, invested: "$50,000", joined: "May 19, 2025", photo: "https://i.pravatar.cc/120?img=68" },
-  { id: "maria", name: "Maria Santos", role: "Investor-Builder", status: "Active", level: 1, units: 25, invested: "$25,000", joined: "May 20, 2025", sponsorId: "lorenzo", photo: "https://i.pravatar.cc/120?img=47" },
-  { id: "david", name: "David Chen", role: "Investor", status: "Pending", level: 1, units: 10, invested: "$10,000", joined: "May 22, 2025", sponsorId: "lorenzo", photo: "https://i.pravatar.cc/120?img=12" },
-  { id: "james", name: "James Wilson", role: "Builder", status: "Active", level: 1, units: 15, invested: "$15,000", joined: "May 28, 2025", sponsorId: "lorenzo", photo: "https://i.pravatar.cc/120?img=52" },
-  { id: "sophia", name: "Sophia Lee", role: "Investor", status: "Active", level: 2, units: 5, invested: "$5,000", joined: "Jun 1, 2025", sponsorId: "maria", photo: "https://i.pravatar.cc/120?img=5" },
-  { id: "michael", name: "Michael Brown", role: "Investor-Builder", status: "Active", level: 2, units: 8, invested: "$8,000", joined: "Jun 5, 2025", sponsorId: "maria", photo: "https://i.pravatar.cc/120?img=11" },
-  { id: "emily", name: "Emily Davis", role: "Investor", status: "Pending", level: 2, units: 3, invested: "$3,000", joined: "Jun 8, 2025", sponsorId: "maria", photo: "https://i.pravatar.cc/120?img=9" },
-  { id: "chris", name: "Chris Park", role: "Investor", status: "Active", level: 2, units: 12, invested: "$12,000", joined: "Jun 10, 2025", sponsorId: "david", photo: "https://i.pravatar.cc/120?img=14" },
-  { id: "ana", name: "Ana Torres", role: "Builder", status: "Active", level: 2, units: 6, invested: "$6,000", joined: "Jun 12, 2025", sponsorId: "david", photo: "https://i.pravatar.cc/120?img=16" },
-  { id: "tyler", name: "Tyler Reed", role: "Investor", status: "Active", level: 3, units: 4, invested: "$4,000", joined: "Jun 20, 2025", sponsorId: "sophia", photo: "https://i.pravatar.cc/120?img=33" },
-  { id: "keisha", name: "Keisha Moore", role: "Investor-Builder", status: "Active", level: 3, units: 7, invested: "$7,000", joined: "Jun 22, 2025", sponsorId: "michael", photo: "https://i.pravatar.cc/120?img=25" },
-  { id: "ryan", name: "Ryan Scott", role: "Investor", status: "Review", level: 3, units: 2, invested: "$2,500", joined: "Jun 25, 2025", sponsorId: "michael", photo: "https://i.pravatar.cc/120?img=15" },
+  { id: "lorenzo", name: "Lorenzo", role: "Origin", status: "Active", level: 0, units: 50, capitalCommitted: "$50,000", joined: "May 19, 2025", photo: "https://i.pravatar.cc/120?img=68" },
+  { id: "maria", name: "Maria Santos", role: "Select Member-Builder", status: "Active", level: 1, units: 25, capitalCommitted: "$25,000", joined: "May 20, 2025", sponsorId: "lorenzo", photo: "https://i.pravatar.cc/120?img=47" },
+  { id: "david", name: "David Chen", role: "Select Member", status: "Pending", level: 1, units: 10, capitalCommitted: "$10,000", joined: "May 22, 2025", sponsorId: "lorenzo", photo: "https://i.pravatar.cc/120?img=12" },
+  { id: "james", name: "James Wilson", role: "Builder", status: "Active", level: 1, units: 15, capitalCommitted: "$15,000", joined: "May 28, 2025", sponsorId: "lorenzo", photo: "https://i.pravatar.cc/120?img=52" },
+  { id: "sophia", name: "Sophia Lee", role: "Select Member", status: "Active", level: 2, units: 5, capitalCommitted: "$5,000", joined: "Jun 1, 2025", sponsorId: "maria", photo: "https://i.pravatar.cc/120?img=5" },
+  { id: "michael", name: "Michael Brown", role: "Select Member-Builder", status: "Active", level: 2, units: 8, capitalCommitted: "$8,000", joined: "Jun 5, 2025", sponsorId: "maria", photo: "https://i.pravatar.cc/120?img=11" },
+  { id: "emily", name: "Emily Davis", role: "Select Member", status: "Pending", level: 2, units: 3, capitalCommitted: "$3,000", joined: "Jun 8, 2025", sponsorId: "maria", photo: "https://i.pravatar.cc/120?img=9" },
+  { id: "chris", name: "Chris Park", role: "Select Member", status: "Active", level: 2, units: 12, capitalCommitted: "$12,000", joined: "Jun 10, 2025", sponsorId: "david", photo: "https://i.pravatar.cc/120?img=14" },
+  { id: "ana", name: "Ana Torres", role: "Builder", status: "Active", level: 2, units: 6, capitalCommitted: "$6,000", joined: "Jun 12, 2025", sponsorId: "david", photo: "https://i.pravatar.cc/120?img=16" },
+  { id: "tyler", name: "Tyler Reed", role: "Select Member", status: "Active", level: 3, units: 4, capitalCommitted: "$4,000", joined: "Jun 20, 2025", sponsorId: "sophia", photo: "https://i.pravatar.cc/120?img=33" },
+  { id: "keisha", name: "Keisha Moore", role: "Select Member-Builder", status: "Active", level: 3, units: 7, capitalCommitted: "$7,000", joined: "Jun 22, 2025", sponsorId: "michael", photo: "https://i.pravatar.cc/120?img=25" },
+  { id: "ryan", name: "Ryan Scott", role: "Select Member", status: "Review", level: 3, units: 2, capitalCommitted: "$2,500", joined: "Jun 25, 2025", sponsorId: "michael", photo: "https://i.pravatar.cc/120?img=15" },
 ];
 
 const adminPlaceholderPeople: ReferralPerson[] = Array.from({ length: 7 }, (_, index) => {
@@ -43,7 +43,7 @@ const adminPlaceholderPeople: ReferralPerson[] = Array.from({ length: 7 }, (_, i
     status: "Review",
     level,
     units: 0,
-    invested: "$0",
+    capitalCommitted: "$0",
     joined: "Future growth",
     sponsorId,
     photo: `https://i.pravatar.cc/120?img=${38 + index}`,
@@ -134,7 +134,7 @@ export default function ReferralNetwork({
       <img src={person.photo} alt={`${person.name} profile`} className="sn-ref-photo" />
       <strong>{person.name}</strong>
       <small>{person.role}</small>
-      <span className="sn-ref-meta">{person.units} Units · {person.invested}</span>
+      <span className="sn-ref-meta">{person.units} Units · {person.capitalCommitted}</span>
       <span className="sn-ref-status" style={statusStyle(person.status)}>{person.status}</span>
       <span
         role="button"

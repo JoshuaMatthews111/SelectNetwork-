@@ -8,9 +8,9 @@ import { Lock, Menu, X } from "lucide-react";
 
 const NAV = [
   { label: "About", href: "/about" },
-  { label: "Investment Focus", href: "/investment-focus" },
-  { label: "Investment Reports", href: "/reports" },
-  { label: "Invest Now", href: "/invest-now" },
+  { label: "Capital Focus", href: "/investment-focus" },
+  { label: "Network Performance Reports", href: "/reports" },
+  { label: "Select Units", href: "/invest-now" },
   { label: "Contact", href: "/contact" },
 ];
 

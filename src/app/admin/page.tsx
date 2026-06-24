@@ -34,9 +34,9 @@ const adminTabs = [
 ];
 
 const matrixL1 = [
-  { name: "Maria Santos", pic: "M", invested: "$25,000", units: 25, status: "Active", joined: "May 20", location: "Miami, FL", source: "Lorenzo", labels: ["Investor-Builder", "Founder Member", "Qualified for Incentive"] },
-  { name: "David Chen", pic: "D", invested: "$10,000", units: 10, status: "Pending", joined: "May 22", location: "New York, NY", source: "Lorenzo", labels: ["Investor", "Pending Review"] },
-  { name: "James Wilson", pic: "J", invested: "$15,000", units: 15, status: "Active", joined: "May 28", location: "Dallas, TX", source: "Lorenzo", labels: ["Builder", "Top Builder", "Early Access Member"] },
+  { name: "Maria Santos", pic: "M", capitalCommitted: "$25,000", units: 25, status: "Active", joined: "May 20", location: "Miami, FL", source: "Lorenzo", labels: ["Select Member-Builder", "Founder Member", "Qualified for Incentive"] },
+  { name: "David Chen", pic: "D", capitalCommitted: "$10,000", units: 10, status: "Pending", joined: "May 22", location: "New York, NY", source: "Lorenzo", labels: ["Select Member", "Pending Review"] },
+  { name: "James Wilson", pic: "J", capitalCommitted: "$15,000", units: 15, status: "Active", joined: "May 28", location: "Dallas, TX", source: "Lorenzo", labels: ["Builder", "Top Builder", "Early Access Member"] },
 ];
 
 const calendarDays = (() => {
@@ -53,18 +53,18 @@ const calendarDays = (() => {
 })();
 
 const meetings = [
-  { id: 1, title: "Investor Call - Michael Anderson", date: "Jun 2, 2025", time: "10:00 AM", type: "Zoom Presentation", status: "Confirmed", zoom: "https://zoom.us/j/987654321" },
+  { id: 1, title: "Select Member Call - Michael Anderson", date: "Jun 2, 2025", time: "10:00 AM", type: "Zoom Presentation", status: "Confirmed", zoom: "https://zoom.us/j/987654321" },
   { id: 2, title: "Onboarding - Sophia Martinez", date: "Jun 4, 2025", time: "2:00 PM", type: "Onboarding Call", status: "Pending", zoom: "" },
   { id: 3, title: "Follow-up - David Thompson", date: "Jun 6, 2025", time: "11:30 AM", type: "Follow-up", status: "Confirmed", zoom: "https://zoom.us/j/123456789" },
   { id: 4, title: "Quarterly Review - Lorenzo", date: "Jun 10, 2025", time: "9:00 AM", type: "Zoom Presentation", status: "Confirmed", zoom: "https://zoom.us/j/111222333" },
 ];
 
 const quarterlyRows = [
-  { name: "Lorenzo", role: "Investor-Builder", units: 50, invested: "$50,000", suggested: "$1,250", email: "lorenzo@selectnetwork.com" },
-  { name: "Maria Santos", role: "Investor-Builder", units: 25, invested: "$25,000", suggested: "$625", email: "maria@email.com" },
-  { name: "David Chen", role: "Investor", units: 10, invested: "$10,000", suggested: "$250", email: "david@email.com" },
-  { name: "James Wilson", role: "Builder", units: 15, invested: "$15,000", suggested: "$375", email: "james@email.com" },
-  { name: "Sophia Lee", role: "Investor", units: 5, invested: "$5,000", suggested: "$125", email: "sophia@email.com" },
+  { name: "Lorenzo", role: "Select Member-Builder", units: 50, capitalCommitted: "$50,000", suggested: "$1,250", email: "lorenzo@selectnetwork.com" },
+  { name: "Maria Santos", role: "Select Member-Builder", units: 25, capitalCommitted: "$25,000", suggested: "$625", email: "maria@email.com" },
+  { name: "David Chen", role: "Select Member", units: 10, capitalCommitted: "$10,000", suggested: "$250", email: "david@email.com" },
+  { name: "James Wilson", role: "Builder", units: 15, capitalCommitted: "$15,000", suggested: "$375", email: "james@email.com" },
+  { name: "Sophia Lee", role: "Select Member", units: 5, capitalCommitted: "$5,000", suggested: "$125", email: "sophia@email.com" },
 ];
 
 export default function AdminPortal() {
@@ -212,9 +212,9 @@ export default function AdminPortal() {
 
   const labelStyle = (label: string): React.CSSProperties => {
     const map: Record<string, { bg: string; fg: string }> = {
-      "Investor": { bg: "#e3f5eb", fg: "#087345" },
+      "Select Member": { bg: "#e3f5eb", fg: "#087345" },
       "Builder": { bg: "#e7f0ff", fg: "#1e4fa3" },
-      "Investor-Builder": { bg: "#efe7ff", fg: "#5b34a3" },
+      "Select Member-Builder": { bg: "#efe7ff", fg: "#5b34a3" },
       "Founder Member": { bg: "#fff3d6", fg: "#8a5a00" },
       "Early Access Member": { bg: "#fde8f3", fg: "#a3346e" },
       "Pending Review": { bg: "#fffaf0", fg: "#bd8e28" },
@@ -231,7 +231,7 @@ export default function AdminPortal() {
     return { padding: "2px 8px", borderRadius: 99, background: c.bg, color: c.fg, fontSize: 9, fontWeight: 900, textTransform: "uppercase" as const, letterSpacing: ".02em", display: "inline-block" };
   };
 
-  const allLabels = ["Investor", "Investor-Builder", "Founder Member", "Foundation Partner", "Early Access Member", "Pending Review", "Active", "Inactive", "Needs Follow-Up", "Top Builder", "Qualified for Incentive", "Not Yet Qualified", "Special Benefits Eligible"];
+  const allLabels = ["Select Member", "Select Member-Builder", "Founder Member", "Foundation Partner", "Early Access Member", "Pending Review", "Active", "Inactive", "Needs Follow-Up", "Top Builder", "Qualified for Incentive", "Not Yet Qualified", "Special Benefits Eligible"];
   const requestRows = memberRequests.length
     ? memberRequests.map((request: any) => ({
       name: request.name || "New member",
@@ -441,7 +441,7 @@ export default function AdminPortal() {
                     <Star size={22} color="#ffd46f" />
                     <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: 0, color: "#fff" }}>Foundation Partner Tracker</h2>
                   </div>
-                  <span style={{ fontSize: 12, color: "#c6d2e1" }}>Members with $10,000+ investment</span>
+                  <span style={{ fontSize: 12, color: "#c6d2e1" }}>Members with $10,000+ capital commitment</span>
                 </div>
                 <div className="sn-kpi-grid-4" style={{ display: "grid", gap: 12 }}>
                   {[
@@ -472,7 +472,7 @@ export default function AdminPortal() {
                     { label: "Total Revenue", value: "$345,000", change: "+22%" },
                     { label: "New Members (MTD)", value: "18", change: "+12%" },
                     { label: "Units Sold (MTD)", value: "240", change: "+15%" },
-                    { label: "Avg Investment", value: "$8,625", change: "+8%" },
+                    { label: "Avg Capital Commitment", value: "$8,625", change: "+8%" },
                   ].map((d, i) => (
                     <div key={i} style={{ background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 10, padding: "14px 16px" }}>
                       <small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase" }}>{d.label}</small>
@@ -588,7 +588,7 @@ export default function AdminPortal() {
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Upcoming This Week</h2>
                   {[
-                    { title: "Investor Call — Michael Anderson", time: "Today, 10:00 AM", type: "Zoom" },
+                    { title: "Select Member Call — Michael Anderson", time: "Today, 10:00 AM", type: "Zoom" },
                     { title: "Onboarding — Sophia Martinez", time: "Wed, 2:00 PM", type: "Zoom" },
                     { title: "Follow-up — David Thompson", time: "Fri, 11:30 AM", type: "Call" },
                     { title: "Q2 Report Publish Deadline", time: "Fri, EOD", type: "Task" },
@@ -639,21 +639,21 @@ export default function AdminPortal() {
               <div className="sn-table-wrap" style={card}><h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Members</h2>
                 <div className="sn-desktop-table" style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 600 }}>
-                  <thead><tr>{["Name", "Status", "Units", "Invested", "Joined", "Action"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
+                  <thead><tr>{["Name", "Status", "Units", "Capital Committed", "Joined", "Action"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
                   <tbody>
-                    {[{ name: "Lorenzo", status: "Active", units: 50, invested: "$5,000", joined: "May 12", role: "Founder", fp: true }, { name: "Maria Santos", status: "Active", units: 25, invested: "$2,500", joined: "May 20", role: "Investor-Builder", fp: true }, { name: "David Chen", status: "Pending", units: 10, invested: "$1,000", joined: "May 22", role: "Investor", fp: true }, { name: "James Wilson", status: "Active", units: 15, invested: "$1,500", joined: "May 28", role: "Builder", fp: true }].map((m, i) => (
-                      <tr key={i}><td style={{ ...tdS, fontWeight: 700 }}>{m.name}{m.fp && <span style={{ marginLeft: 6, background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "2px 7px", borderRadius: 4, verticalAlign: "middle" }}>Foundation Partner</span>}</td><td style={tdS}><span style={statusBadge(m.status)}>{m.status}</span></td><td style={tdS}>{m.units}</td><td style={tdS}>{m.invested}</td><td style={{ ...tdS, color: "#667085" }}>{m.joined}</td><td style={tdS}><span style={labelStyle(m.role)}>{m.role}</span> <button style={{ ...btnOutline, marginLeft: 6 }}>View</button></td></tr>
+                    {[{ name: "Lorenzo", status: "Active", units: 50, capitalCommitted: "$5,000", joined: "May 12", role: "Founder", fp: true }, { name: "Maria Santos", status: "Active", units: 25, capitalCommitted: "$2,500", joined: "May 20", role: "Select Member-Builder", fp: true }, { name: "David Chen", status: "Pending", units: 10, capitalCommitted: "$1,000", joined: "May 22", role: "Select Member", fp: true }, { name: "James Wilson", status: "Active", units: 15, capitalCommitted: "$1,500", joined: "May 28", role: "Builder", fp: true }].map((m, i) => (
+                      <tr key={i}><td style={{ ...tdS, fontWeight: 700 }}>{m.name}{m.fp && <span style={{ marginLeft: 6, background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "2px 7px", borderRadius: 4, verticalAlign: "middle" }}>Foundation Partner</span>}</td><td style={tdS}><span style={statusBadge(m.status)}>{m.status}</span></td><td style={tdS}>{m.units}</td><td style={tdS}>{m.capitalCommitted}</td><td style={{ ...tdS, color: "#667085" }}>{m.joined}</td><td style={tdS}><span style={labelStyle(m.role)}>{m.role}</span> <button style={{ ...btnOutline, marginLeft: 6 }}>View</button></td></tr>
                     ))}
                   </tbody>
                 </table>
                 </div>
                 <div className="sn-mobile-cards" style={{ display: "none" }}>
-                  {[{ name: "Lorenzo", status: "Active", units: 50, invested: "$5,000", joined: "May 12", role: "Founder", fp: true }, { name: "Maria Santos", status: "Active", units: 25, invested: "$2,500", joined: "May 20", role: "Investor-Builder", fp: true }, { name: "David Chen", status: "Pending", units: 10, invested: "$1,000", joined: "May 22", role: "Investor", fp: true }, { name: "James Wilson", status: "Active", units: 15, invested: "$1,500", joined: "May 28", role: "Builder", fp: true }].map((m, i) => (
+                  {[{ name: "Lorenzo", status: "Active", units: 50, capitalCommitted: "$5,000", joined: "May 12", role: "Founder", fp: true }, { name: "Maria Santos", status: "Active", units: 25, capitalCommitted: "$2,500", joined: "May 20", role: "Select Member-Builder", fp: true }, { name: "David Chen", status: "Pending", units: 10, capitalCommitted: "$1,000", joined: "May 22", role: "Select Member", fp: true }, { name: "James Wilson", status: "Active", units: 15, capitalCommitted: "$1,500", joined: "May 28", role: "Builder", fp: true }].map((m, i) => (
                     <div key={i}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}><b style={{ fontSize: 15 }}>{m.name}</b><span style={statusBadge(m.status)}>{m.status}</span></div>
                       {m.fp && <div style={{ marginBottom: 8, display: "flex", gap: 5, flexWrap: "wrap" }}><span style={{ background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "3px 8px", borderRadius: 4 }}>Foundation Partner</span> <span style={labelStyle(m.role)}>{m.role}</span></div>}
                       <div className="sn-m-card-row"><span className="sn-m-label">Units</span><span className="sn-m-value">{m.units}</span></div>
-                      <div className="sn-m-card-row"><span className="sn-m-label">Invested</span><span className="sn-m-value">{m.invested}</span></div>
+                      <div className="sn-m-card-row"><span className="sn-m-label">Capital Committed</span><span className="sn-m-value">{m.capitalCommitted}</span></div>
                       <div className="sn-m-card-row"><span className="sn-m-label">Joined</span><span className="sn-m-value">{m.joined}</span></div>
                       <button style={{ ...btnOutline, width: "100%", marginTop: 10 }}>View Profile</button>
                     </div>
@@ -722,7 +722,7 @@ export default function AdminPortal() {
                     <div style={{ color: "#ffd46f", fontSize: 11, fontWeight: 900, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 8 }}>Upload Reports</div>
                     <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 25, margin: "0 0 8px" }}>Quarterly Earnings Publisher</h2>
                     <p style={{ color: "#c6d2e1", maxWidth: 760, lineHeight: 1.7, margin: 0, fontSize: 13.5 }}>
-                      Upload a CSV or document, review every member&apos;s units and invested amount, enter quarterly returns, then publish the result to investor and builder dashboards in real time.
+                      Upload a CSV or document, review every member&apos;s units and capital commitment, enter quarterly returns, then publish the result to select member and builder dashboards in real time.
                     </p>
                   </div>
                   <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
@@ -737,10 +737,10 @@ export default function AdminPortal() {
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>1. Upload CSV or Report</h2>
                   <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
                     <div><label style={fieldLabel}>Quarter</label><select style={fieldInput}><option>Q2 2026</option><option>Q1 2026</option><option>Q4 2025</option><option>Q3 2025</option></select></div>
-                    <div><label style={fieldLabel}>Report Type</label><select style={fieldInput}><option>Quarterly Earnings</option><option>Monthly Financials</option><option>Tax Document</option><option>Investor Notice</option></select></div>
+                    <div><label style={fieldLabel}>Report Type</label><select style={fieldInput}><option>Quarterly Earnings</option><option>Monthly Financials</option><option>Tax Document</option><option>Select Member Notice</option></select></div>
                   </div>
                   <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Upload File</label><input type="file" accept=".csv,.xlsx,.pdf,.doc,.docx" style={fieldInput} /></div>
-                  <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Member CSV Columns</label><input value="email, name, units, invested, quarter_return, notes" readOnly style={{ ...fieldInput, color: "#667085" }} /></div>
+                  <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Member CSV Columns</label><input value="email, name, units, capital_commitment, quarter_return, notes" readOnly style={{ ...fieldInput, color: "#667085" }} /></div>
                   <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}><button style={btnGreen}>Preview Upload</button><button style={btnOutline}>Download CSV Template</button></div>
                 </div>
 
@@ -752,7 +752,7 @@ export default function AdminPortal() {
                   </div>
                   <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Publish Message</label><textarea rows={3} defaultValue="Q2 earnings have been posted to your member dashboard." style={{ ...fieldInput, resize: "none" as const }} /></div>
                   <div style={{ borderLeft: "4px solid #bd8e28", background: "#fffaf0", color: "#604b17", padding: "12px 14px", fontSize: 12, borderRadius: "0 6px 6px 0" }}>
-                    Draft first, review totals, then publish. Published earnings appear in investor and builder dashboards.
+                    Draft first, review totals, then publish. Published earnings appear in select member and builder dashboards.
                   </div>
                 </div>
               </div>
@@ -767,14 +767,14 @@ export default function AdminPortal() {
                 </div>
                 <div className="sn-desktop-table" style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-                    <thead><tr>{["Member", "Role", "Units", "Invested", "Quarter Return", "Status"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
+                    <thead><tr>{["Member", "Role", "Units", "Capital Committed", "Quarter Return", "Status"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
                     <tbody>
                       {quarterlyRows.map((member, index) => (
                         <tr key={member.email}>
                           <td style={tdS}><b>{member.name}</b><br /><small style={{ color: "#667085" }}>{member.email}</small></td>
                           <td style={tdS}>{member.role}</td>
                           <td style={tdS}>{member.units}</td>
-                          <td style={tdS}>{member.invested}</td>
+                          <td style={tdS}>{member.capitalCommitted}</td>
                           <td style={tdS}><input defaultValue={member.suggested} style={{ ...fieldInput, maxWidth: 150, padding: "9px 10px" }} /></td>
                           <td style={tdS}><span style={statusBadge(index < 2 ? "Review" : "Pending")}>{index < 2 ? "Review" : "Pending"}</span></td>
                         </tr>
@@ -791,7 +791,7 @@ export default function AdminPortal() {
                       </div>
                       <div className="sn-m-card-row"><span className="sn-m-label">Role</span><span className="sn-m-value">{member.role}</span></div>
                       <div className="sn-m-card-row"><span className="sn-m-label">Units</span><span className="sn-m-value">{member.units}</span></div>
-                      <div className="sn-m-card-row"><span className="sn-m-label">Invested</span><span className="sn-m-value">{member.invested}</span></div>
+                      <div className="sn-m-card-row"><span className="sn-m-label">Capital Committed</span><span className="sn-m-value">{member.capitalCommitted}</span></div>
                       <label style={{ ...fieldLabel, marginTop: 10 }}>Quarter Return</label>
                       <input defaultValue={member.suggested} style={fieldInput} />
                     </div>
@@ -814,7 +814,7 @@ export default function AdminPortal() {
                   <div style={{ padding: "22px 24px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <div style={{ color: "#bd8e28", fontSize: 10.5, fontWeight: 900, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 8 }}>Official Document · Shared with Members</div>
                     <h3 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 21, margin: "0 0 8px" }}>The Select Network Member Group Compensation Plan</h3>
-                    <p style={{ color: "#667085", fontSize: 13, lineHeight: 1.6, margin: "0 0 14px", maxWidth: 460 }}>Unit investment and quarterly profit distribution overview. Visible in every investor back office under Documents.</p>
+                    <p style={{ color: "#667085", fontSize: 13, lineHeight: 1.6, margin: "0 0 14px", maxWidth: 460 }}>Unit allocation and quarterly distribution overview. Visible in every select member back office under Documents.</p>
                     <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                       <button onClick={() => setCompOpen(true)} style={btnGreen}>View</button>
                       <a href="/assets/select-network/select-network-comp-plan.png" download="Select-Network-Compensation-Plan.png" style={{ ...btnOutline, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>Download</a>
@@ -823,7 +823,7 @@ export default function AdminPortal() {
                 </div>
               </div>
               <div className="sn-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 18 }}>
-                {["Membership Agreement", "Operating Agreement", "Investment Disclosure", "Tax Form W-9", "Track Record", "Legal Updates"].map((d, i) => (
+                {["Membership Agreement", "Operating Agreement", "Capital Commitment Disclosure", "Tax Form W-9", "Track Record", "Legal Updates"].map((d, i) => (
                   <div key={i} style={{ ...card, transition: ".3s" }} className="hover:translate-y-[-3px] hover:shadow-[0_16px_40px_rgba(5,20,45,.10)]">
                     <h3 style={{ margin: "0 0 8px" }}>{d}</h3>
                     <p style={{ color: "#667085", fontSize: 13, margin: "0 0 14px" }}>Document management</p>
@@ -862,7 +862,7 @@ export default function AdminPortal() {
                     <div style={{ display: "flex", justifyContent: "center", marginBottom: 16, opacity: matrixAnimated ? 1 : 0, transform: matrixAnimated ? "translateY(0)" : "translateY(20px)", transition: "all .6s ease" }}>
                       <div style={{ background: "#fff", border: "2px solid #bd8e28", borderRadius: 14, padding: "14px 20px", display: "flex", alignItems: "center", gap: 14, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
                         <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 18 }}>L</div>
-                        <div><b>Lorenzo (Admin)</b><br /><small style={{ color: "#667085" }}>Origin • Active • Sees entire network</small><div style={{ fontSize: 12, color: "#5b6675" }}>Units: 50 | Invested: $50,000 | 3 Direct</div></div>
+                        <div><b>Lorenzo (Admin)</b><br /><small style={{ color: "#667085" }}>Origin • Active • Sees entire network</small><div style={{ fontSize: 12, color: "#5b6675" }}>Units: 50 | Capital Committed: $50,000 | 3 Direct</div></div>
                       </div>
                     </div>
                     <div style={{ height: 24, width: 2, background: "linear-gradient(#bd8e28,#075933)", margin: "0 auto" }} />
@@ -874,7 +874,7 @@ export default function AdminPortal() {
                           <div key={i} onClick={() => setViewingReferralNetwork(m)} style={{ background: viewingReferralNetwork?.name === m.name ? "linear-gradient(135deg,#071a33,#0d3366)" : "#fff", color: viewingReferralNetwork?.name === m.name ? "#fff" : "inherit", border: viewingReferralNetwork?.name === m.name ? "2px solid #bd8e28" : "1px solid #e7e2d8", borderRadius: 12, padding: 14, cursor: "pointer", transition: ".3s", boxShadow: "0 8px 22px rgba(5,20,45,.06)" }} className="hover:translate-y-[-3px] hover:shadow-[0_0_22px_rgba(213,168,61,.55)] hover:border-[#bd8e28]">
                             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                               <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#075933", fontWeight: 900, fontSize: 14 }}>{m.pic}</div>
-                              <div><b style={{ fontSize: 13 }}>{m.name}</b><br /><small style={{ color: viewingReferralNetwork?.name === m.name ? "#c6d2e1" : "#667085", fontSize: 11 }}>{m.invested} | {m.units} Units</small></div>
+                              <div><b style={{ fontSize: 13 }}>{m.name}</b><br /><small style={{ color: viewingReferralNetwork?.name === m.name ? "#c6d2e1" : "#667085", fontSize: 11 }}>{m.capitalCommitted} | {m.units} Units</small></div>
                             </div>
                             <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 8 }}>
                               <span style={statusBadge(m.status)}>{m.status}</span>
@@ -890,7 +890,7 @@ export default function AdminPortal() {
                       <div style={{ textAlign: "center", fontSize: 12, fontWeight: 900, color: "#075933", marginBottom: 8 }}>Level 2 — 5 Active</div>
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 8 }}>
                         {["Sophia Lee", "Michael Brown", "Emily Davis", "Chris Park", "Ana Torres"].filter(n => !matrixSearch || n.toLowerCase().includes(matrixSearch.toLowerCase())).map((n, i) => (
-                          <div key={i} onClick={() => setViewingReferralNetwork({ name: n, pic: n.charAt(0), invested: "$5,000", units: 5, status: "Active", joined: "Jun 2025", location: "US", source: "L1", labels: ["Investor"] })} style={{ background: viewingReferralNetwork?.name === n ? "linear-gradient(135deg,#071a33,#0d3366)" : "#fff", color: viewingReferralNetwork?.name === n ? "#fff" : "inherit", border: viewingReferralNetwork?.name === n ? "2px solid #bd8e28" : "1px solid #e7e2d8", borderRadius: 10, padding: 10, textAlign: "center", fontSize: 12, transition: ".3s", cursor: "pointer" }} className="hover:translate-y-[-2px] hover:border-[#bd8e28]">
+                          <div key={i} onClick={() => setViewingReferralNetwork({ name: n, pic: n.charAt(0), capitalCommitted: "$5,000", units: 5, status: "Active", joined: "Jun 2025", location: "US", source: "L1", labels: ["Select Member"] })} style={{ background: viewingReferralNetwork?.name === n ? "linear-gradient(135deg,#071a33,#0d3366)" : "#fff", color: viewingReferralNetwork?.name === n ? "#fff" : "inherit", border: viewingReferralNetwork?.name === n ? "2px solid #bd8e28" : "1px solid #e7e2d8", borderRadius: 10, padding: 10, textAlign: "center", fontSize: 12, transition: ".3s", cursor: "pointer" }} className="hover:translate-y-[-2px] hover:border-[#bd8e28]">
                             <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#edf6ef", display: "grid", placeItems: "center", margin: "0 auto 4px", fontSize: 11, fontWeight: 900, color: "#075933" }}>{n.charAt(0)}</div>
                             <b style={{ fontSize: 11 }}>{n.split(" ")[0]}</b><br /><span style={{ ...statusBadge("Active"), fontSize: 9 }}>Active</span>
                           </div>
@@ -976,7 +976,7 @@ export default function AdminPortal() {
                     <div style={{ transform: `scale(${matrixZoom})`, transformOrigin: "top center", transition: "transform .3s ease", minWidth: 1200 }}>
                       {/* Root */}
                       <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
-                        <div onMouseEnter={() => setHoveredMember({ name: "Lorenzo", invested: "$50,000", units: 50, status: "Active", joined: "May 19, 2025", location: "Cleveland, OH", role: "Founder", email: "lorenzo@selectnetwork.com", referrals: 3 })} onMouseLeave={() => setHoveredMember(null)} style={{ background: "#fff", border: "3px solid #bd8e28", borderRadius: 16, padding: "18px 28px", display: "flex", alignItems: "center", gap: 16, boxShadow: "0 12px 36px rgba(5,20,45,.10)", cursor: "pointer" }}>
+                        <div onMouseEnter={() => setHoveredMember({ name: "Lorenzo", capitalCommitted: "$50,000", units: 50, status: "Active", joined: "May 19, 2025", location: "Cleveland, OH", role: "Founder", email: "lorenzo@selectnetwork.com", referrals: 3 })} onMouseLeave={() => setHoveredMember(null)} style={{ background: "#fff", border: "3px solid #bd8e28", borderRadius: 16, padding: "18px 28px", display: "flex", alignItems: "center", gap: 16, boxShadow: "0 12px 36px rgba(5,20,45,.10)", cursor: "pointer" }}>
                           <div style={{ width: 56, height: 56, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 22 }}>L</div>
                           <div><b style={{ fontSize: 16 }}>Lorenzo</b><br /><small style={{ color: "#667085" }}>Origin · Founder</small><div style={{ fontSize: 12, color: "#075933", marginTop: 2 }}>$50,000 | 50 Units | 3 Direct</div></div>
                         </div>
@@ -987,16 +987,16 @@ export default function AdminPortal() {
                       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 900, color: "#075933", marginBottom: 12 }}>Level 1 — Direct Referrals (3)</div>
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 16, maxWidth: 900, margin: "0 auto 20px" }}>
                         {[
-                          { name: "Maria Santos", pic: "M", invested: "$25,000", units: 25, status: "Active", joined: "May 20, 2025", location: "Miami, FL", role: "Builder", email: "maria@email.com", referrals: 3 },
-                          { name: "David Chen", pic: "D", invested: "$10,000", units: 10, status: "Pending", joined: "May 22, 2025", location: "New York, NY", role: "Investor", email: "david@email.com", referrals: 2 },
-                          { name: "James Wilson", pic: "J", invested: "$15,000", units: 15, status: "Active", joined: "May 28, 2025", location: "Dallas, TX", role: "Builder", email: "james@email.com", referrals: 0 },
+                          { name: "Maria Santos", pic: "M", capitalCommitted: "$25,000", units: 25, status: "Active", joined: "May 20, 2025", location: "Miami, FL", role: "Builder", email: "maria@email.com", referrals: 3 },
+                          { name: "David Chen", pic: "D", capitalCommitted: "$10,000", units: 10, status: "Pending", joined: "May 22, 2025", location: "New York, NY", role: "Select Member", email: "david@email.com", referrals: 2 },
+                          { name: "James Wilson", pic: "J", capitalCommitted: "$15,000", units: 15, status: "Active", joined: "May 28, 2025", location: "Dallas, TX", role: "Builder", email: "james@email.com", referrals: 0 },
                         ].filter(m => (matrixFilter === "all" || m.status === matrixFilter) && (!matrixSearch || m.name.toLowerCase().includes(matrixSearch.toLowerCase()))).map((m, i) => (
                           <div key={i} onMouseEnter={() => setHoveredMember(m)} onMouseLeave={() => setHoveredMember(null)} onClick={() => setDrawerMember({ ...m, labels: [m.role] } as any)} style={{ background: "#fff", border: "2px solid #e7e2d8", borderRadius: 14, padding: 18, cursor: "pointer", transition: ".3s", boxShadow: "0 8px 22px rgba(5,20,45,.06)" }} className="hover:translate-y-[-4px] hover:shadow-[0_0_30px_rgba(213,168,61,.55)] hover:border-[#bd8e28]">
                             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
                               <div style={{ width: 44, height: 44, borderRadius: "50%", background: "#edf6ef", border: "2px solid #c7e2d0", display: "grid", placeItems: "center", color: "#075933", fontWeight: 900, fontSize: 16 }}>{m.pic}</div>
                               <div><b style={{ fontSize: 14 }}>{m.name}</b><br /><small style={{ color: "#667085", fontSize: 11 }}>{m.role} · {m.location}</small></div>
                             </div>
-                            <div style={{ fontSize: 12, color: "#5b6675", marginBottom: 8 }}>{m.invested} | {m.units} Units | {m.referrals} referral{m.referrals !== 1 ? "s" : ""}</div>
+                            <div style={{ fontSize: 12, color: "#5b6675", marginBottom: 8 }}>{m.capitalCommitted} | {m.units} Units | {m.referrals} referral{m.referrals !== 1 ? "s" : ""}</div>
                             <div style={{ display: "flex", gap: 6 }}>
                               <span style={statusBadge(m.status)}>{m.status}</span>
                               <span style={{ padding: "3px 8px", borderRadius: 99, background: "#e7f0ff", color: "#1e4fa3", fontSize: 10, fontWeight: 900 }}>{m.role}</span>
@@ -1010,16 +1010,16 @@ export default function AdminPortal() {
                       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 900, color: "#075933", marginBottom: 12 }}>Level 2 — 5 Active, 4 Open Slots</div>
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 12, maxWidth: 1100, margin: "0 auto 20px" }}>
                         {[
-                          { name: "Sophia Lee", pic: "S", invested: "$5,000", units: 5, status: "Active", location: "LA, CA", role: "Investor", email: "sophia@email.com", referrals: 1, joined: "Jun 1, 2025" },
-                          { name: "Michael Brown", pic: "M", invested: "$8,000", units: 8, status: "Active", location: "Chicago, IL", role: "Builder", email: "michael@email.com", referrals: 2, joined: "Jun 5, 2025" },
-                          { name: "Emily Davis", pic: "E", invested: "$3,000", units: 3, status: "Pending", location: "Houston, TX", role: "Investor", email: "emily@email.com", referrals: 0, joined: "Jun 8, 2025" },
-                          { name: "Chris Park", pic: "C", invested: "$12,000", units: 12, status: "Active", location: "Atlanta, GA", role: "Investor", email: "chris@email.com", referrals: 0, joined: "Jun 10, 2025" },
-                          { name: "Ana Torres", pic: "A", invested: "$6,000", units: 6, status: "Active", location: "San Diego, CA", role: "Builder", email: "ana@email.com", referrals: 0, joined: "Jun 12, 2025" },
+                          { name: "Sophia Lee", pic: "S", capitalCommitted: "$5,000", units: 5, status: "Active", location: "LA, CA", role: "Select Member", email: "sophia@email.com", referrals: 1, joined: "Jun 1, 2025" },
+                          { name: "Michael Brown", pic: "M", capitalCommitted: "$8,000", units: 8, status: "Active", location: "Chicago, IL", role: "Builder", email: "michael@email.com", referrals: 2, joined: "Jun 5, 2025" },
+                          { name: "Emily Davis", pic: "E", capitalCommitted: "$3,000", units: 3, status: "Pending", location: "Houston, TX", role: "Select Member", email: "emily@email.com", referrals: 0, joined: "Jun 8, 2025" },
+                          { name: "Chris Park", pic: "C", capitalCommitted: "$12,000", units: 12, status: "Active", location: "Atlanta, GA", role: "Select Member", email: "chris@email.com", referrals: 0, joined: "Jun 10, 2025" },
+                          { name: "Ana Torres", pic: "A", capitalCommitted: "$6,000", units: 6, status: "Active", location: "San Diego, CA", role: "Builder", email: "ana@email.com", referrals: 0, joined: "Jun 12, 2025" },
                         ].filter(m => (matrixFilter === "all" || m.status === matrixFilter) && (!matrixSearch || m.name.toLowerCase().includes(matrixSearch.toLowerCase()))).map((m, i) => (
                           <div key={i} onMouseEnter={() => setHoveredMember(m)} onMouseLeave={() => setHoveredMember(null)} onClick={() => setDrawerMember({ ...m, labels: [m.role] } as any)} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 12, padding: 12, textAlign: "center", cursor: "pointer", transition: ".3s", boxShadow: "0 4px 14px rgba(5,20,45,.05)" }} className="hover:translate-y-[-3px] hover:border-[#bd8e28] hover:shadow-[0_0_22px_rgba(213,168,61,.4)]">
                             <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#edf6ef", display: "grid", placeItems: "center", margin: "0 auto 6px", fontSize: 13, fontWeight: 900, color: "#075933" }}>{m.pic}</div>
                             <b style={{ fontSize: 12 }}>{m.name}</b><br />
-                            <small style={{ fontSize: 10, color: "#667085" }}>{m.invested} · {m.units}u</small><br />
+                            <small style={{ fontSize: 10, color: "#667085" }}>{m.capitalCommitted} · {m.units}u</small><br />
                             <span style={{ ...statusBadge(m.status), fontSize: 9, marginTop: 4, display: "inline-block" }}>{m.status}</span>
                           </div>
                         ))}
@@ -1036,9 +1036,9 @@ export default function AdminPortal() {
                       <div style={{ textAlign: "center", fontSize: 13, fontWeight: 900, color: "#075933", marginBottom: 12 }}>Level 3 — 3 Active, Expanding</div>
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(9,1fr)", gap: 8, maxWidth: 1200, margin: "0 auto 20px" }}>
                         {[
-                          { name: "Tyler Reed", pic: "T", invested: "$4,000", units: 4, status: "Active", location: "Denver, CO", role: "Investor", email: "tyler@email.com", referrals: 0, joined: "Jun 20, 2025" },
-                          { name: "Keisha Moore", pic: "K", invested: "$7,000", units: 7, status: "Active", location: "Boston, MA", role: "Builder", email: "keisha@email.com", referrals: 1, joined: "Jun 22, 2025" },
-                          { name: "Ryan Scott", pic: "R", invested: "$2,500", units: 2, status: "Pending", location: "Phoenix, AZ", role: "Investor", email: "ryan@email.com", referrals: 0, joined: "Jun 25, 2025" },
+                          { name: "Tyler Reed", pic: "T", capitalCommitted: "$4,000", units: 4, status: "Active", location: "Denver, CO", role: "Select Member", email: "tyler@email.com", referrals: 0, joined: "Jun 20, 2025" },
+                          { name: "Keisha Moore", pic: "K", capitalCommitted: "$7,000", units: 7, status: "Active", location: "Boston, MA", role: "Builder", email: "keisha@email.com", referrals: 1, joined: "Jun 22, 2025" },
+                          { name: "Ryan Scott", pic: "R", capitalCommitted: "$2,500", units: 2, status: "Pending", location: "Phoenix, AZ", role: "Select Member", email: "ryan@email.com", referrals: 0, joined: "Jun 25, 2025" },
                         ].filter(m => (matrixFilter === "all" || m.status === matrixFilter) && (!matrixSearch || m.name.toLowerCase().includes(matrixSearch.toLowerCase()))).map((m, i) => (
                           <div key={i} onMouseEnter={() => setHoveredMember(m)} onMouseLeave={() => setHoveredMember(null)} onClick={() => setDrawerMember({ ...m, labels: [m.role] } as any)} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "8px 6px", textAlign: "center", cursor: "pointer", transition: ".3s" }} className="hover:translate-y-[-2px] hover:border-[#bd8e28]">
                             <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#edf6ef", display: "grid", placeItems: "center", margin: "0 auto 3px", fontSize: 10, fontWeight: 900, color: "#075933" }}>{m.pic}</div>
@@ -1065,7 +1065,7 @@ export default function AdminPortal() {
                       <div style={{ flex: 1 }}>
                         <b style={{ fontSize: 15 }}>{hoveredMember.name}</b>
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "4px 16px", marginTop: 6, fontSize: 12 }}>
-                          <span><b style={{ color: "#ffd46f" }}>Invested:</b> {hoveredMember.invested}</span>
+                          <span><b style={{ color: "#ffd46f" }}>Capital Committed:</b> {hoveredMember.capitalCommitted}</span>
                           <span><b style={{ color: "#ffd46f" }}>Units:</b> {hoveredMember.units}</span>
                           <span><b style={{ color: "#ffd46f" }}>Status:</b> {hoveredMember.status}</span>
                           <span><b style={{ color: "#ffd46f" }}>Location:</b> {hoveredMember.location}</span>
@@ -1086,10 +1086,10 @@ export default function AdminPortal() {
               {announcePosted && <div style={{ position: "fixed", top: 20, right: 20, zIndex: 99999, background: "#e3f5eb", border: "1px solid #87d4a5", borderRadius: 10, padding: "14px 20px", boxShadow: "0 10px 30px rgba(5,20,45,.15)" }}><b style={{ color: "#075933" }}>✓ Announcement {editingAnn ? "Updated" : "Published"}</b></div>}
               <div style={card}>
                 <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 6px" }}>{editingAnn ? "Edit Announcement" : "Compose Announcement"}</h2>
-                <p style={{ fontSize: 12.5, color: "#667085", margin: "0 0 14px", lineHeight: 1.5 }}>Create and publish announcements. They appear in investor and builder dashboards based on audience targeting.</p>
+                <p style={{ fontSize: 12.5, color: "#667085", margin: "0 0 14px", lineHeight: 1.5 }}>Create and publish announcements. They appear in select member and builder dashboards based on audience targeting.</p>
                 <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Title</label><input value={annTitle} onChange={(e) => setAnnTitle(e.target.value)} placeholder="Announcement title" style={fieldInput} /></div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                  <div><label style={fieldLabel}>Audience</label><select value={annAudience} onChange={(e) => setAnnAudience(e.target.value)} style={fieldInput}><option value="all">All Members</option><option value="investors">Investors Only</option><option value="builders">Builders Only</option><option value="foundation_partners">Foundation Partners</option></select></div>
+                  <div><label style={fieldLabel}>Audience</label><select value={annAudience} onChange={(e) => setAnnAudience(e.target.value)} style={fieldInput}><option value="all">All Members</option><option value="investors">Select Members Only</option><option value="builders">Builders Only</option><option value="foundation_partners">Foundation Partners</option></select></div>
                   <div><label style={fieldLabel}>Priority</label><select value={annPriority} onChange={(e) => setAnnPriority(e.target.value)} style={fieldInput}><option value="normal">Normal</option><option value="urgent">Urgent</option></select></div>
                 </div>
                 <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Message</label><textarea value={annMsg} onChange={(e) => setAnnMsg(e.target.value)} rows={4} placeholder="Write your announcement..." style={{ ...fieldInput, resize: "none" as const }} /></div>
@@ -1238,7 +1238,7 @@ export default function AdminPortal() {
                     <div><label style={fieldLabel}>Phone</label><input type="tel" placeholder="(555) 000-0000" style={fieldInput} /></div>
                     <div><label style={fieldLabel}>Date</label><input type="date" style={fieldInput} /></div>
                     <div><label style={fieldLabel}>Time</label><input type="time" style={fieldInput} /></div>
-                    <div><label style={fieldLabel}>Meeting Type</label><select style={fieldInput}><option>Zoom Presentation</option><option>Onboarding Call</option><option>Follow-up</option><option>Investor Review</option><option>Prospect Introduction</option></select></div>
+                    <div><label style={fieldLabel}>Meeting Type</label><select style={fieldInput}><option>Zoom Presentation</option><option>Onboarding Call</option><option>Follow-up</option><option>Member Review</option><option>Prospect Introduction</option></select></div>
                   </div>
                   <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Meeting Notes</label><textarea rows={2} placeholder="Pre-meeting notes, agenda items..." style={{ ...fieldInput, resize: "none" as const }} /></div>
                   <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Follow-up Notes</label><textarea rows={2} placeholder="Post-meeting follow-up..." style={{ ...fieldInput, resize: "none" as const }} /></div>
@@ -1390,12 +1390,12 @@ export default function AdminPortal() {
                     <tbody>
                       {[
                         { name: "Payment Completed", req: "Payment confirmed", achieved: 48, status: "Active" },
-                        { name: "First Investment", req: "1+ units purchased", achieved: 42, status: "Active" },
+                        { name: "First Capital Commitment", req: "1+ units purchased", achieved: 42, status: "Active" },
                         { name: "10 Referrals", req: "10 active referrals", achieved: 12, status: "Active" },
                         { name: "25 Referrals", req: "25 active referrals", achieved: 4, status: "Active" },
                         { name: "40 Member Cap", req: "Full referral network (40)", achieved: 1, status: "Active" },
                         { name: "$1,000 Incentive Earned", req: "Qualified sharing incentive", achieved: 8, status: "Active" },
-                        { name: "Foundation Partner", req: "$10,000+ investment", achieved: 12, status: "Active" },
+                        { name: "Foundation Partner", req: "$10,000+ capital commitment", achieved: 12, status: "Active" },
                       ].map((m, i) => (
                         <tr key={i}><td style={tdS}><b>{m.name}</b></td><td style={{ ...tdS, color: "#667085" }}>{m.req}</td><td style={tdS}>{m.achieved}</td><td style={tdS}><span style={statusBadge(m.status)}>{m.status}</span></td></tr>
                       ))}
@@ -1490,7 +1490,7 @@ export default function AdminPortal() {
                 </div>
               </details>
             </div>
-            {[["Joined", drawerMember.joined], ["Amount Invested", drawerMember.invested], ["Units", String(drawerMember.units)], ["Location", drawerMember.location], ["Referral Source", drawerMember.source], ["Status", drawerMember.status]].map(([l, v], i) => (
+            {[["Joined", drawerMember.joined], ["Capital Commitment", drawerMember.capitalCommitted], ["Units", String(drawerMember.units)], ["Location", drawerMember.location], ["Referral Source", drawerMember.source], ["Status", drawerMember.status]].map(([l, v], i) => (
               <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "12px 0", borderBottom: "1px solid #eef2f6", fontSize: 14 }}><span style={{ color: "#667085" }}>{l}</span><b>{v}</b></div>
             ))}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginTop: 20 }}>

@@ -24,9 +24,9 @@ export default function ReportsPage() {
     { icon: <BarChart3 size={24} />, title: "Revenue Performance Overview", desc: "Total sales and category revenue from Lorenzo's Dog Training Team historical records, 2016–2025.", pdf: null },
     { icon: <TrendingUp size={24} />, title: "Profit & Margin Summary", desc: "Operating profit and margin by year from the client-provided LDTT record.", pdf: null },
     { icon: <PieChart size={24} />, title: "Category Sales Breakdown", desc: "Training, boarding, equipment/misc, and tuition totals across all years.", pdf: null },
-    { icon: <Network size={24} />, title: "Trainer Hierarchy 2026", desc: "Visual overview of LDTT's trainer network and leadership structure. Separate from the investor referral network.", pdf: "/reports/trainer-hierarchy-2026.png", viewHref: "/reports/trainer-hierarchy-2026.png" },
+    { icon: <Network size={24} />, title: "Trainer Hierarchy 2026", desc: "Visual overview of LDTT's trainer network and leadership structure. Separate from the member referral network.", pdf: "/reports/trainer-hierarchy-2026.png", viewHref: "/reports/trainer-hierarchy-2026.png" },
     { icon: <FileText size={24} />, title: "Explaining the Drop & Rebuild", desc: "A detailed explanation of why LDTT's sales volume declined and the current recovery and growth strategy moving forward.", pdf: "/reports/explaining-the-drop-and-rebuild.pages", viewHref: "#live-charts", dropDoc: true },
-    { icon: <CalendarClock size={24} />, title: "Quarterly Investor Updates", desc: "Full quarterly updates, communications, and financial summaries are available exclusively inside the investor dashboard after participation is completed.", pdf: null, portal: true },
+    { icon: <CalendarClock size={24} />, title: "Quarterly Select Member Updates", desc: "Full quarterly updates, communications, and financial summaries are available exclusively inside the member dashboard after participation is completed.", pdf: null, portal: true },
   ];
 
   return (
@@ -36,12 +36,12 @@ export default function ReportsPage() {
       {/* Hero */}
       <section className="sn-section-pad" style={{ background: "linear-gradient(135deg,#061a33,#030b17)", color: "#fff", padding: "70px 0" }}>
         <div className="sn-shell" style={{ textAlign: "center" }}>
-          <div style={{ color: GOLD, fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>Investment Reports</div>
+          <div style={{ color: GOLD, fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>Network Performance Reports</div>
           <h1 className="sn-page-hero-h1" style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 42, lineHeight: 1.15, margin: "0 auto", maxWidth: 720 }}>
             Transparency You Can Trust
           </h1>
           <p style={{ color: "#c6d2e1", maxWidth: 760, margin: "20px auto 0", lineHeight: 1.8, fontSize: 15.5 }}>
-            At The Select Network Member Group, we believe informed investors make confident decisions. Our investment reports provide clear, consistent, and data-driven visibility into the historical operating performance of Lorenzo&apos;s Dog Training Team so qualified investors can review the business record with confidence.
+            At The Select Network Member Group, we believe informed select members make confident decisions. Our network performance reports provide clear, consistent, and data-driven visibility into the historical operating performance of Lorenzo&apos;s Dog Training Team so qualified select members can review the business record with confidence.
           </p>
         </div>
       </section>
@@ -97,7 +97,7 @@ export default function ReportsPage() {
                   </div>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 10px" }}>The Select Network Member Group Compensation Plan</h2>
                   <p style={{ color: "#5b6675", lineHeight: 1.7, fontSize: 14.5, margin: "0 0 22px", maxWidth: 560 }}>
-                    Review the official unit investment and quarterly profit distribution overview. A Unit is a proportional participation allocation within The Select Network Member Group investment structure, used to determine an investor&apos;s share of designated company distributions and growth-based revenue participation. This document illustrates how units are purchased ($100 per unit) and how available quarterly profit is distributed across all units.
+                    Review the official unit allocation and quarterly distribution overview. A Unit is a proportional participation allocation within The Select Network Member Group membership stake structure, used to determine a select member&apos;s share of designated company distributions and growth-based revenue participation. This document illustrates how units are purchased ($100 per unit) and how available quarterly profit is distributed across all units.
                   </p>
                   <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                     <button onClick={() => setCompOpen(true)} style={btnGreen}><Eye size={15} /> View Document</button>
@@ -118,7 +118,7 @@ export default function ReportsPage() {
               <div style={{ width: 40, height: 3, background: GOLD, marginBottom: 16 }} />
               <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 32, margin: "0 0 12px" }}>Lorenzo&apos;s Dog Training Team Historical Operating Snapshot</h2>
               <p style={{ color: "#5b6675", lineHeight: 1.75, maxWidth: 820, margin: 0 }}>
-                The charts below summarize Lorenzo&apos;s Dog Training Team sales, category revenue, trainer count, expenses, and operating profit based on the records provided. The purpose is to give qualified investors visibility into the operating history connected to the opportunity.
+                The charts below summarize Lorenzo&apos;s Dog Training Team sales, category revenue, trainer count, expenses, and operating profit based on the records provided. The purpose is to give qualified select members visibility into the operating history connected to the opportunity.
               </p>
             </div>
           </Reveal>
@@ -166,7 +166,7 @@ export default function ReportsPage() {
                 <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 24, margin: 0 }}>Quarterly Reports &amp; Tax Documents</h2>
               </div>
               <p style={{ color: "#3d4a57", lineHeight: 1.7, fontSize: 14.5, margin: "0 0 20px" }}>
-                Full reports, quarterly updates, and tax-related documents are available inside the investor dashboard after participation is completed.
+                Full reports, quarterly updates, and tax-related documents are available inside the member dashboard after participation is completed.
               </p>
 
               {/* Blurred/locked document tiles */}
@@ -201,7 +201,7 @@ export default function ReportsPage() {
               <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", borderRadius: 12, padding: "18px 22px", display: "flex", gap: 14, alignItems: "center" }}>
                 <Lock size={18} color="#ffd46f" style={{ flexShrink: 0 }} />
                 <p style={{ margin: 0, color: "#c6d2e1", fontSize: 13, lineHeight: 1.6 }}>
-                  Full reports, quarterly updates, and tax-related documents are available inside the investor dashboard after participation is completed.
+                  Full reports, quarterly updates, and tax-related documents are available inside the member dashboard after participation is completed.
                   <Link href="/invest-now" style={{ color: "#ffd46f", fontWeight: 700, marginLeft: 8 }}>Complete Your Participation →</Link>
                 </p>
               </div>
@@ -215,7 +215,7 @@ export default function ReportsPage() {
         <div className="sn-shell">
           <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 18px" }}>Review the full record inside the Member Portal.</h2>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/invest-now" className="sn-btn" style={{ background: `linear-gradient(135deg,#0b5b34,#08431f)` }}>Invest Now <ArrowRight size={16} /></Link>
+            <Link href="/invest-now" className="sn-btn" style={{ background: `linear-gradient(135deg,#0b5b34,#08431f)` }}>Select Units <ArrowRight size={16} /></Link>
             <Link href="/login" className="sn-btn sn-btn-outline">Member Portal</Link>
           </div>
         </div>

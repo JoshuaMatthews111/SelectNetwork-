@@ -25,7 +25,7 @@ export default function ContactPage() {
           <div style={{ color: GOLD, fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>Contact</div>
           <h1 className="sn-page-hero-h1" style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 42, lineHeight: 1.15, margin: 0 }}>We&apos;re Here to Help</h1>
           <p style={{ color: "#c6d2e1", maxWidth: 560, margin: "18px auto 0", lineHeight: 1.7, fontSize: 16 }}>
-            We&apos;re here to support your investment journey.
+            We&apos;re here to support your membership journey.
           </p>
         </div>
       </section>

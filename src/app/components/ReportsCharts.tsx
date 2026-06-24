@@ -204,7 +204,7 @@ function SalesLine() {
               The visible decline in the Total Sales chart reflects this same disruption period — not a fundamental failure of the business model, but the direct result of workforce reduction, COVID-era constraints, and a deliberate reset to rebuild with better structure and clearer systems.
             </p>
             <p style={{ color: "#5b6675", lineHeight: 1.7, fontSize: 13.5, margin: "0 0 22px", fontStyle: "italic" }}>
-              This context helps investors understand that the drop represents a documented past disruption, not the final direction of the company. LDTT is currently on a rebuilding path supported by renewed strategy and investor participation.
+              This context helps select members understand that the drop represents a documented past disruption, not the final direction of the company. LDTT is currently on a rebuilding path supported by renewed strategy and select member participation.
             </p>
             <a
               href="/reports/explaining-the-drop-and-rebuild.pages"
@@ -553,7 +553,7 @@ export default function ReportsCharts() {
         )}
 
         {tab === "hierarchy" && (
-          <ChartCard title="Trainer Hierarchy 2026" subtitle="A visual overview of Lorenzo's Dog Training Team's current trainer network and leadership structure. This is separate from The Select Network Member Group investor referral network.">
+          <ChartCard title="Trainer Hierarchy 2026" subtitle="A visual overview of Lorenzo's Dog Training Team's current trainer network and leadership structure. This is separate from The Select Network Member Group member referral network.">
             <div style={{ background: "#f9f7f2", border: "1px solid #eee", borderRadius: 12, padding: 14, marginBottom: 16 }}>
               <div className="sn-table-wrap">
                 <img src="/reports/trainer-hierarchy-2026.png" alt="Lorenzo's Dog Training Team Trainer Hierarchy 2026" style={{ width: "100%", minWidth: 0, borderRadius: 8, display: "block" }} />

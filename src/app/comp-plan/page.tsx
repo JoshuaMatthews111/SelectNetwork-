@@ -29,7 +29,7 @@ export default function CompPlanPage() {
         <div className="sn-shell" style={{ maxWidth: 760 }}>
           <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 16, padding: "40px 32px" }}>
             <p style={{ fontSize: 16, lineHeight: 1.8, color: "#3d4a57", margin: "0 0 24px" }}>
-              The full compensation plan will be added here once the official structure, member terms, and legal language are finalized. This section will explain unit ownership, quarterly profit distributions, Builder participation, Foundation Partner status, referral network growth, bonus opportunities, and withdrawal rules.
+              The full compensation plan will be added here once the official structure, member terms, and legal language are finalized. This section will explain unit ownership, quarterly distributions, Builder participation, Foundation Partner status, referral network growth, bonus opportunities, and payout rules.
             </p>
 
             <div style={{ display: "flex", gap: 14, alignItems: "flex-start", background: "#fffaf0", border: "1px solid #e7d9b6", borderLeft: `4px solid ${GOLD}`, borderRadius: "0 12px 12px 0", padding: "18px 20px", marginBottom: 28 }}>
@@ -41,19 +41,19 @@ export default function CompPlanPage() {
 
             <h3 style={{ fontSize: 18, margin: "0 0 14px" }}>Topics to be Covered:</h3>
             <ul style={{ color: "#3d4a57", fontSize: 14.5, lineHeight: 2, paddingLeft: 22, margin: "0 0 28px" }}>
-              <li>Unit definition, ownership, and pricing structure — A Unit is a proportional participation allocation within The Select Network Member Group investment structure, used to determine an investor&apos;s share of designated company distributions and growth-based revenue participation</li>
+              <li>Unit definition, ownership, and pricing structure — A Unit is a proportional participation allocation within The Select Network Member Group membership stake structure, used to determine a select member&apos;s share of designated company distributions and growth-based revenue participation</li>
               <li>Quarterly profit distribution mechanics</li>
               <li>Builder referral network (3-wide structure)</li>
               <li>Foundation Partner status and benefits</li>
               <li>Referral network growth and completion milestones</li>
               <li>Bonus unit opportunities</li>
-              <li>Withdrawal rules and approval process</li>
+              <li>Payout rules and approval process</li>
               <li>Member terms and official disclosures</li>
             </ul>
 
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               <Link href="/invest-now" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: `linear-gradient(135deg, ${GREEN}, #064a28)`, color: "#fff", borderRadius: 8, padding: "14px 22px", fontWeight: 800, fontSize: 12.5, textTransform: "uppercase", letterSpacing: ".04em", textDecoration: "none" }}>
-                Back to Invest Now <ArrowRight size={14} />
+                Back to Select Units <ArrowRight size={14} />
               </Link>
               <Link href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", color: NAVY, border: "1.5px solid #d4cdbf", borderRadius: 8, padding: "14px 22px", fontWeight: 800, fontSize: 12.5, textTransform: "uppercase", letterSpacing: ".04em", textDecoration: "none" }}>
                 Contact Us

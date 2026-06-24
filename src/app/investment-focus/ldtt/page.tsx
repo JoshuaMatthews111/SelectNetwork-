@@ -13,10 +13,10 @@ const GOLD = "#bd8e28";
 const GREEN = "#075933";
 
 const FAQ_ITEMS = [
-  { q: "Who is eligible to participate?", a: "Participation is open to qualified investors and strategic partners who share our mission of long-term value creation and impact in the pet industry." },
-  { q: "What types of investment opportunities are available?", a: "Members gain access to carefully selected opportunities connected to Lorenzo's Dog Training Team and future growth initiatives within the expanding pet industry." },
+  { q: "Who is eligible to participate?", a: "Participation is open to qualified select members and strategic partners who share our mission of long-term value creation and impact in the pet industry." },
+  { q: "What types of membership stake opportunities are available?", a: "Members gain access to carefully selected opportunities connected to Lorenzo's Dog Training Team and future growth initiatives within the expanding pet industry." },
   { q: "How is my information protected?", a: "All member information is protected with the highest standard of privacy and security protocols. We are confidential by design." },
-  { q: "How does the participation process work?", a: "The process is straightforward: select your units, choose your role, review and sign the Participation Agreement, then complete payment via ACH or card. Your investor dashboard activates automatically once payment is confirmed." },
+  { q: "How does the participation process work?", a: "The process is straightforward: select your units, choose your role, review and sign the Participation Agreement, then complete payment via ACH or card. Your member dashboard activates automatically once payment is confirmed." },
 ];
 
 export default function LDTTOpportunityPage() {
@@ -71,15 +71,15 @@ export default function LDTTOpportunityPage() {
         <div className="sn-shell sn-hero-inner" style={{ position: "relative", zIndex: 2, display: "grid", gridTemplateColumns: "1fr auto", gap: 40, alignItems: "center" }}>
           <div style={{ maxWidth: 620 }}>
             <div style={{ color: GOLD, fontSize: 11.5, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>
-              Current Investment Focus — Lorenzo&apos;s Dog Training Team
+              Current Capital Focus — Lorenzo&apos;s Dog Training Team
             </div>
             <h1 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 44, lineHeight: 1.12, margin: "0 0 20px", letterSpacing: "-.01em" }}>
-              Your Opportunity to Invest in{" "}
+              Your Opportunity to Join{" "}
               <span style={{ color: GREEN }}>Dog Training</span>,{" "}
               <span style={{ color: GREEN }}>Dog Rescue</span>, and the Future of the Pet Industry
             </h1>
             <p style={{ fontSize: 15, lineHeight: 1.75, color: "#3d4a57", margin: "0 0 28px", maxWidth: 540 }}>
-              Lorenzo&apos;s Dog Training Team is the first current investment focus inside The Select Network Member Group. This opportunity highlights a growing dog training brand connected to systems, expansion, service impact, and long-term business development.
+              Lorenzo&apos;s Dog Training Team is the first current capital focus inside The Select Network Member Group. This opportunity highlights a growing dog training brand connected to systems, expansion, service impact, and long-term business development.
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
               <Link
@@ -101,7 +101,7 @@ export default function LDTTOpportunityPage() {
                   boxShadow: "0 6px 18px rgba(7,89,51,.25)",
                 }}
               >
-                Invest Now <ArrowRight size={15} />
+                Select Units <ArrowRight size={15} />
               </Link>
               <Link
                 href="/contact"
@@ -226,7 +226,7 @@ export default function LDTTOpportunityPage() {
                     Lorenzo&apos;s Dog Training Team previously operated with a larger trainer network, reaching more than 100 trainers before major disruption affected the company&apos;s structure and operations. During the COVID period and the seasons that followed, the trainer count dropped to approximately 25 as the business adjusted to market changes, operational challenges, staffing shifts, and the need to rebuild with stronger systems.
                   </p>
                   <p style={{ color: "#5b6675", lineHeight: 1.7, fontSize: 13.5, margin: 0, fontStyle: "italic" }}>
-                    This section helps investors understand that the drop represents a past disruption, not the final direction of the company.
+                    This section helps select members understand that the drop represents a past disruption, not the final direction of the company.
                   </p>
                 </div>
               )}
@@ -237,7 +237,7 @@ export default function LDTTOpportunityPage() {
             <div style={{ background: "linear-gradient(135deg,#0b5b34,#06351f)", color: "#fff", borderRadius: 16, padding: "32px 28px" }}>
               <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 24, margin: "0 0 16px", color: "#ffd46f" }}>Current Recovery and Growth Strategy</h2>
               <p style={{ lineHeight: 1.8, fontSize: 14.5, margin: 0, color: "#eaf3ee" }}>
-                Lorenzo&apos;s Dog Training Team is currently on the path to outperform previous years through a renewed strategy, stronger branding, improved company systems, and the support of strategic investors. The focus is now on rebuilding with better structure, stronger operations, clearer reporting, and a growth plan designed to support long-term expansion.
+                Lorenzo&apos;s Dog Training Team is currently on the path to outperform previous years through a renewed strategy, stronger branding, improved company systems, and the support of strategic select members. The focus is now on rebuilding with better structure, stronger operations, clearer reporting, and a growth plan designed to support long-term expansion.
               </p>
             </div>
           </Reveal>
@@ -250,9 +250,9 @@ export default function LDTTOpportunityPage() {
       <section style={{ padding: "50px 0", background: "#fbf9f4", borderTop: "1px solid #ece6da" }}>
         <div className="sn-shell" style={{ textAlign: "center" }}>
           <Reveal>
-            <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 12px" }}>Review Investment Reports</h2>
+            <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 12px" }}>Review Network Performance Reports</h2>
             <p style={{ color: "#5b6675", lineHeight: 1.7, maxWidth: 660, margin: "0 auto 24px", fontSize: 15 }}>
-              Review available investment reports, business updates, financial summaries, tax documentation, and supporting materials connected to this current investment focus.
+              Review available network performance reports, business updates, financial summaries, tax documentation, and supporting materials connected to this current capital focus.
             </p>
             <Link
               href="/reports"
@@ -272,7 +272,7 @@ export default function LDTTOpportunityPage() {
                 boxShadow: "0 6px 18px rgba(7,89,51,.25)",
               }}
             >
-              View Investment Reports <ArrowRight size={16} />
+              View Network Performance Reports <ArrowRight size={16} />
             </Link>
           </Reveal>
         </div>
@@ -296,7 +296,7 @@ export default function LDTTOpportunityPage() {
                 <h3 style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400, fontSize: 42, lineHeight: 1, margin: "0 0 8px", color: "#b87522", whiteSpace: "nowrap" }}>Lorenzo Miller</h3>
                 <span style={{ fontFamily: "'Montserrat', 'Inter', sans-serif", fontSize: 13, fontWeight: 700, letterSpacing: "1.4px", textTransform: "uppercase", color: "#001b5d", display: "block", marginBottom: 10 }}>Founder &amp; CEO</span>
                 <p style={{ fontSize: 12, lineHeight: 1.55, color: "#4b5563", margin: "0 0 14px", fontStyle: "italic" }}>
-                  &ldquo;At The Select Network Member Group, we believe wealth is more than numbers—it&apos;s impact, legacy, and freedom of choice. Our mission is to connect exceptional investors with exceptional opportunities.&rdquo;
+                  &ldquo;At The Select Network Member Group, we believe wealth is more than numbers—it&apos;s impact, legacy, and freedom of choice. Our mission is to connect exceptional select members with exceptional opportunities.&rdquo;
                 </p>
                 <Link href="/about" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "10px 18px", borderRadius: 8, background: "#005c2f", color: "#fff", fontWeight: 700, fontSize: 12, letterSpacing: "0.8px", textTransform: "uppercase", textDecoration: "none" }}>
                   Learn More
@@ -343,13 +343,13 @@ export default function LDTTOpportunityPage() {
           <Reveal>
             <div style={{ marginBottom: 30 }}>
               <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 26, margin: "0 0 6px", letterSpacing: ".02em" }}>Trust. Privacy. Excellence.</h2>
-              <p style={{ color: "#8a7a52", fontFamily: "Georgia, serif", fontStyle: "italic", margin: 0, fontSize: 14.5 }}>Built for discerning investors who value impact and integrity.</p>
+              <p style={{ color: "#8a7a52", fontFamily: "Georgia, serif", fontStyle: "italic", margin: 0, fontSize: 14.5 }}>Built for discerning select members who value impact and integrity.</p>
             </div>
           </Reveal>
           <div className="sn-grid-4m" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 18 }}>
             {[
-              { icon: <BadgeCheck size={24} />, title: "Invitation-Only Membership", desc: "Access is reserved for qualified investors and strategic partners who share our mission." },
-              { icon: <EyeOff size={24} />, title: "Confidential By Design", desc: "Your information and investments are protected with the highest standard of privacy." },
+              { icon: <BadgeCheck size={24} />, title: "Invitation-Only Membership", desc: "Access is reserved for qualified select members and strategic partners who share our mission." },
+              { icon: <EyeOff size={24} />, title: "Confidential By Design", desc: "Your information and membership records are protected with the highest standard of privacy." },
               { icon: <ShieldCheck size={24} />, title: "Vetted Opportunities", desc: "We conduct rigorous due diligence to ensure every opportunity meets our high standards." },
               { icon: <Building2 size={24} />, title: "Aligned for Long-Term Value", desc: "We focus on sustainable growth, meaningful impact, and generational value creation." },
             ].map((t, i) => (

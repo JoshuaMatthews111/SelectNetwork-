@@ -61,7 +61,7 @@ export default function LoginPage() {
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <h3 style={{ fontFamily: "Georgia, serif", fontSize: 22, margin: "0 0 8px" }}>Information Received!</h3>
-            <p style={{ color: "#667085", fontSize: 14, margin: "0 0 20px" }}>Thank you. Visit the Invest Now page to select your units, review the agreement, and submit your payment.</p>
+            <p style={{ color: "#667085", fontSize: 14, margin: "0 0 20px" }}>Thank you. Visit the Select Units page to select your units, review the agreement, and submit your payment.</p>
             <button onClick={() => { setApplySuccess(false); setMode("choice"); }} style={{ background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", border: 0, borderRadius: 8, padding: "12px 24px", fontWeight: 800, cursor: "pointer" }}>Back to Login</button>
           </div>
         ) : (
@@ -73,14 +73,14 @@ export default function LoginPage() {
           </div>
           <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Email</label><input type="email" required value={applyForm.email} onChange={(e) => setApplyForm({...applyForm, email: e.target.value})} placeholder="you@email.com" style={fieldInput} /></div>
           <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Phone</label><input required value={applyForm.phone} onChange={(e) => setApplyForm({...applyForm, phone: e.target.value})} placeholder="(555) 000-0000" style={fieldInput} /></div>
-          <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Desired Investment Amount</label><input required value={applyForm.amount} onChange={(e) => setApplyForm({...applyForm, amount: e.target.value})} placeholder="$25,000" style={fieldInput} /></div>
+          <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Desired Capital Commitment</label><input required value={applyForm.amount} onChange={(e) => setApplyForm({...applyForm, amount: e.target.value})} placeholder="$25,000" style={fieldInput} /></div>
           <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Referral Code (Optional)</label><input value={applyForm.referral} onChange={(e) => setApplyForm({...applyForm, referral: e.target.value})} placeholder="Enter referral code" style={fieldInput} /></div>
           <div style={{ marginBottom: 16 }}>
             <label style={fieldLabel}>Message</label>
             <textarea rows={3} value={applyForm.message} onChange={(e) => setApplyForm({...applyForm, message: e.target.value})} placeholder="Tell us about your interest..." style={{ ...fieldInput, resize: "none" as const }} />
           </div>
           <button type="submit" disabled={applyLoading} className="sn-btn-gold sn-btn" style={{ width: "100%", padding: "16px 0", opacity: applyLoading ? 0.7 : 1 }}>
-            {applyLoading ? <><Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} /> Submitting...</> : "Continue to Invest Now →"}
+            {applyLoading ? <><Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} /> Submitting...</> : "Continue to Select Units →"}
           </button>
         </form>
         <button onClick={() => setMode("choice")} style={{ display: "block", width: "100%", textAlign: "center", marginTop: 14, background: "none", border: "none", color: "#667085", fontSize: 13, cursor: "pointer" }}>← Back to login options</button>
@@ -138,7 +138,7 @@ export default function LoginPage() {
     <div style={{ maxWidth: 420, width: "100%" }}>
       <div style={{ textAlign: "center", marginBottom: 30 }}>
         <Link href="/"><Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={250} height={120} className="sn-glow" style={{ height: 57, width: "auto", margin: "0 auto 20px", display: "block" }} /></Link>
-        <h1 style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 400, margin: "0 0 8px", color: "#071a33" }}>{mode === "investor" ? "Investor Login" : "Staff / Admin Login"}</h1>
+        <h1 style={{ fontFamily: "Georgia, serif", fontSize: 28, fontWeight: 400, margin: "0 0 8px", color: "#071a33" }}>{mode === "investor" ? "Select Member Login" : "Staff / Admin Login"}</h1>
         <p style={{ color: "#667085", fontSize: 14, margin: 0 }}>{mode === "investor" ? "Access your private member dashboard" : "Access the admin back office"}</p>
       </div>
       <div style={{ background: "#fff", border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", padding: 32, borderRadius: 6 }}>
@@ -174,7 +174,7 @@ export default function LoginPage() {
       <div className="sn-login-choice-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
         <button onClick={() => setMode("investor")} style={{ textAlign: "left", background: "#fff", border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", padding: 28, borderRadius: 10, cursor: "pointer", transition: ".35s" }} className="hover:translate-y-[-4px] hover:border-[#bd8e28]">
           <div style={{ width: 56, height: 56, borderRadius: "50%", border: "1px solid #bd8e28", display: "grid", placeItems: "center", color: "#bd8e28", marginBottom: 16, background: "linear-gradient(135deg,#fffaf0,#fff3d6)" }}><TrendingUp size={26} /></div>
-          <b style={{ display: "block", fontSize: 20, color: "#071a33", marginBottom: 8 }}>Investor Portal</b>
+          <b style={{ display: "block", fontSize: 20, color: "#071a33", marginBottom: 8 }}>Select Member Portal</b>
           <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: "0 0 12px" }}>Access your private dashboard, units, growth chart, documents, earnings, and account updates.</p>
           <span style={{ fontSize: 11, color: "#bd8e28", fontWeight: 800, textTransform: "uppercase", letterSpacing: ".04em" }}>Demo: demo / demo</span>
         </button>

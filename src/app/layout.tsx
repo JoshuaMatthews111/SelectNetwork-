@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "The Select Network Member Group",
-  description: "A premium private investor platform connected to Lorenzo's nationwide dog training company. Exclusive unit opportunity, member dashboard, and financial reporting.",
+  description: "A premium private member platform connected to Lorenzo's nationwide dog training company. Exclusive unit opportunity, member dashboard, and financial reporting.",
 };
 
 export const viewport: Viewport = {

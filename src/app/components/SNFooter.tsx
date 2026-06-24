@@ -6,9 +6,9 @@ import { Lock, ShieldCheck } from "lucide-react";
 
 const LINKS = [
   { label: "About", href: "/about" },
-  { label: "Investment Focus", href: "/investment-focus" },
-  { label: "Investment Reports", href: "/reports" },
-  { label: "Invest Now", href: "/invest-now" },
+  { label: "Capital Focus", href: "/investment-focus" },
+  { label: "Network Performance Reports", href: "/reports" },
+  { label: "Select Units", href: "/invest-now" },
   { label: "Contact", href: "/contact" },
   { label: "Member Portal", href: "/login" },
 ];
@@ -28,7 +28,7 @@ export default function SNFooter() {
           fontSize: 15,
         }}
       >
-        Investing in Purpose. Building Legacy. Creating Impact.
+        Participating With Purpose. Building Legacy. Creating Impact.
       </div>
 
       <div
@@ -45,7 +45,7 @@ export default function SNFooter() {
         <div>
           <Image src="/assets/select-network/select-network-logo.png" alt="The Select Network Member Group" width={220} height={54} style={{ width: 210, height: "auto" }} />
           <p style={{ marginTop: 16, color: "#9fb1c7", fontSize: 13, lineHeight: 1.7, maxWidth: 360 }}>
-            The Select Network Member Group is a private, invitation-only investor
+            The Select Network Member Group is a private, invitation-only member
             platform. Lorenzo&apos;s Dog Training Team is the operating company whose historical
             business record is referenced for due diligence.
           </p>

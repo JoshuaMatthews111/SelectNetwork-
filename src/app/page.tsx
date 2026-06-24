@@ -15,7 +15,7 @@ export default function SelectNetworkHomePage() {
     "Connect Capital to Growing Companies.",
     "Build Strategic Partnerships.",
     "Expand With Proven Systems.",
-    "Join a Private Investor Network.",
+    "Join a Private Select Member Network.",
   ];
   useEffect(() => {
     const timer = setInterval(() => setActiveCard((i) => (i + 1) % 6), 1700);
@@ -39,9 +39,9 @@ export default function SelectNetworkHomePage() {
           </Link>
           <div className="sn-nav-links">
             <Link href="/about">About</Link>
-            <Link href="/investment-focus">Investment Focus</Link>
-            <Link href="/reports">Investment Reports</Link>
-            <Link href="/invest-now">Invest Now</Link>
+            <Link href="/investment-focus">Capital Focus</Link>
+            <Link href="/reports">Network Performance Reports</Link>
+            <Link href="/invest-now">Select Units</Link>
             <Link href="/contact">Contact</Link>
           </div>
           <Link href="/login" className="sn-portal-btn sn-hide-mobile">🔒 Member Portal</Link>
@@ -61,7 +61,7 @@ export default function SelectNetworkHomePage() {
               <button onClick={() => setMobileOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "#071a33" }}><X size={24} /></button>
             </div>
             <nav style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {[{ label: "About", href: "/about" }, { label: "Investment Focus", href: "/investment-focus" }, { label: "Investment Reports", href: "/reports" }, { label: "Invest Now", href: "/invest-now" }, { label: "Contact", href: "/contact" }].map((l) => (
+              {[{ label: "About", href: "/about" }, { label: "Capital Focus", href: "/investment-focus" }, { label: "Network Performance Reports", href: "/reports" }, { label: "Select Units", href: "/invest-now" }, { label: "Contact", href: "/contact" }].map((l) => (
                 <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)} style={{ padding: "14px 16px", borderRadius: 10, fontSize: 14, fontWeight: 800, letterSpacing: ".03em", textTransform: "uppercase", color: "#0d2845", textDecoration: "none" }}>{l.label}</Link>
               ))}
             </nav>
@@ -75,7 +75,7 @@ export default function SelectNetworkHomePage() {
         <section className="sn-hero" aria-label="The Select Network Member Group homepage hero">
           {/* Left — Copy */}
           <div className="sn-hero-copy">
-            <div className="sn-editorial-kicker">Private investors.<br />Strategic partners.<br />Lasting impact.</div>
+            <div className="sn-editorial-kicker">Private select members.<br />Strategic partners.<br />Lasting impact.</div>
             <h1 className="sn-rotator-headline">
               {HERO_PHRASES.map((phrase, i) => {
                 const words = phrase.split(" ");
@@ -89,8 +89,8 @@ export default function SelectNetworkHomePage() {
               })}
             </h1>
             <div className="sn-gold-rule"><span className="sn-rule-diamond">◇</span></div>
-            <h2 className="sn-hero-subtitle">Building the Next Wave of Private Investment Opportunities</h2>
-            <p className="sn-hero-paragraph">The Select Network Member Group exists to connect capital with vision, strong company systems, and strategic private investment opportunities designed to create sustainable long-term growth.</p>
+            <h2 className="sn-hero-subtitle">Building the Next Wave of Private Membership Stake Opportunities</h2>
+            <p className="sn-hero-paragraph">The Select Network Member Group exists to connect capital with vision, strong company systems, and strategic private membership stake opportunities designed to create sustainable long-term growth.</p>
           </div>
 
           {/* Center — Video Header */}
@@ -119,12 +119,12 @@ export default function SelectNetworkHomePage() {
           {/* Right — Focus Cards */}
           <aside className="sn-focus-panel" aria-label="Rotating The Select Network Member Group focus areas">
             {[
-              { icon: <Users size={24} />, label: "Private Investor Group" },
+              { icon: <Users size={24} />, label: "Private Select Member Group" },
               { icon: <Target size={24} />, label: "Strategic Opportunities" },
               { icon: <Building2 size={24} />, label: "Strong Company Systems" },
               { icon: <Leaf size={24} />, label: "Sustainable Growth" },
               { icon: <Lock size={24} />, label: "Member-Based Access" },
-              { icon: <TrendingUp size={24} />, label: "Future Investment Focuses" },
+              { icon: <TrendingUp size={24} />, label: "Future Capital Focuses" },
             ].map((card, i) => (
               <div key={i} className={`sn-focus-card${activeCard === i ? " active" : ""}`}>
                 <span className="sn-focus-icon">{card.icon}</span>
@@ -142,7 +142,7 @@ export default function SelectNetworkHomePage() {
               <div className="sn-icon-ring"><Sun size={38} /></div>
               <div>
                 <h3>Identify Opportunity</h3>
-                <p>We evaluate private investment opportunities with strong potential and long-term impact.</p>
+                <p>We evaluate private membership stake opportunities with strong potential and long-term impact.</p>
               </div>
             </article>
             <div className="sn-arrow">→</div>
@@ -165,12 +165,12 @@ export default function SelectNetworkHomePage() {
         </section>
 
         {/* ═══ GROW YOUR MONEY NOW ═══ */}
-        <section className="sn-money" id="investment-focus" aria-label="Grow your money now investment focus section">
+        <section className="sn-money" id="investment-focus" aria-label="Grow your money now capital focus section">
           <div className="sn-money-copy">
             <h2>GROW YOUR MONEY NOW</h2>
             <div className="sn-small-rule"></div>
-            <p>Explore our current investment focus and discover how The Select Network Member Group is creating value across real private investment opportunities.</p>
-            <Link href="/investment-focus" className="sn-btn-gold">View Investment Focus <ArrowRight size={16} /></Link>
+            <p>Explore our current capital focus and discover how The Select Network Member Group is creating value across real private membership stake opportunities.</p>
+            <Link href="/investment-focus" className="sn-btn-gold">View Capital Focus <ArrowRight size={16} /></Link>
           </div>
           <div className="sn-chart" aria-label="Illustrative platform growth visualization">
             <svg viewBox="0 0 360 200" preserveAspectRatio="xMidYMid meet">
@@ -201,7 +201,7 @@ export default function SelectNetworkHomePage() {
           <article className="sn-ldtt-card">
             <Image src="/assets/select-network/lorenzos-dog-training-team-logo.png" alt="Lorenzo&apos;s Dog Training Team" width={200} height={200} style={{ width: 72, height: "auto", borderRadius: 6 }} />
             <div>
-              <small>Current Investment Focus</small>
+              <small>Current Capital Focus</small>
               <h3>Lorenzo&apos;s Dog Training Team</h3>
               <p>A Proven Brand. A Growing Mission. Professional Training. Positive Impact. Built for Long-Term Growth.</p>
               <Link href="/investment-focus/ldtt">Learn More About Lorenzo&apos;s →</Link>
@@ -215,14 +215,14 @@ export default function SelectNetworkHomePage() {
             <div className="sn-trust-icon"><ShieldPlus size={36} /></div>
             <div>
               <h4>Invitation-Only Membership</h4>
-              <p>Access is reserved for qualified investors and strategic partners who share our mission.</p>
+              <p>Access is reserved for qualified select members and strategic partners who share our mission.</p>
             </div>
           </article>
           <article className="sn-trust-item">
             <div className="sn-trust-icon"><Lock size={36} /></div>
             <div>
               <h4>Confidential by Design</h4>
-              <p>Your information and investments are protected with the highest standard of privacy.</p>
+              <p>Your information and membership records are protected with the highest standard of privacy.</p>
             </div>
           </article>
           <article className="sn-trust-item">
@@ -238,7 +238,7 @@ export default function SelectNetworkHomePage() {
       {/* ═══ FOOTER ═══ */}
       <footer className="sn-footer-home">
         <strong>TRUST. PRIVACY. EXCELLENCE.</strong>
-        <div className="sn-script">Built for discerning investors who value impact and integrity.</div>
+        <div className="sn-script">Built for discerning select members who value impact and integrity.</div>
         <div className="sn-footer-right">
           <span>Become by Design</span>
           <span>🔒 Private Protected</span>

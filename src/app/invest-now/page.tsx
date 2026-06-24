@@ -98,12 +98,12 @@ export default function InvestNowPage() {
       {/* Hero */}
       <section style={{ background: "linear-gradient(135deg,#061a33,#030b17)", color: "#fff", padding: "64px 0 56px" }}>
         <div className="sn-shell" style={{ textAlign: "center" }}>
-          <div style={{ color: GOLD, fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>Private Investment Enrollment</div>
+          <div style={{ color: GOLD, fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>Select Member Enrollment</div>
           <h1 className="sn-page-hero-h1" style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 44, lineHeight: 1.12, margin: "0 auto", maxWidth: 720 }}>
             Complete Your Participation in The Select Network Member Group
           </h1>
           <p style={{ color: "#c6d2e1", maxWidth: 700, margin: "20px auto 0", lineHeight: 1.7, fontSize: 16 }}>
-            The Select Network Member Group provides qualified members with access to private growth opportunities, structured reports, and member benefits. Select your units, choose your role, review the agreement, and submit your payment to unlock your investor dashboard.
+            The Select Network Member Group provides qualified members with access to private growth opportunities, structured reports, and member benefits. Select your units, choose your role, review the agreement, and submit your payment to unlock your member dashboard.
           </p>
           {step === 0 && !submitted && (
             <button onClick={() => document.getElementById("sn-flow")?.scrollIntoView({ behavior: "smooth" })} style={{ ...btnPrimary, marginTop: 28, background: "linear-gradient(135deg,#d1a645,#bc8b25)" }}>
@@ -123,7 +123,7 @@ export default function InvestNowPage() {
                 <div style={{ textAlign: "center", marginBottom: 30 }}>
                   <CheckCircle size={48} color={GREEN} style={{ margin: "0 auto 12px" }} />
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 8px" }}>Welcome to The Select Network Member Group!</h2>
-                  <p style={{ color: "#5b6675", fontSize: 14, margin: 0 }}>Your account has been activated. Here is your investment certificate.</p>
+                  <p style={{ color: "#5b6675", fontSize: 14, margin: 0 }}>Your account has been activated. Here is your membership stake certificate.</p>
                 </div>
 
                 {/* ─── CERTIFICATE ─── */}
@@ -133,15 +133,15 @@ export default function InvestNowPage() {
                   <div style={{ position: "absolute", bottom: 14, left: 14, width: 56, height: 56, borderBottom: "3px solid #d5a83d", borderLeft: "3px solid #d5a83d", borderRadius: "0 0 0 4px" }} />
                   <div style={{ position: "absolute", bottom: 14, right: 14, width: 56, height: 56, borderBottom: "3px solid #d5a83d", borderRight: "3px solid #d5a83d", borderRadius: "0 0 4px 0" }} />
                   <div style={{ textAlign: "center" }}>
-                    <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: ".2em", textTransform: "uppercase", color: "#bd8e28", marginBottom: 6 }}>Certificate of Investment</div>
+                    <div style={{ fontSize: 11, fontWeight: 900, letterSpacing: ".2em", textTransform: "uppercase", color: "#bd8e28", marginBottom: 6 }}>Membership Stake Certificate</div>
                     <div style={{ width: 70, height: 2, background: "linear-gradient(90deg,transparent,#d5a83d,transparent)", margin: "0 auto 16px" }} />
                     <p style={{ fontSize: 13, color: "#667085", margin: "0 0 8px" }}>This certifies that</p>
                     <h1 style={{ fontFamily: "Georgia, serif", fontSize: 34, fontWeight: 400, color: NAVY, margin: "0 0 8px", borderBottom: "2px solid #e7e2d8", display: "inline-block", padding: "0 24px 6px" }}>{form.name || "Member"}</h1>
-                    <p style={{ fontSize: 13, color: "#667085", margin: "12px 0 6px" }}>has successfully invested in</p>
+                    <p style={{ fontSize: 13, color: "#667085", margin: "12px 0 6px" }}>has successfully secured a membership stake in</p>
                     <div style={{ fontSize: 44, fontWeight: 900, color: GREEN, margin: "6px 0" }}>{units} Units</div>
                     <p style={{ fontSize: 16, color: NAVY, margin: "4px 0 20px" }}>valued at <b style={{ color: GOLD }}>{fmt(subtotal)}</b></p>
                     <div style={{ width: 50, height: 2, background: "linear-gradient(90deg,transparent,#d5a83d,transparent)", margin: "0 auto 16px" }} />
-                    <p style={{ fontSize: 12, color: "#667085", margin: "0 0 4px" }}>through The Select Network Member Group investment structure</p>
+                    <p style={{ fontSize: 12, color: "#667085", margin: "0 0 4px" }}>through The Select Network Member Group membership stake structure</p>
                     <p style={{ fontSize: 11, color: "#9aa0ab", margin: "0 0 20px" }}>Issued: {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</p>
                     {isFoundationPartner && (
                       <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", borderRadius: 99, padding: "6px 16px", fontSize: 11, fontWeight: 900, marginBottom: 14 }}>
@@ -167,8 +167,8 @@ export default function InvestNowPage() {
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
                     {[
                       { label: "Units Owned", value: `${units}`, sub: "Units" },
-                      { label: "Amount Invested", value: fmt(subtotal), sub: "Total investment" },
-                      { label: "Role", value: role || "Investor", sub: "Your participation" },
+                      { label: "Capital Commitment", value: fmt(subtotal), sub: "Total capital commitment" },
+                      { label: "Role", value: role || "Select Member", sub: "Your participation" },
                     ].map((d, i) => (
                       <div key={i} style={{ background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 12, padding: "18px 16px", textAlign: "center" }}>
                         <div style={{ fontSize: 11, fontWeight: 800, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 6 }}>{d.label}</div>
@@ -182,17 +182,17 @@ export default function InvestNowPage() {
                 {/* ─── TUTORIAL: HOW TO USE YOUR DASHBOARD ─── */}
                 <div style={{ marginBottom: 28 }}>
                   <h3 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 6px", textAlign: "center" }}>How to Use Your Dashboard</h3>
-                  <p style={{ textAlign: "center", color: "#667085", fontSize: 13, margin: "0 0 20px" }}>Your investor dashboard gives you everything you need. Here&apos;s a quick guide:</p>
+                  <p style={{ textAlign: "center", color: "#667085", fontSize: 13, margin: "0 0 20px" }}>Your member dashboard gives you everything you need. Here&apos;s a quick guide:</p>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 16 }}>
                     {[
-                      { title: "Overview", desc: "See your total invested, current value, units owned, and quarterly distributions at a glance.", highlight: true },
+                      { title: "Overview", desc: "See your total capital committed, current value, units owned, and quarterly distributions at a glance.", highlight: true },
                       { title: "Units", desc: "Track your unit allocation, purchase history, and current unit value over time.", highlight: true },
                       { title: "Reports & Documents", desc: "Access quarterly financial reports, official documents, and download PDFs.", highlight: false },
-                      { title: "Withdrawals", desc: "Request profit withdrawals from your available balance. Track pending and completed requests.", highlight: false },
+                      { title: "Payouts", desc: "Request earnings payouts from your available balance. Track pending and completed requests.", highlight: false },
                       { title: "Announcements", desc: "Stay updated with official announcements from The Select Network Member Group team.", highlight: false },
                       { title: "Support / Chat", desc: "Contact our support team directly. Create tickets and get responses in your dashboard.", highlight: false },
-                      { title: "Certificates", desc: "View, generate, and download your investment certificates at any time.", highlight: true },
-                      { title: "Milestones", desc: "Track your achievement progress — from first investment to referral goals.", highlight: false },
+                      { title: "Certificates", desc: "View, generate, and download your membership stake certificates at any time.", highlight: true },
+                      { title: "Milestones", desc: "Track your achievement progress — from first capital commitment to referral goals.", highlight: false },
                     ].map((t, i) => (
                       <div key={i} style={{ background: t.highlight ? "linear-gradient(135deg,#071a33,#0d3366)" : "#fff", color: t.highlight ? "#fff" : NAVY, border: t.highlight ? "2px solid #bd8e28" : "1px solid #e7e2d8", borderRadius: 14, padding: "20px 18px", boxShadow: t.highlight ? "0 10px 30px rgba(5,20,45,.15)" : "0 4px 12px rgba(5,20,45,.04)" }}>
                         <b style={{ fontSize: 14, display: "block", marginBottom: 6 }}>{t.title}</b>
@@ -205,7 +205,7 @@ export default function InvestNowPage() {
 
                 {/* CTA */}
                 <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
-                  <Link href={role === "Investor-Builder" ? "/builder" : "/investor"} style={{ ...btnPrimary, padding: "16px 32px", fontSize: 14 }}>Enter Your Dashboard <ArrowRight size={16} /></Link>
+                  <Link href={role === "Select Member-Builder" ? "/builder" : "/investor"} style={{ ...btnPrimary, padding: "16px 32px", fontSize: 14 }}>Enter Your Dashboard <ArrowRight size={16} /></Link>
                   <Link href="/contact" style={btnGhost}>Speak With Our Team</Link>
                 </div>
               </div>
@@ -254,7 +254,7 @@ export default function InvestNowPage() {
                     <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", borderRadius: 12, padding: "18px 22px", marginBottom: 24, display: "flex", gap: 14, alignItems: "flex-start" }}>
                       <Info size={20} color="#ffd46f" style={{ flexShrink: 0, marginTop: 2 }} />
                       <p style={{ margin: 0, color: "#c6d2e1", fontSize: 13, lineHeight: 1.7 }}>
-                        <b style={{ color: "#ffd46f" }}>What is a Unit?</b> A Unit is a proportional participation allocation within The Select Network Member Group investment structure, used to determine an investor&apos;s share of designated company distributions and growth-based revenue participation.
+                        <b style={{ color: "#ffd46f" }}>What is a Unit?</b> A Unit is a proportional participation allocation within The Select Network Member Group membership stake structure, used to determine a select member&apos;s share of designated company distributions and growth-based revenue participation.
                       </p>
                     </div>
 
@@ -284,7 +284,7 @@ export default function InvestNowPage() {
                       <div style={{ display: "flex", gap: 12, alignItems: "center", background: "linear-gradient(135deg,#d1a645,#bc8b25)", borderRadius: 12, padding: "14px 18px", marginBottom: 14 }}>
                         <Building2 size={20} color="#fff" style={{ flexShrink: 0 }} />
                         <p style={{ margin: 0, fontSize: 13, color: "#fff", lineHeight: 1.6, fontWeight: 700 }}>
-                          Foundation Partner — Your investment level of {fmt(subtotal)} qualifies you for Foundation Partner recognition within The Select Network Member Group.
+                          Foundation Partner — Your capital commitment level of {fmt(subtotal)} qualifies you for Foundation Partner recognition within The Select Network Member Group.
                         </p>
                       </div>
                     )}
@@ -305,14 +305,14 @@ export default function InvestNowPage() {
                     <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
                       {[
                         {
-                          key: "Investor",
+                          key: "Select Member",
                           icon: <Users size={32} />,
-                          desc: "Acquire Units — proportional participation allocations that determine your share of designated company distributions and growth-based revenue participation. Receive quarterly profit distributions and access exclusive member reports. No referral activity required.",
+                          desc: "Acquire Units — proportional participation allocations that determine your share of designated company distributions and growth-based revenue participation. Receive quarterly distributions and access exclusive member reports. No referral activity required.",
                         },
                         {
-                          key: "Investor-Builder",
+                          key: "Select Member-Builder",
                           icon: <UserPlus size={32} />,
-                          desc: "Combine investment participation with network-building activity. Access all investor benefits plus the referral network, builder tools, and referral tracking. Eligible Investor-Builders may qualify for referral or marketing incentives according to official program terms.",
+                          desc: "Combine membership stake participation with network-building activity. Access all select member benefits plus the referral network, builder tools, and referral tracking. Eligible Select Member-Builders may qualify for referral or marketing incentives according to official program terms.",
                         },
                       ].map((r) => (
                         <div key={r.key} onClick={() => setRole(r.key)} style={{ border: role === r.key ? `2px solid ${GREEN}` : "1px solid #e7e2d8", background: role === r.key ? "#edf6ef" : "#fff", borderRadius: 14, padding: "24px 20px", cursor: "pointer", transition: ".25s" }}>
@@ -351,11 +351,11 @@ export default function InvestNowPage() {
                     >
                       <b style={{ fontSize: 15, color: NAVY, display: "block", marginBottom: 12 }}>The Select Network Member Group — Participation Agreement</b>
                       <p>This Participation Agreement (&quot;Agreement&quot;) is entered into between the participating member (&quot;Member&quot;) and The Select Network Member Group (&quot;The Select Network Member Group&quot;). By completing this enrollment and submitting payment, the Member agrees to all terms below.</p>
-                      <p><b>1. Unit Participation.</b> Each Unit represents a proportional participation allocation within The Select Network Member Group investment structure, used to determine the Member&apos;s share of designated company distributions and growth-based revenue participation. Units are priced at $100 each.</p>
-                      <p><b>2. Distributions.</b> Approved participants may receive profit-based distributions quarterly when profits are available and posted through The Select Network Member Group reporting system. Distributions are not guaranteed. Initial investment amounts are not treated as withdrawable profit. Members may request withdrawals only from available profit balances, subject to approval and official member terms.</p>
-                      <p><b>3. Roles.</b> Members may participate as an Investor or Investor-Builder. Investor accounts receive quarterly distribution access and member reports. Investor-Builder accounts additionally receive access to the referral network, builder tools, and referral tracking. Role capabilities are subject to program requirements.</p>
-                      <p><b>4. Foundation Partner.</b> Members who invest $10,000 or more are recognized as Foundation Partners within The Select Network Member Group. This recognition is based solely on investment level and is not limited by membership count.</p>
-                      <p><b>5. Incentives.</b> Eligible Investor-Builders may qualify for referral or marketing incentives according to official program terms. Incentives are not guaranteed and are subject to eligibility, compliance, and program requirements.</p>
+                      <p><b>1. Unit Participation.</b> Each Unit represents a proportional participation allocation within The Select Network Member Group membership stake structure, used to determine the Member&apos;s share of designated company distributions and growth-based revenue participation. Units are priced at $100 each.</p>
+                      <p><b>2. Distributions.</b> Approved participants may receive participation yield distributions quarterly when profits are available and posted through The Select Network Member Group reporting system. Distributions are not guaranteed. Initial capital commitments are not treated as available earnings. Members may request payouts only from available profit balances, subject to approval and official member terms.</p>
+                      <p><b>3. Roles.</b> Members may participate as a Select Member or Select Member-Builder. Select Member accounts receive quarterly distribution access and member reports. Select Member-Builder accounts additionally receive access to the referral network, builder tools, and referral tracking. Role capabilities are subject to program requirements.</p>
+                      <p><b>4. Foundation Partner.</b> Members with a capital commitment of $10,000 or more are recognized as Foundation Partners within The Select Network Member Group. This recognition is based solely on capital commitment level and is not limited by membership count.</p>
+                      <p><b>5. Incentives.</b> Eligible Select Member-Builders may qualify for referral or marketing incentives according to official program terms. Incentives are not guaranteed and are subject to eligibility, compliance, and program requirements.</p>
                       <p><b>6. Payment &amp; Activation.</b> Dashboard access is activated automatically upon confirmed payment. There is no manual review or approval process after payment is confirmed.</p>
                       <p><b>7. No Guarantees.</b> The Select Network Member Group does not guarantee returns, distributions, profits, or any specific financial outcome. Past performance of associated businesses does not guarantee future results.</p>
                       <p><b>8. Member Records.</b> The Member&apos;s name, email, unit selection, role, agreement acceptance date/time, and payment status will be stored securely as part of the official participation record.</p>
@@ -390,7 +390,7 @@ export default function InvestNowPage() {
                 {step === 4 && (
                   <div>
                     <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 26, margin: "0 0 6px" }}>Submit Your Payment</h2>
-                    <p style={{ color: "#5b6675", fontSize: 14, margin: "0 0 20px" }}>Review your selection and complete your payment to activate your investor dashboard.</p>
+                    <p style={{ color: "#5b6675", fontSize: 14, margin: "0 0 20px" }}>Review your selection and complete your payment to activate your member dashboard.</p>
 
                     {/* Summary */}
                     <div style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 14, padding: "20px 22px", marginBottom: 16 }}>
@@ -493,12 +493,12 @@ export default function InvestNowPage() {
         <div className="sn-shell" style={{ maxWidth: 860 }}>
           <Reveal>
             <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 16, padding: "32px 28px" }}>
-              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 24, margin: "0 0 16px" }}>How Quarterly Profit Distributions Work</h2>
+              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 24, margin: "0 0 16px" }}>How Quarterly Distributions Work</h2>
               <p style={{ color: "#3d4a57", lineHeight: 1.8, fontSize: 14.5, margin: "0 0 16px" }}>
-                Each Unit represents a proportional participation allocation used to determine an investor&apos;s share of designated company distributions and growth-based revenue participation. Approved participants may receive profit-based distributions quarterly when profits are available and posted through The Select Network Member Group reporting system. Initial investment amounts are not treated as withdrawable profit. Members may request withdrawals only from available profit balances, subject to approval and official member terms.
+                Each Unit represents a proportional participation allocation used to determine a select member&apos;s share of designated company distributions and growth-based revenue participation. Approved participants may receive participation yield distributions quarterly when profits are available and posted through The Select Network Member Group reporting system. Initial capital commitments are not treated as available earnings. Members may request payouts only from available profit balances, subject to approval and official member terms.
               </p>
               <p style={{ color: "#667085", fontSize: 13, lineHeight: 1.7, margin: "0 0 16px" }}>
-                Full report access, quarterly updates, and member-only documents will be available inside the investor dashboard after participation is completed.
+                Full report access, quarterly updates, and member-only documents will be available inside the member dashboard after participation is completed.
               </p>
               <Link href="/comp-plan" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: GOLD, fontWeight: 700, fontSize: 13, textDecoration: "none", borderBottom: `1px solid ${GOLD}`, paddingBottom: 2 }}>
                 Learn More About How This Works <ArrowRight size={14} />

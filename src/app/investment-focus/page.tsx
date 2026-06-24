@@ -19,9 +19,9 @@ export default function InvestmentFocusPage() {
       {/* Hero */}
       <section className="sn-section-pad" style={{ background: "linear-gradient(135deg,#061a33,#030b17)", color: "#fff", padding: "70px 0" }}>
         <div className="sn-shell" style={{ textAlign: "center" }}>
-          <div style={{ color: GOLD, fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>Investment Focus</div>
+          <div style={{ color: GOLD, fontSize: 12, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 16 }}>Capital Focus</div>
           <h1 className="sn-page-hero-h1" style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 42, lineHeight: 1.15, margin: "0 auto", maxWidth: 760 }}>
-            Current Investment Opportunities
+            Current Membership Stake Opportunities
           </h1>
           <p style={{ color: "#c6d2e1", maxWidth: 660, margin: "20px auto 0", lineHeight: 1.7, fontSize: 16 }}>
             The Select Network Member Group identifies and develops high-impact, purpose-driven opportunities designed to create sustainable long-term growth for our members.
@@ -35,8 +35,8 @@ export default function InvestmentFocusPage() {
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: 40 }}>
               <div style={{ width: 40, height: 3, background: GOLD, margin: "0 auto 18px" }} />
-              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 30, margin: "0 0 8px" }}>Current Investment Focus</h2>
-              <p style={{ color: "#5b6675", fontSize: 14.5, margin: 0 }}>Our first investment opportunity inside The Select Network Member Group.</p>
+              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 30, margin: "0 0 8px" }}>Current Capital Focus</h2>
+              <p style={{ color: "#5b6675", fontSize: 14.5, margin: 0 }}>Our first membership stake opportunity inside The Select Network Member Group.</p>
             </div>
           </Reveal>
 
@@ -63,10 +63,10 @@ export default function InvestmentFocusPage() {
                   style={{ width: 200, height: "auto" }}
                 />
                 <div>
-                  <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: ".12em", textTransform: "uppercase", color: GOLD, marginBottom: 10, display: "block" }}>First Investment Focus</span>
+                  <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: ".12em", textTransform: "uppercase", color: GOLD, marginBottom: 10, display: "block" }}>First Capital Focus</span>
                   <h3 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 14px", color: NAVY }}>Lorenzo&apos;s Dog Training Team</h3>
                   <p style={{ fontSize: 15, lineHeight: 1.75, color: "#3d4a57", margin: "0 0 22px" }}>
-                    Lorenzo&apos;s Dog Training Team is the first current investment focus inside The Select Network Member Group. This opportunity highlights a growing dog training brand connected to systems, expansion, service impact, and long-term business development.
+                    Lorenzo&apos;s Dog Training Team is the first current capital focus inside The Select Network Member Group. This opportunity highlights a growing dog training brand connected to systems, expansion, service impact, and long-term business development.
                   </p>
                   <span style={{
                     display: "inline-flex",
@@ -90,13 +90,13 @@ export default function InvestmentFocusPage() {
         </div>
       </section>
 
-      {/* Where We Invest */}
+      {/* Where We Build Value */}
       <section style={{ padding: "70px 0", background: "#fff" }}>
         <div className="sn-shell">
           <Reveal>
             <div style={{ textAlign: "center", marginBottom: 40 }}>
               <div style={{ width: 40, height: 3, background: GOLD, margin: "0 auto 18px" }} />
-              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 32, margin: 0 }}>Where We Invest</h2>
+              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 32, margin: 0 }}>Where We Build Value</h2>
             </div>
           </Reveal>
           <div className="sn-grid-5" style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 18 }}>
@@ -119,7 +119,7 @@ export default function InvestmentFocusPage() {
         </div>
       </section>
 
-      {/* Why this market + Investor Lens */}
+      {/* Why this market + Member Lens */}
       <section style={{ padding: "20px 0 78px", background: "#fff" }}>
         <div className="sn-shell sn-split" style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 30, alignItems: "start" }}>
           <Reveal>
@@ -144,7 +144,7 @@ export default function InvestmentFocusPage() {
 
           <Reveal delay={120}>
             <div style={{ background: "linear-gradient(135deg,#0b5b34,#06351f)", color: "#fff", borderRadius: 18, padding: 32, boxShadow: "0 18px 45px rgba(7,67,31,.25)" }}>
-              <span style={{ color: "#ffd46f", fontSize: 12, fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase" }}>Investor Lens</span>
+              <span style={{ color: "#ffd46f", fontSize: 12, fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase" }}>Member Lens</span>
               <p style={{ fontSize: 16, lineHeight: 1.7, margin: "14px 0 22px", color: "#eaf3ee" }}>
                 We take a long-term view, focusing on disciplined growth, strong leadership, and systems built to scale.
               </p>
@@ -153,7 +153,7 @@ export default function InvestmentFocusPage() {
                   "Purpose-driven opportunities with measurable impact",
                   "Select participation with experienced leadership",
                   "Scalable models and operational discipline",
-                  "Long-term value creation for investors and communities",
+                  "Long-term value creation for select members and communities",
                 ].map((b, i) => (
                   <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
                     <CheckCircle2 size={20} color="#ffd46f" style={{ flexShrink: 0, marginTop: 1 }} />
@@ -171,8 +171,8 @@ export default function InvestmentFocusPage() {
         <div className="sn-shell">
           <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 18px" }}>Review the operating record behind the opportunity.</h2>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/reports" className="sn-btn" style={{ background: `linear-gradient(135deg,#0b5b34,#08431f)` }}>View Investment Reports <ArrowRight size={16} /></Link>
-            <Link href="/invest-now" className="sn-btn sn-btn-outline">Invest Now</Link>
+            <Link href="/reports" className="sn-btn" style={{ background: `linear-gradient(135deg,#0b5b34,#08431f)` }}>View Network Performance Reports <ArrowRight size={16} /></Link>
+            <Link href="/invest-now" className="sn-btn sn-btn-outline">Select Units</Link>
           </div>
         </div>
       </section>

@@ -38,7 +38,7 @@ export default function JoinPage() {
             Become a Member. <span style={{ color: GOLD }}>Make an Impact.</span>
           </h1>
           <p style={{ color: "#c6d2e1", maxWidth: 640, margin: "20px auto 0", lineHeight: 1.7, fontSize: 16 }}>
-            Join a community of like-minded investors building wealth and creating long-term value in the pet industry.
+            Join a community of like-minded select members building wealth and creating long-term value in the pet industry.
           </p>
         </div>
       </section>
@@ -50,7 +50,7 @@ export default function JoinPage() {
             {[
               { n: 1, icon: <FileText size={26} />, title: "Select Your Units", desc: "Choose the number of units and your participation role." },
               { n: 2, icon: <FileSignature size={26} />, title: "Review & Sign Agreement", desc: "Read and accept the Participation Agreement." },
-              { n: 3, icon: <PhoneCall size={26} />, title: "Submit Payment", desc: "Complete payment via ACH or card to activate your investor dashboard automatically." },
+              { n: 3, icon: <PhoneCall size={26} />, title: "Submit Payment", desc: "Complete payment via ACH or card to activate your member dashboard automatically." },
             ].map((s, i) => (
               <Reveal key={i} delay={i * 100}>
                 <div style={{ background: "#fbf9f4", border: "1px solid #eee7d8", borderRadius: 16, padding: 30, height: "100%", position: "relative" }}>
@@ -78,7 +78,7 @@ export default function JoinPage() {
                 <div style={{ background: "#edf6ef", border: "1px solid #c7e2d0", borderRadius: 12, padding: "28px 24px", textAlign: "center" }}>
                   <CheckCircle2 size={44} color={GREEN} style={{ margin: "0 auto 12px" }} />
                   <h3 style={{ margin: "0 0 8px", color: NAVY }}>Information Received</h3>
-                  <p style={{ color: "#4b5563", fontSize: 14, lineHeight: 1.6, margin: 0 }}>Thank you, {form.firstName}. Proceed to the Invest Now page to select your units, review the agreement, and submit your payment to activate your dashboard.</p>
+                  <p style={{ color: "#4b5563", fontSize: 14, lineHeight: 1.6, margin: 0 }}>Thank you, {form.firstName}. Proceed to the Select Units page to select your units, review the agreement, and submit your payment to activate your dashboard.</p>
                 </div>
               ) : (
                 <form onSubmit={(e) => { e.preventDefault(); if (valid) setSubmitted(true); }}>
@@ -140,13 +140,13 @@ export default function JoinPage() {
                     </>
                   )}
 
-                  <SectionHead>Investor Status</SectionHead>
-                  <Field label="Investor Classification *">
+                  <SectionHead>Select Member Status</SectionHead>
+                  <Field label="Select Member Classification *">
                     <select value={form.status} onChange={(e) => u("status", e.target.value)} style={inputStyle}>
                       <option value="">Select an option</option>
-                      <option>Accredited Investor</option>
-                      <option>Non-Accredited Investor</option>
-                      <option>Institutional Investor</option>
+                      <option>Accredited Select Member</option>
+                      <option>Non-Accredited Select Member</option>
+                      <option>Institutional Select Member</option>
                       <option>Exploring Options</option>
                     </select>
                   </Field>
