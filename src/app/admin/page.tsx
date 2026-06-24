@@ -1136,9 +1136,9 @@ export default function AdminPortal() {
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Add New Prospect</h2>
                   <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
                     <div><label style={fieldLabel}>Name</label><input value={newProspect.name} onChange={(e) => setNewProspect({...newProspect, name: e.target.value})} placeholder="Full name" style={fieldInput} /></div>
-                    <div><label style={fieldLabel}>Phone</label><input value={newProspect.phone} onChange={(e) => setNewProspect({...newProspect, phone: e.target.value})} placeholder="(555) 000-0000" style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Phone</label><input value={newProspect.phone} onChange={(e) => setNewProspect({...newProspect, phone: e.target.value})} placeholder="Phone number" style={fieldInput} /></div>
                     <div><label style={fieldLabel}>Email</label><input type="email" value={newProspect.email} onChange={(e) => setNewProspect({...newProspect, email: e.target.value})} placeholder="email@example.com" style={fieldInput} /></div>
-                    <div><label style={fieldLabel}>Interest</label><input value={newProspect.interest_amount} onChange={(e) => setNewProspect({...newProspect, interest_amount: e.target.value})} placeholder="$5,000" style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Interest</label><input value={newProspect.interest_amount} onChange={(e) => setNewProspect({...newProspect, interest_amount: e.target.value})} placeholder="Capital commitment amount" style={fieldInput} /></div>
                     <div><label style={fieldLabel}>Referred By</label><input value={newProspect.source} onChange={(e) => setNewProspect({...newProspect, source: e.target.value})} placeholder="Source" style={fieldInput} /></div>
                   </div>
                   <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Notes</label><textarea value={newProspect.notes} onChange={(e) => setNewProspect({...newProspect, notes: e.target.value})} placeholder="Initial notes about this prospect..." rows={3} style={{ ...fieldInput, resize: "none" as const }} /></div>
@@ -1235,7 +1235,7 @@ export default function AdminPortal() {
                   <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
                     <div><label style={fieldLabel}>Prospect / Member Name</label><input placeholder="Enter name" style={fieldInput} /></div>
                     <div><label style={fieldLabel}>Email</label><input type="email" placeholder="email@example.com" style={fieldInput} /></div>
-                    <div><label style={fieldLabel}>Phone</label><input type="tel" placeholder="(555) 000-0000" style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Phone</label><input type="tel" placeholder="Phone number" style={fieldInput} /></div>
                     <div><label style={fieldLabel}>Date</label><input type="date" style={fieldInput} /></div>
                     <div><label style={fieldLabel}>Time</label><input type="time" style={fieldInput} /></div>
                     <div><label style={fieldLabel}>Meeting Type</label><select style={fieldInput}><option>Zoom Presentation</option><option>Onboarding Call</option><option>Follow-up</option><option>Member Review</option><option>Prospect Introduction</option></select></div>

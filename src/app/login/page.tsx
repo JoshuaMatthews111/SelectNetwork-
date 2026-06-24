@@ -72,8 +72,8 @@ export default function LoginPage() {
             <div><label style={fieldLabel}>Last Name</label><input required value={applyForm.lastName} onChange={(e) => setApplyForm({...applyForm, lastName: e.target.value})} style={fieldInput} /></div>
           </div>
           <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Email</label><input type="email" required value={applyForm.email} onChange={(e) => setApplyForm({...applyForm, email: e.target.value})} placeholder="you@email.com" style={fieldInput} /></div>
-          <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Phone</label><input required value={applyForm.phone} onChange={(e) => setApplyForm({...applyForm, phone: e.target.value})} placeholder="(555) 000-0000" style={fieldInput} /></div>
-          <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Desired Capital Commitment</label><input required value={applyForm.amount} onChange={(e) => setApplyForm({...applyForm, amount: e.target.value})} placeholder="$25,000" style={fieldInput} /></div>
+          <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Phone</label><input required value={applyForm.phone} onChange={(e) => setApplyForm({...applyForm, phone: e.target.value})} placeholder="Phone number" style={fieldInput} /></div>
+          <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Desired Capital Commitment</label><input required value={applyForm.amount} onChange={(e) => setApplyForm({...applyForm, amount: e.target.value})} placeholder="Capital commitment amount" style={fieldInput} /></div>
           <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Referral Code (Optional)</label><input value={applyForm.referral} onChange={(e) => setApplyForm({...applyForm, referral: e.target.value})} placeholder="Enter referral code" style={fieldInput} /></div>
           <div style={{ marginBottom: 16 }}>
             <label style={fieldLabel}>Message</label>

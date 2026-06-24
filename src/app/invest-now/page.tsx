@@ -247,7 +247,7 @@ export default function InvestNowPage() {
                     <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                       <Field label="Full Name"><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your full name" style={inputStyle} /></Field>
                       <Field label="Email Address"><input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@email.com" style={inputStyle} /></Field>
-                      <Field label="Phone"><input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="(555) 000-0000" style={inputStyle} /></Field>
+                      <Field label="Phone"><input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="Phone number" style={inputStyle} /></Field>
                       <Field label="City / State"><input value={form.cityState} onChange={(e) => setForm({ ...form, cityState: e.target.value })} placeholder="City, State" style={inputStyle} /></Field>
                       <Field label="How did you hear about The Select Network Member Group?"><input value={form.heard} onChange={(e) => setForm({ ...form, heard: e.target.value })} placeholder="Referral, event, online..." style={inputStyle} /></Field>
                     </div>

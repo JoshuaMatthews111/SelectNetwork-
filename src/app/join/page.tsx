@@ -90,7 +90,7 @@ export default function JoinPage() {
                   </div>
                   <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                     <Field label="Date of Birth *"><input type="date" value={form.dob} onChange={(e) => u("dob", e.target.value)} style={inputStyle} /></Field>
-                    <Field label="Social Security Number"><input value={form.ssn} onChange={(e) => u("ssn", e.target.value)} placeholder="XXX-XX-XXXX" style={inputStyle} /></Field>
+                    <Field label="Social Security Number"><input value={form.ssn} onChange={(e) => u("ssn", e.target.value)} placeholder="Social Security Number" style={inputStyle} /></Field>
                   </div>
                   <div className="sn-grid-3" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
                     <Field label="Driver License Number"><input value={form.dlNumber} onChange={(e) => u("dlNumber", e.target.value)} style={inputStyle} /></Field>
@@ -100,8 +100,8 @@ export default function JoinPage() {
 
                   <SectionHead>Contact Information</SectionHead>
                   <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                    <Field label="Primary Phone Number *"><input value={form.phone} onChange={(e) => u("phone", e.target.value)} placeholder="(555) 123-4567" style={inputStyle} /></Field>
-                    <Field label="Secondary Phone (Optional)"><input value={form.phone2} onChange={(e) => u("phone2", e.target.value)} placeholder="(555) 765-4321" style={inputStyle} /></Field>
+                    <Field label="Primary Phone Number *"><input value={form.phone} onChange={(e) => u("phone", e.target.value)} placeholder="Primary phone number" style={inputStyle} /></Field>
+                    <Field label="Secondary Phone (Optional)"><input value={form.phone2} onChange={(e) => u("phone2", e.target.value)} placeholder="Secondary phone number" style={inputStyle} /></Field>
                   </div>
                   <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                     <Field label="Email Address *"><input type="email" value={form.email} onChange={(e) => u("email", e.target.value)} placeholder="you@example.com" style={inputStyle} /></Field>
