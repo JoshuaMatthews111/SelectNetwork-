@@ -50,7 +50,7 @@ export default function JoinPage() {
             {[
               { n: 1, icon: <FileText size={26} />, title: "Select Your Units", desc: "Choose the number of units and your participation role." },
               { n: 2, icon: <FileSignature size={26} />, title: "Review & Sign Agreement", desc: "Read and accept the Participation Agreement." },
-              { n: 3, icon: <PhoneCall size={26} />, title: "Submit Payment", desc: "Complete payment via ACH or card to activate your member dashboard automatically." },
+              { n: 3, icon: <PhoneCall size={26} />, title: "Submit ACH Payment", desc: "Complete payment by ACH bank transfer only to activate your member dashboard automatically." },
             ].map((s, i) => (
               <Reveal key={i} delay={i * 100}>
                 <div style={{ background: "#fbf9f4", border: "1px solid #eee7d8", borderRadius: 16, padding: 30, height: "100%", position: "relative" }}>

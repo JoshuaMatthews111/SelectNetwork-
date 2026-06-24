@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
-import { Binoculars, ClipboardList, Users, Star, CreditCard, BarChart3, FolderOpen, TreePine, Megaphone, Contact, CalendarDays, Settings, ShieldCheck, Bell, Mail, CheckCircle, CircleDot, TrendingUp, Wallet, Menu, LogOut, UserCircle, MessageSquare, Award, Ribbon, FileBarChart, UserRoundPlus } from "lucide-react";
+import { Binoculars, ClipboardList, Users, Star, Landmark, BarChart3, FolderOpen, TreePine, Megaphone, Contact, CalendarDays, Settings, ShieldCheck, Bell, Mail, CheckCircle, CircleDot, TrendingUp, Wallet, Menu, LogOut, UserCircle, MessageSquare, Award, Ribbon, FileBarChart, UserRoundPlus } from "lucide-react";
 import ReferralNetwork from "../components/ReferralNetwork";
 
 function useCountUp(target: number, duration = 1200) {
@@ -19,7 +19,7 @@ const adminTabs = [
   { id: "requests", label: "Member Requests", ico: "request" },
   { id: "members", label: "Members", ico: "users" },
   { id: "units", label: "Units", ico: "star" },
-  { id: "payments", label: "Payments", ico: "credit" },
+  { id: "payments", label: "ACH Payments", ico: "credit" },
   { id: "crm", label: "Prospect CRM", ico: "contact" },
   { id: "scheduler", label: "Scheduler", ico: "calendar" },
   { id: "reports", label: "Upload Reports", ico: "chart" },
@@ -351,7 +351,7 @@ export default function AdminPortal() {
     clipboard: <ClipboardList size={18} />,
     users: <Users size={18} />,
     star: <Star size={18} />,
-    credit: <CreditCard size={18} />,
+    credit: <Landmark size={18} />,
     chart: <FileBarChart size={18} />,
     folder: <FolderOpen size={18} />,
     tree: <TreePine size={18} />,
@@ -426,7 +426,7 @@ export default function AdminPortal() {
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
               {/* KPI Row */}
               <div className="sn-kpi-grid-6" style={{ display: "grid", gap: 14, marginBottom: 22 }}>
-                {[{ ico: <Users size={20} />, label: "Active Members", value: String(membersCount) }, { ico: <UserRoundPlus size={20} />, label: "New Requests", value: String(apps) }, { ico: <Star size={20} />, label: "Units Issued", value: issued.toLocaleString() }, { ico: <CircleDot size={20} />, label: "Remaining", value: remaining.toLocaleString() }, { ico: <CreditCard size={20} />, label: "Revenue (MTD)", value: "$84,200" }, { ico: <TrendingUp size={20} />, label: "Growth", value: "+18.4%" }].map((k, i) => (
+                {[{ ico: <Users size={20} />, label: "Active Members", value: String(membersCount) }, { ico: <UserRoundPlus size={20} />, label: "New Requests", value: String(apps) }, { ico: <Star size={20} />, label: "Units Issued", value: issued.toLocaleString() }, { ico: <CircleDot size={20} />, label: "Remaining", value: remaining.toLocaleString() }, { ico: <Landmark size={20} />, label: "ACH Received (MTD)", value: "$84,200" }, { ico: <TrendingUp size={20} />, label: "Growth", value: "+18.4%" }].map((k, i) => (
                   <div key={i} style={kpiBox} className="hover:translate-y-[-3px] hover:shadow-[0_16px_40px_rgba(5,20,45,.10)]">
                     <div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div>
                     <div><small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em" }}>{k.label}</small><br /><b style={{ fontSize: 18 }}>{k.value}</b></div>
@@ -448,7 +448,7 @@ export default function AdminPortal() {
                     { label: "Foundation Partners", value: "12", c: "#ffd46f" },
                     { label: "Total Members", value: "87", c: "#fff" },
                     { label: "Incentive Eligible", value: "41", c: "#9ff5c0" },
-                    { label: "Pending Payment", value: "9", c: "#ffd0a0" },
+                    { label: "Pending ACH", value: "9", c: "#ffd0a0" },
                   ].map((s, i) => (
                     <div key={i} style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 10, padding: "12px 14px" }}>
                       <div style={{ fontSize: 20, fontWeight: 900, color: s.c }}>{s.value}</div>
@@ -469,7 +469,7 @@ export default function AdminPortal() {
                 </div>
                 <div className="sn-analytics-grid" style={{ display: "grid", gap: 14, marginBottom: 18 }}>
                   {[
-                    { label: "Total Revenue", value: "$345,000", change: "+22%" },
+                    { label: "Total ACH Received", value: "$345,000", change: "+22%" },
                     { label: "New Members (MTD)", value: "18", change: "+12%" },
                     { label: "Units Sold (MTD)", value: "240", change: "+15%" },
                     { label: "Avg Capital Commitment", value: "$8,625", change: "+8%" },
@@ -535,7 +535,7 @@ export default function AdminPortal() {
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Recent Activity</h2>
                   {[
                     { action: "Member Request Approved", who: "Michael Anderson", time: "2 hours ago", color: "#087345" },
-                    { action: "Payment Received", who: "$10,000 — Maria Santos", time: "5 hours ago", color: "#bd8e28" },
+                    { action: "ACH Received", who: "$10,000 — Maria Santos", time: "5 hours ago", color: "#bd8e28" },
                     { action: "New Member Request", who: "Jessica Moore", time: "8 hours ago", color: "#1e4fa3" },
                     { action: "Certificate Issued", who: "James Wilson — Builder 10", time: "1 day ago", color: "#5b34a3" },
                     { action: "Units Assigned", who: "25 units → David Chen", time: "1 day ago", color: "#075933" },
@@ -687,13 +687,13 @@ export default function AdminPortal() {
           {/* PAYMENTS */}
           {activeTab === "payments" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
-              <div className="sn-table-wrap" style={card}><h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Payments</h2>
+              <div className="sn-table-wrap" style={card}><h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>ACH Payments</h2>
                 <div className="sn-desktop-table" style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 550 }}>
-                  <thead><tr>{["Member", "Amount", "Processor", "Status", "Action"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
+                  <thead><tr>{["Member", "Amount", "Method", "Status", "Action"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
                   <tbody>
                     {[{ name: "David Chen", amount: "$1,000", status: "Pending" }, { name: "Maria Santos", amount: "$2,500", status: "Active" }, { name: "James Wilson", amount: "$1,500", status: "Active" }].map((p, i) => (
-                      <tr key={i}><td style={{ ...tdS, fontWeight: 700 }}>{p.name}</td><td style={tdS}>{p.amount}</td><td style={{ ...tdS, color: "#667085" }}>Placeholder</td><td style={tdS}><span style={statusBadge(p.status)}>{p.status}</span></td><td style={tdS}><button style={btnOutline}>Review</button></td></tr>
+                      <tr key={i}><td style={{ ...tdS, fontWeight: 700 }}>{p.name}</td><td style={tdS}>{p.amount}</td><td style={{ ...tdS, color: "#667085" }}>ACH</td><td style={tdS}><span style={statusBadge(p.status)}>{p.status}</span></td><td style={tdS}><button style={btnOutline}>Review</button></td></tr>
                     ))}
                   </tbody>
                 </table>
@@ -703,12 +703,12 @@ export default function AdminPortal() {
                     <div key={i}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}><b style={{ fontSize: 15 }}>{p.name}</b><span style={statusBadge(p.status)}>{p.status}</span></div>
                       <div className="sn-m-card-row"><span className="sn-m-label">Amount</span><span className="sn-m-value">{p.amount}</span></div>
-                      <div className="sn-m-card-row"><span className="sn-m-label">Processor</span><span className="sn-m-value" style={{ color: "#667085" }}>Placeholder</span></div>
+                      <div className="sn-m-card-row"><span className="sn-m-label">Method</span><span className="sn-m-value" style={{ color: "#667085" }}>ACH</span></div>
                       <button style={{ ...btnOutline, width: "100%", marginTop: 10 }}>Review</button>
                     </div>
                   ))}
                 </div>
-                <div style={{ marginTop: 16, borderLeft: "4px solid #3b82f6", background: "#f0f7ff", color: "#1e40af", padding: "12px 14px", fontSize: 12, borderRadius: "0 6px 6px 0" }}>Payment processor placeholder. Final integration after attorney/accountant review.</div>
+                <div style={{ marginTop: 16, borderLeft: "4px solid #3b82f6", background: "#f0f7ff", color: "#1e40af", padding: "12px 14px", fontSize: 12, borderRadius: "0 6px 6px 0" }}>ACH only. JPMorgan OAuth is handled securely on the server. Credit cards, debit cards, checks, cash, and other payment paths are not accepted.</div>
               </div>
             </div>
           )}

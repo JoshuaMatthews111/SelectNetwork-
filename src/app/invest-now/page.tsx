@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useRef } from "react";
-import { ArrowRight, ArrowLeft, CheckCircle, Shield, Lock, CreditCard, Info, Users, UserPlus, FileText, Building2 } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle, Shield, Lock, Landmark, Info, Users, UserPlus, FileText, Building2 } from "lucide-react";
 import SNNav from "../components/SNNav";
 import SNFooter from "../components/SNFooter";
 import Reveal from "../components/Reveal";
@@ -41,7 +41,7 @@ export default function InvestNowPage() {
   const [submitting, setSubmitting] = useState(false);
   const [units, setUnits] = useState(50);
   const [role, setRole] = useState("");
-  const [payMethod, setPayMethod] = useState<"ach" | "card">("ach");
+  const [checkoutError, setCheckoutError] = useState("");
   const [contractRead, setContractRead] = useState(false);
   const contractRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = useState({
@@ -67,22 +67,34 @@ export default function InvestNowPage() {
   };
 
   const handleSubmit = async () => {
+    setCheckoutError("");
     setSubmitting(true);
     try {
-      const res = await fetch("/api/member-requests", {
+      const res = await fetch("/api/ach-checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: form.name,
           email: form.email,
           phone: form.phone,
+          cityState: form.cityState,
+          heard: form.heard,
           interest_amount: subtotal,
-          notes: `City/State: ${form.cityState}\nHow they heard: ${form.heard}\nRole: ${role}\nUnits: ${units}\nPayment Method: ${payMethod}\nAgreement Accepted: ${new Date().toISOString()}\nFoundation Partner: ${isFoundationPartner}`
+          role,
+          units,
+          foundationPartner: isFoundationPartner,
+          agreementAcceptedAt: new Date().toISOString()
         })
       });
-      if (res.ok) setSubmitted(true);
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await res.json().catch(() => null);
+        setCheckoutError(data?.error || "ACH checkout could not be started. Please contact support.");
+      }
     } catch (err) {
       console.error(err);
+      setCheckoutError("ACH checkout could not be started. Please contact support.");
     }
     setSubmitting(false);
   };
@@ -410,73 +422,47 @@ export default function InvestNowPage() {
                       ))}
                     </div>
 
-                    {/* Payment Method Toggle */}
                     <div style={{ marginBottom: 16 }}>
                       <div style={{ fontSize: 11.5, fontWeight: 800, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 10 }}>Payment Method</div>
-                      <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                        {[
-                          { id: "ach" as const, label: "ACH Bank Transfer", sub: "via Authorize.net" },
-                          { id: "card" as const, label: "Credit / Debit Card", sub: "via Authorize.net" },
-                        ].map((m) => (
-                          <div key={m.id} onClick={() => setPayMethod(m.id)} style={{ flex: 1, minWidth: 160, border: payMethod === m.id ? `2px solid ${GREEN}` : "1px solid #e7e2d8", background: payMethod === m.id ? "#edf6ef" : "#fff", borderRadius: 12, padding: "16px 18px", cursor: "pointer", transition: ".2s" }}>
-                            <b style={{ fontSize: 14, color: payMethod === m.id ? GREEN : NAVY, display: "block" }}>{m.label}</b>
-                            <span style={{ fontSize: 11.5, color: "#667085" }}>{m.sub}</span>
-                          </div>
-                        ))}
+                      <div style={{ border: `2px solid ${GREEN}`, background: "#edf6ef", borderRadius: 12, padding: "16px 18px" }}>
+                        <b style={{ fontSize: 14, color: GREEN, display: "flex", alignItems: "center", gap: 8 }}><Landmark size={17} /> ACH Bank Transfer Only</b>
+                        <span style={{ fontSize: 11.5, color: "#667085" }}>Credit cards, debit cards, checks, and other payment types are not accepted.</span>
                       </div>
                     </div>
 
-                    {/* ACH Fields */}
-                    {payMethod === "ach" && (
-                      <div style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 14, padding: "22px 24px", marginBottom: 16 }}>
-                        <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 16, background: "#e8f4ed", borderRadius: 8, padding: "10px 14px" }}>
-                          <FileText size={16} color={GREEN} />
-                          <span style={{ fontSize: 12.5, color: GREEN, fontWeight: 700 }}>ACH Bank Transfer — Powered by Authorize.net (placeholder — credentials to be connected)</span>
-                        </div>
-                        <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-                          <Field label="Account Holder Name"><input placeholder="Name on account" style={inputStyle} disabled /></Field>
-                          <Field label="Bank Name"><input placeholder="Your bank name" style={inputStyle} disabled /></Field>
-                          <Field label="Routing Number"><input placeholder="9-digit routing number" style={inputStyle} disabled /></Field>
-                          <Field label="Account Number"><input placeholder="Account number" style={inputStyle} disabled /></Field>
-                        </div>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 12, borderTop: "1px solid #e7e2d8", marginTop: 4 }}>
-                          <span style={{ fontSize: 12.5, color: "#667085", display: "inline-flex", alignItems: "center", gap: 6 }}><Lock size={13} /> Encrypted &amp; Secure</span>
-                          <b style={{ fontSize: 20 }}>{fmt(subtotal)}</b>
-                        </div>
+                    <div style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 14, padding: "22px 24px", marginBottom: 16 }}>
+                      <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 16, background: "#e8f4ed", borderRadius: 8, padding: "10px 14px" }}>
+                        <FileText size={16} color={GREEN} />
+                        <span style={{ fontSize: 12.5, color: GREEN, fontWeight: 700 }}>ACH Bank Transfer — JPMorgan Payments sandbox connection is handled securely on the server.</span>
                       </div>
-                    )}
-
-                    {/* Card Fields */}
-                    {payMethod === "card" && (
-                      <div style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 14, padding: "22px 24px", marginBottom: 16 }}>
-                        <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 16, background: "#e8f4ed", borderRadius: 8, padding: "10px 14px" }}>
-                          <CreditCard size={16} color={GREEN} />
-                          <span style={{ fontSize: 12.5, color: GREEN, fontWeight: 700 }}>Credit / Debit Card — Powered by Authorize.net (placeholder — credentials to be connected)</span>
-                        </div>
-                        <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-                          <Field label="Cardholder Name"><input placeholder="Name on card" style={inputStyle} disabled /></Field>
-                          <Field label="Card Number"><input placeholder="•••• •••• •••• ••••" style={inputStyle} disabled /></Field>
-                          <Field label="Expiry"><input placeholder="MM / YY" style={inputStyle} disabled /></Field>
-                          <Field label="CVC"><input placeholder="•••" style={inputStyle} disabled /></Field>
-                        </div>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 12, borderTop: "1px solid #e7e2d8", marginTop: 4 }}>
-                          <span style={{ fontSize: 12.5, color: "#667085", display: "inline-flex", alignItems: "center", gap: 6 }}><Lock size={13} /> Encrypted &amp; Secure</span>
-                          <b style={{ fontSize: 20 }}>{fmt(subtotal)}</b>
-                        </div>
+                      <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                        <Field label="Account Holder Name"><input value={form.name} readOnly style={inputStyle} /></Field>
+                        <Field label="Capital Commitment"><input value={fmt(subtotal)} readOnly style={inputStyle} /></Field>
                       </div>
-                    )}
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 12, borderTop: "1px solid #e7e2d8", marginTop: 4 }}>
+                        <span style={{ fontSize: 12.5, color: "#667085", display: "inline-flex", alignItems: "center", gap: 6 }}><Lock size={13} /> ACH only · server-side token handling</span>
+                        <b style={{ fontSize: 20 }}>{fmt(subtotal)}</b>
+                      </div>
+                    </div>
 
                     <div style={{ display: "flex", gap: 10, alignItems: "center", background: "#f0f7ff", border: "1px solid #c7ddf5", borderRadius: 10, padding: "12px 16px", marginBottom: 20 }}>
                       <Info size={16} color="#1e40af" style={{ flexShrink: 0 }} />
                       <p style={{ margin: 0, fontSize: 12.5, color: "#1e40af", lineHeight: 1.5 }}>
-                        Payment processing via Authorize.net is currently in placeholder mode. No charges will be made until the processor is fully connected.
+                        Bank account collection should use JPMorgan&apos;s approved ACH/payment flow. This page will not accept card payments or collect card details.
                       </p>
                     </div>
+
+                    {checkoutError && (
+                      <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "#fff3f0", border: "1px solid #f3c4b8", borderRadius: 10, padding: "12px 16px", marginBottom: 20 }}>
+                        <Info size={16} color="#b42318" style={{ flexShrink: 0, marginTop: 2 }} />
+                        <p style={{ margin: 0, fontSize: 12.5, color: "#8a2b20", lineHeight: 1.5 }}>{checkoutError}</p>
+                      </div>
+                    )}
 
                     <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
                       <button onClick={back} style={btnGhost}><ArrowLeft size={16} /> Back</button>
                       <button onClick={handleSubmit} disabled={submitting} style={{ ...btnPrimary, background: "linear-gradient(135deg,#d1a645,#bc8b25)", ...(submitting ? dis : {}) }}>
-                        {submitting ? "Processing..." : <><CreditCard size={16} /> Submit Payment — {fmt(subtotal)}</>}
+                        {submitting ? "Processing..." : <><Landmark size={16} /> Submit ACH Payment — {fmt(subtotal)}</>}
                       </button>
                     </div>
                   </div>
