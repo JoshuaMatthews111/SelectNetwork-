@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Download } from "lucide-react";
+import { Download, Info } from "lucide-react";
 import {
   ldttSales,
   ldttProfit,
@@ -68,6 +68,7 @@ function ChartCard({ title, subtitle, children }: { title: string; subtitle?: st
 function SalesLine() {
   const [hover, setHover] = useState<number | null>(null);
   const [dropOpen, setDropOpen] = useState(false);
+  const [dropHintOpen, setDropHintOpen] = useState(false);
   const max = Math.max(...ldttSales.map((d) => d.total)) * 1.08;
   const px = (i: number) => PAD.l + (i / (ldttSales.length - 1)) * plotW;
   const py = (v: number) => PAD.t + plotH - (v / max) * plotH;
@@ -99,7 +100,7 @@ function SalesLine() {
             <rect x={px(i) - plotW / (ldttSales.length * 2)} y={PAD.t} width={plotW / ldttSales.length} height={plotH} fill="transparent" onMouseEnter={() => setHover(i)} />
           </g>
         ))}
-        {/* Red annotation arrow pointing at 2025 drop */}
+        {/* Yellow info marker pointing at the 2025 drop */}
         {(() => {
           const dropIdx = ldttSales.length - 1;
           const cx = px(dropIdx);
@@ -107,13 +108,20 @@ function SalesLine() {
           const labelX = cx - 60;
           const labelY = cy - 52;
           return (
-            <g style={{ cursor: "pointer" }} onClick={() => setDropOpen(true)}>
-              <line x1={labelX + 30} y1={labelY + 16} x2={cx} y2={cy - 10} stroke="#c0392b" strokeWidth="2" markerEnd="url(#dropArrow)" style={{ animation: "arrowBounce 1.5s ease-in-out infinite" }} />
+            <g
+              style={{ cursor: "pointer" }}
+              onMouseEnter={() => setDropHintOpen(true)}
+              onMouseLeave={() => setDropHintOpen(false)}
+              onClick={() => setDropOpen(true)}
+            >
+              <line x1={labelX + 30} y1={labelY + 16} x2={cx} y2={cy - 10} stroke="#bd8e28" strokeWidth="2" markerEnd="url(#dropArrow)" style={{ animation: "arrowBounce 1.5s ease-in-out infinite" }} />
               <defs>
-                <marker id="dropArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#c0392b" /></marker>
+                <marker id="dropArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#bd8e28" /></marker>
               </defs>
-              <text x={labelX} y={labelY} fill="#c0392b" fontSize="13" fontWeight="900" style={{ textTransform: "uppercase" } as React.CSSProperties}>Why the Drop?</text>
-              <text x={labelX + 4} y={labelY + 14} fill="#c0392b" fontSize="9.5" fontWeight="600" opacity="0.75">Click to learn more</text>
+              <circle cx={labelX - 14} cy={labelY - 4} r="10" fill="#ffd46f" stroke="#bd8e28" strokeWidth="2" />
+              <text x={labelX - 14} y={labelY} fill="#071a33" fontSize="13" fontWeight="900" textAnchor="middle">i</text>
+              <text x={labelX} y={labelY} fill="#8a5a00" fontSize="13" fontWeight="900" style={{ textTransform: "uppercase" } as React.CSSProperties}>Why the Drop?</text>
+              <text x={labelX + 4} y={labelY + 14} fill="#8a5a00" fontSize="9.5" fontWeight="700" opacity="0.75">Hover for brief</text>
             </g>
           );
         })()}
@@ -124,23 +132,50 @@ function SalesLine() {
           {fmtUSD(ldttSales[hover].total)}
         </Tooltip>
       )}
+      {dropHintOpen && !dropOpen && (
+        <div
+          style={{
+            position: "absolute",
+            right: 18,
+            top: 52,
+            zIndex: 8,
+            maxWidth: 310,
+            background: "#fffaf0",
+            border: "1px solid #e7d9b6",
+            borderLeft: "4px solid #bd8e28",
+            borderRadius: "0 10px 10px 0",
+            padding: "12px 14px",
+            boxShadow: "0 12px 30px rgba(5,20,45,.15)",
+          }}
+        >
+          <b style={{ color: "#604b17", fontSize: 12.5, display: "block", marginBottom: 5 }}>Brief explanation</b>
+          <p style={{ margin: "0 0 10px", color: "#604b17", fontSize: 12, lineHeight: 1.55 }}>
+            The decline reflects a past disruption: trainer count reduction, COVID-era pressure, and a reset to rebuild with stronger systems.
+          </p>
+          <button onClick={() => setDropOpen(true)} style={{ background: "transparent", border: 0, color: "#8a5a00", fontWeight: 900, fontSize: 11.5, padding: 0, cursor: "pointer", textTransform: "uppercase", letterSpacing: ".03em" }}>View full explanation</button>
+        </div>
+      )}
 
-      {/* Why the Drop? text button below chart */}
+      {/* Why the Drop? info button below chart */}
       <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
         <button
           onClick={() => setDropOpen(true)}
+          onMouseEnter={() => setDropHintOpen(true)}
+          onMouseLeave={() => setDropHintOpen(false)}
           style={{
             display: "inline-flex",
             alignItems: "center",
             gap: 8,
-            background: "none",
-            border: "none",
+            background: "#fffaf0",
+            border: "1px solid #e7d9b6",
+            borderRadius: 999,
             cursor: "pointer",
-            padding: "4px 0",
+            padding: "7px 12px",
           }}
         >
-          <span style={{ color: "#c0392b", fontSize: 13, fontWeight: 900, letterSpacing: ".02em" }}>Why the Drop?</span>
-          <span style={{ color: "#9aa4b2", fontSize: 11, fontWeight: 600 }}>— Click here</span>
+          <span style={{ width: 20, height: 20, borderRadius: "50%", background: "#ffd46f", color: "#071a33", display: "grid", placeItems: "center", border: "1px solid #bd8e28" }}><Info size={13} /></span>
+          <span style={{ color: "#8a5a00", fontSize: 13, fontWeight: 900, letterSpacing: ".02em" }}>Why the Drop?</span>
+          <span style={{ color: "#604b17", fontSize: 11, fontWeight: 700 }}>View full explanation</span>
         </button>
       </div>
 

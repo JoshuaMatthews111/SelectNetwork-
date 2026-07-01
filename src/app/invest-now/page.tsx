@@ -14,6 +14,21 @@ const GREEN = "#075933";
 const UNIT_PRICE = 100;
 const STEPS = ["Your Information", "Unit Selection", "Role Selection", "Agreement", "Payment"];
 
+const DISCLAIMER_PARAGRAPHS = [
+  "This presentation is confidential and proprietary and has been prepared exclusively for invited prospective members of The Select Network Private Members Group LLC (the Company). It is provided solely for informational and evaluation purposes in connection with a potential private membership opportunity and may not be copied, reproduced, distributed, published, or disclosed, in whole or in part, without the prior written consent of the Company.",
+  "This presentation is not intended for public distribution and does not constitute an offer to sell, a solicitation of an offer to buy, or a recommendation regarding any security, investment, or financial product. Any offer of membership interests or LLC units in the Company will be made only through definitive legal offering documents, including, where applicable, a Private Placement Memorandum (PPM), Operating Agreement, Subscription Agreement, and related disclosure documents, and only to persons who satisfy applicable qualification requirements under federal and state securities laws.",
+  "The information contained herein includes financial projections, operational forecasts, strategic objectives, market analyses, anticipated growth opportunities, and other forward-looking statements. These statements are based on management's current expectations and assumptions and involve known and unknown risks, uncertainties, and other factors that could cause actual results to differ materially from those projected or implied.",
+  "No representation or warranty is made as to the accuracy, completeness, or future achievement of any estimates or projections. Participation involves risk, including possible loss of principal, limited liquidity, transfer restrictions, and other risks described in the definitive offering documents. Prospective members should consult independent legal, tax, financial, and business advisors before making any decision.",
+  "Acceptance of this disclaimer acknowledges that all information is provided solely for evaluation purposes. Past performance does not predict future results. Financial returns, distributions, and capital appreciation are not guaranteed.",
+];
+
+const MISSION_PARAGRAPHS = [
+  "The Select Network exists to build a private capital ecosystem that transforms the way businesses access growth capital and the way members participate in wealth creation.",
+  "We unite visionary entrepreneurs, business leaders, and strategic members through a disciplined capital model that aligns private capital with high-potential business opportunities. By creating direct access to capital within our network, we reduce dependence on traditional financing and establish a sustainable framework for long-term economic growth.",
+  "Our mission is to create an enduring ecosystem where capital is continuously reinvested, businesses are empowered to scale, innovation is accelerated, and enterprise value is strengthened across the network. Every member contributes to expanding opportunity, increasing ownership, and building lasting financial prosperity.",
+  "Guided by integrity, strategic discipline, transparency, and collaboration, The Select Network is creating more than a capital platform. We are building an economic infrastructure designed to generate sustainable growth, preserve operational independence, and create shared value over time.",
+];
+
 const inputStyle: React.CSSProperties = {
   width: "100%",
   background: "#f9f7f2",
@@ -45,17 +60,25 @@ export default function InvestNowPage() {
   const [contractRead, setContractRead] = useState(false);
   const contractRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = useState({
-    name: "", email: "", phone: "", cityState: "", heard: "",
+    name: "",
+    email: "",
+    phone: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    state: "",
+    zip: "",
+    heard: "",
   });
-  const [ack, setAck] = useState({ terms: false, distributions: false });
+  const [ack, setAck] = useState({ terms: false, distributions: false, disclaimer: false });
 
   const subtotal = units * UNIT_PRICE;
   const fmt = (n: number) => `$${n.toLocaleString()}`;
   const isFoundationPartner = subtotal >= 10000;
 
-  const infoValid = !!(form.name && form.email && form.phone && form.cityState);
+  const infoValid = !!(form.name && form.email && form.phone && form.addressLine1 && form.city && form.state && form.zip);
   const roleValid = !!role;
-  const agreementValid = contractRead && ack.terms && ack.distributions;
+  const agreementValid = contractRead && ack.terms && ack.distributions && ack.disclaimer;
 
   const next = () => setStep((s) => Math.min(s + 1, STEPS.length - 1));
   const back = () => setStep((s) => Math.max(s - 1, 0));
@@ -77,7 +100,12 @@ export default function InvestNowPage() {
           name: form.name,
           email: form.email,
           phone: form.phone,
-          cityState: form.cityState,
+          addressLine1: form.addressLine1,
+          addressLine2: form.addressLine2,
+          city: form.city,
+          state: form.state,
+          zip: form.zip,
+          cityState: `${form.city}, ${form.state} ${form.zip}`.trim(),
           heard: form.heard,
           interest_amount: subtotal,
           role,
@@ -248,7 +276,11 @@ export default function InvestNowPage() {
                       <Field label="Full Name"><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your full name" style={inputStyle} /></Field>
                       <Field label="Email Address"><input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@email.com" style={inputStyle} /></Field>
                       <Field label="Phone"><input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="Phone number" style={inputStyle} /></Field>
-                      <Field label="City / State"><input value={form.cityState} onChange={(e) => setForm({ ...form, cityState: e.target.value })} placeholder="City, State" style={inputStyle} /></Field>
+                      <Field label="Street Address *"><input value={form.addressLine1} onChange={(e) => setForm({ ...form, addressLine1: e.target.value })} placeholder="Street address" style={inputStyle} /></Field>
+                      <Field label="Apartment / Suite"><input value={form.addressLine2} onChange={(e) => setForm({ ...form, addressLine2: e.target.value })} placeholder="Apartment, suite, or unit" style={inputStyle} /></Field>
+                      <Field label="City *"><input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="City" style={inputStyle} /></Field>
+                      <Field label="State *"><input value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })} placeholder="State" style={inputStyle} /></Field>
+                      <Field label="Zip Code *"><input value={form.zip} onChange={(e) => setForm({ ...form, zip: e.target.value })} placeholder="Zip code" style={inputStyle} /></Field>
                       <Field label="How did you hear about The Select Network Member Group?"><input value={form.heard} onChange={(e) => setForm({ ...form, heard: e.target.value })} placeholder="Referral, event, online..." style={inputStyle} /></Field>
                     </div>
                     <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
@@ -359,7 +391,7 @@ export default function InvestNowPage() {
                     <div
                       ref={contractRef}
                       onScroll={handleContractScroll}
-                      style={{ height: 300, overflowY: "auto", background: "#f9f7f2", border: `2px solid ${contractRead ? GREEN : "#e2dccf"}`, borderRadius: 12, padding: "20px 22px", marginBottom: 14, fontSize: 13, lineHeight: 1.85, color: "#3d4a57", transition: "border-color .3s" }}
+                      style={{ height: 360, overflowY: "auto", background: "#f9f7f2", border: `2px solid ${contractRead ? GREEN : "#e2dccf"}`, borderRadius: 12, padding: "20px 22px", marginBottom: 14, fontSize: 13, lineHeight: 1.85, color: "#3d4a57", transition: "border-color .3s" }}
                     >
                       <b style={{ fontSize: 15, color: NAVY, display: "block", marginBottom: 12 }}>The Select Network Member Group — Participation Agreement</b>
                       <p>This Participation Agreement (&quot;Agreement&quot;) is entered into between the participating member (&quot;Member&quot;) and The Select Network Member Group (&quot;The Select Network Member Group&quot;). By completing this enrollment and submitting payment, the Member agrees to all terms below.</p>
@@ -372,7 +404,12 @@ export default function InvestNowPage() {
                       <p><b>7. No Guarantees.</b> The Select Network Member Group does not guarantee returns, distributions, profits, or any specific financial outcome. Past performance of associated businesses does not guarantee future results.</p>
                       <p><b>8. Member Records.</b> The Member&apos;s name, email, unit selection, role, agreement acceptance date/time, and payment status will be stored securely as part of the official participation record.</p>
                       <p><b>9. Modifications.</b> The Select Network Member Group reserves the right to update or modify program terms, incentives, and participation structures at any time with notice to members.</p>
-                      <p style={{ marginBottom: 0 }}><b>10. Governing Agreement.</b> This Agreement represents the complete understanding between the Member and The Select Network Member Group with respect to participation and supersedes any prior representations, whether oral or written.</p>
+                      <p><b>10. Governing Agreement.</b> This Agreement represents the complete understanding between the Member and The Select Network Member Group with respect to participation and supersedes any prior representations, whether oral or written.</p>
+                      <div style={{ height: 1, background: "#d8d2c6", margin: "22px 0" }} />
+                      <b style={{ fontSize: 15, color: NAVY, display: "block", marginBottom: 12 }}>Confidentiality &amp; Private Placement Disclaimer</b>
+                      {DISCLAIMER_PARAGRAPHS.map((p, i) => (
+                        <p key={i} style={i === DISCLAIMER_PARAGRAPHS.length - 1 ? { marginBottom: 0 } : undefined}>{p}</p>
+                      ))}
                     </div>
 
                     {!contractRead && (
@@ -390,6 +427,13 @@ export default function InvestNowPage() {
                       <input type="checkbox" checked={ack.distributions} disabled={!contractRead} onChange={(e) => setAck({ ...ack, distributions: e.target.checked })} style={{ marginTop: 3 }} />
                       <span style={{ fontSize: 13, color: "#475569", lineHeight: 1.55 }}>I acknowledge that distributions, benefits, and incentives are not guaranteed, and that no returns or specific financial outcomes are promised by The Select Network Member Group.</span>
                     </label>
+                    <label style={{ display: "flex", gap: 10, alignItems: "flex-start", cursor: contractRead ? "pointer" : "not-allowed", opacity: contractRead ? 1 : 0.45, marginBottom: 20 }}>
+                      <input type="checkbox" checked={ack.disclaimer} disabled={!contractRead} onChange={(e) => setAck({ ...ack, disclaimer: e.target.checked })} style={{ marginTop: 3 }} />
+                      <span style={{ fontSize: 13, color: "#475569", lineHeight: 1.55 }}>I have read and accept the Confidentiality &amp; Private Placement Disclaimer.</span>
+                    </label>
+                    <a href="/documents/select-disclaimer.pages" download="Select-Disclaimer.pages" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: GOLD, fontSize: 12.5, fontWeight: 900, textTransform: "uppercase", letterSpacing: ".03em", marginBottom: 18, textDecoration: "none" }}>
+                      <FileText size={15} /> Download Full Disclaimer
+                    </a>
 
                     <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
                       <button onClick={back} style={btnGhost}><ArrowLeft size={16} /> Back</button>
@@ -491,6 +535,21 @@ export default function InvestNowPage() {
               </Link>
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      <section style={{ padding: "0 0 70px", background: "#fbf9f4" }}>
+        <div className="sn-shell" style={{ maxWidth: 880 }}>
+          <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 18, padding: "32px 30px", boxShadow: "0 14px 40px rgba(5,20,45,.07)" }}>
+            <div style={{ color: GOLD, fontSize: 11.5, fontWeight: 900, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 10 }}>Select Mission Statement</div>
+            <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 16px" }}>The Select Network Mission Statement</h2>
+            {MISSION_PARAGRAPHS.map((p, i) => (
+              <p key={i} style={{ color: i === 0 ? NAVY : "#3d4a57", fontSize: i === 0 ? 16 : 14.5, fontWeight: i === 0 ? 800 : 400, lineHeight: 1.75, margin: i === MISSION_PARAGRAPHS.length - 1 ? "0 0 18px" : "0 0 14px" }}>{p}</p>
+            ))}
+            <a href="/documents/select-mission-statement.pages" download="Select-Mission-Statement.pages" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: GOLD, fontSize: 12.5, fontWeight: 900, textTransform: "uppercase", letterSpacing: ".03em", textDecoration: "none" }}>
+              <FileText size={15} /> Download Full Mission Statement
+            </a>
+          </div>
         </div>
       </section>
 

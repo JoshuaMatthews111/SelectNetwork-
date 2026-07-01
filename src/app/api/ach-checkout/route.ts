@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
         status: "ach_pending",
         submitted_at: new Date().toISOString(),
         notes: [
-          `City/State: ${body.cityState || ""}`,
+          `Address: ${[body.addressLine1, body.addressLine2, body.city, body.state, body.zip].filter(Boolean).join(", ") || body.cityState || ""}`,
           `How they heard: ${body.heard || ""}`,
           `Role: ${body.role || ""}`,
           `Units: ${body.units || ""}`,
