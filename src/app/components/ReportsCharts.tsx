@@ -105,7 +105,7 @@ function SalesLine() {
           const dropIdx = ldttSales.length - 1;
           const cx = px(dropIdx);
           const cy = py(ldttSales[dropIdx].total);
-          const labelX = cx - 60;
+          const labelX = cx - 34;
           const labelY = cy - 52;
           return (
             <g
@@ -114,14 +114,12 @@ function SalesLine() {
               onMouseLeave={() => setDropHintOpen(false)}
               onClick={() => setDropOpen(true)}
             >
-              <line x1={labelX + 30} y1={labelY + 16} x2={cx} y2={cy - 10} stroke="#bd8e28" strokeWidth="2" markerEnd="url(#dropArrow)" style={{ animation: "arrowBounce 1.5s ease-in-out infinite" }} />
+              <line x1={labelX} y1={labelY + 12} x2={cx} y2={cy - 10} stroke="#bd8e28" strokeWidth="2" markerEnd="url(#dropArrow)" style={{ animation: "arrowBounce 1.5s ease-in-out infinite" }} />
               <defs>
                 <marker id="dropArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#bd8e28" /></marker>
               </defs>
-              <circle cx={labelX - 14} cy={labelY - 4} r="10" fill="#ffd46f" stroke="#bd8e28" strokeWidth="2" />
-              <text x={labelX - 14} y={labelY} fill="#071a33" fontSize="13" fontWeight="900" textAnchor="middle">i</text>
-              <text x={labelX} y={labelY} fill="#8a5a00" fontSize="13" fontWeight="900" style={{ textTransform: "uppercase" } as React.CSSProperties}>Why the Drop?</text>
-              <text x={labelX + 4} y={labelY + 14} fill="#8a5a00" fontSize="9.5" fontWeight="700" opacity="0.75">Hover for brief</text>
+              <circle cx={labelX} cy={labelY} r="11" fill="#ffd46f" stroke="#bd8e28" strokeWidth="2" />
+              <text x={labelX} y={labelY + 4} fill="#071a33" fontSize="14" fontWeight="900" textAnchor="middle">i</text>
             </g>
           );
         })()}
