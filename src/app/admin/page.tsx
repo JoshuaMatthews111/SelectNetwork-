@@ -123,12 +123,25 @@ export default function AdminPortal() {
   // Fetch data from API
   useEffect(() => { 
     setTimeout(() => setChartDraw(true), 300); 
+    try {
+      const savedMeetings = window.localStorage.getItem("selectNetworkAdminMeetings");
+      if (savedMeetings) setScheduledMeetings(JSON.parse(savedMeetings));
+    } catch (err) {
+      console.error("Failed to load saved meetings:", err);
+    }
     fetchProspects();
     fetchMemberRequests();
     fetchAnnouncements();
     fetchTickets();
   }, []);
   useEffect(() => { if (activeTab === "matrix") setTimeout(() => setMatrixAnimated(true), 100); }, [activeTab]);
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("selectNetworkAdminMeetings", JSON.stringify(scheduledMeetings));
+    } catch (err) {
+      console.error("Failed to save meetings:", err);
+    }
+  }, [scheduledMeetings]);
 
   const fetchProspects = async () => {
     try {
