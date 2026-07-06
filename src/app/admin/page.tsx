@@ -96,8 +96,22 @@ export default function AdminPortal() {
   const [memberRequests, setMemberRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [crmNote, setCrmNote] = useState("");
-  const [selectedProspect, setSelectedProspect] = useState<number|null>(null);
+  const [crmSearch, setCrmSearch] = useState("");
+  const [crmStatusFilter, setCrmStatusFilter] = useState("all");
+  const [crmMessage, setCrmMessage] = useState("");
+  const [selectedProspect, setSelectedProspect] = useState<string|null>(null);
   const [newProspect, setNewProspect] = useState({ name: "", phone: "", email: "", interest_amount: "", source: "", notes: "" });
+  const [scheduledMeetings, setScheduledMeetings] = useState(meetings);
+  const [meetingForm, setMeetingForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    date: new Date().toISOString().slice(0, 10),
+    time: "10:00",
+    type: "Prospect Introduction",
+    notes: "",
+    followUp: "",
+  });
   // Matrix fullscreen state
   const [matrixFullscreen, setMatrixFullscreen] = useState(false);
   const [matrixZoom, setMatrixZoom] = useState(1);
@@ -128,9 +142,10 @@ export default function AdminPortal() {
           email: p.email || "",
           interest: p.interest_amount ? `$${p.interest_amount.toLocaleString()}` : "",
           source: p.source,
-          status: p.status === "hot" ? "Hot Lead" : p.status === "warm" ? "Warm" : "New",
+          status: p.status === "hot" ? "Hot Lead" : p.status === "warm" ? "Warm" : p.status === "converted" ? "Converted" : p.status === "archived" ? "Archived" : "New",
           lastContact: p.last_contact ? new Date(p.last_contact).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "",
-          notes: p.notes || ""
+          notes: p.notes || "",
+          rawInterest: p.interest_amount || 0
         })));
       }
     } catch (err) {
@@ -169,7 +184,9 @@ export default function AdminPortal() {
       });
       if (res.ok) {
         setNewProspect({ name: "", phone: "", email: "", interest_amount: "", source: "", notes: "" });
+        setCrmMessage("Prospect added to the CRM.");
         fetchProspects();
+        setTimeout(() => setCrmMessage(""), 3000);
       }
     } catch (err) {
       console.error(err);
@@ -177,21 +194,27 @@ export default function AdminPortal() {
     setLoading(false);
   };
 
-  const updateProspectNote = async (id: number, note: string) => {
+  const updateProspectNote = async (id: string, note: string, existingNote = "") => {
     if (!note.trim()) return;
+    setLoading(true);
+    const stamp = new Date().toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+    const nextNote = `${existingNote ? `${existingNote}\n\n` : ""}[${stamp}] ${note.trim()}`;
     try {
       const res = await fetch("/api/prospects", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, notes: note })
+        body: JSON.stringify({ id, notes: nextNote })
       });
       if (res.ok) {
         setCrmNote("");
+        setCrmMessage("Follow-up note saved.");
         fetchProspects();
+        setTimeout(() => setCrmMessage(""), 3000);
       }
     } catch (err) {
       console.error(err);
     }
+    setLoading(false);
   };
 
   const membersCount = useCountUp(128);
@@ -246,6 +269,113 @@ export default function AdminPortal() {
     ];
 
   const switchTab = (id: string) => { setActiveTab(id); setSidebarOpen(false); };
+  const normalizedCrmSearch = crmSearch.trim().toLowerCase();
+  const visibleProspects = prospects.filter((p) => {
+    const matchesSearch = !normalizedCrmSearch || [p.name, p.phone, p.email, p.source, p.status].some((value) => String(value || "").toLowerCase().includes(normalizedCrmSearch));
+    const matchesStatus = crmStatusFilter === "all" || p.status === crmStatusFilter;
+    return matchesSearch && matchesStatus;
+  });
+  const currentMonthLabel = new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" });
+
+  const setProspectStatus = async (id: string, status: string) => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/prospects", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status }),
+      });
+      if (res.ok) {
+        setCrmMessage(status === "hot" ? "Prospect marked as a hot lead." : status === "warm" ? "Prospect marked as warm." : "Prospect status updated.");
+        fetchProspects();
+        setTimeout(() => setCrmMessage(""), 3000);
+      }
+    } catch (err) { console.error(err); }
+    setLoading(false);
+  };
+
+  const scheduleProspect = (p: any) => {
+    setMeetingForm({
+      name: p.name || "",
+      email: p.email || "",
+      phone: p.phone || "",
+      date: new Date().toISOString().slice(0, 10),
+      time: "10:00",
+      type: "Prospect Introduction",
+      notes: `Discuss ${p.interest || "unit"} interest. Source: ${p.source || "CRM"}.`,
+      followUp: "",
+    });
+    switchTab("scheduler");
+  };
+
+  const exportProspects = () => {
+    const rows = visibleProspects.length ? visibleProspects : prospects;
+    const csvRows = [
+      ["Name", "Phone", "Email", "Interest", "Source", "Status", "Last Contact", "Notes"],
+      ...rows.map((p) => [p.name, p.phone, p.email, p.interest, p.source, p.status, p.lastContact, p.notes]),
+    ];
+    const csv = csvRows.map((row) => row.map((value) => `"${String(value || "").replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `select-network-prospects-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    setCrmMessage("CRM export downloaded.");
+    setTimeout(() => setCrmMessage(""), 3000);
+  };
+
+  const convertProspectToMember = async (p: any) => {
+    setLoading(true);
+    try {
+      const memberRes = await fetch("/api/members", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: p.name,
+          email: p.email,
+          phone: p.phone,
+          role: "investor",
+          units: 0,
+          invested_amount: p.rawInterest || 0,
+          location: "",
+          referral_source: p.source || "Prospect CRM",
+        }),
+      });
+      if (!memberRes.ok) throw new Error("Could not create member record");
+      await fetch("/api/prospects", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: p.id, status: "converted", notes: `${p.notes || ""}\n\n[${new Date().toLocaleDateString("en-US")}] Converted to member record.`.trim() }),
+      });
+      setCrmMessage(`${p.name} was converted to a member record.`);
+      setSelectedProspect(null);
+      fetchProspects();
+      setTimeout(() => setCrmMessage(""), 3500);
+    } catch (err) {
+      console.error(err);
+      setCrmMessage("Could not convert this prospect. Check that name and email are complete.");
+      setTimeout(() => setCrmMessage(""), 4500);
+    }
+    setLoading(false);
+  };
+
+  const removeProspect = async (p: any) => {
+    const confirmed = window.confirm(`Remove ${p.name} from the Prospect CRM? This only removes the prospect record.`);
+    if (!confirmed) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/prospects?id=${encodeURIComponent(p.id)}`, { method: "DELETE" });
+      if (res.ok) {
+        setCrmMessage(`${p.name} was removed from the CRM.`);
+        setSelectedProspect(null);
+        fetchProspects();
+        setTimeout(() => setCrmMessage(""), 3000);
+      }
+    } catch (err) { console.error(err); }
+    setLoading(false);
+  };
 
   const fetchAnnouncements = async () => {
     try {
@@ -341,6 +471,20 @@ export default function AdminPortal() {
   };
 
   const handleCreateMeeting = () => {
+    const displayDate = meetingForm.date ? new Date(`${meetingForm.date}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "New date";
+    const displayTime = meetingForm.time ? new Date(`2026-01-01T${meetingForm.time}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) : "Time pending";
+    setScheduledMeetings((current) => [
+      {
+        id: Date.now(),
+        title: `${meetingForm.type} - ${meetingForm.name || "New Prospect"}`,
+        date: displayDate,
+        time: displayTime,
+        type: meetingForm.type,
+        status: "Confirmed",
+        zoom: zoomLink,
+      },
+      ...current,
+    ]);
     setMeetingCreated(true);
     setTimeout(() => setMeetingCreated(false), 3000);
   };
@@ -1130,6 +1274,7 @@ export default function AdminPortal() {
           {/* PROSPECTS CRM */}
           {activeTab === "crm" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
+              {crmMessage && <div style={{ position: "fixed", top: 20, right: 20, zIndex: 99999, background: "#e3f5eb", border: "1px solid #87d4a5", borderRadius: 10, padding: "14px 20px", boxShadow: "0 10px 30px rgba(5,20,45,.15)", animation: "fadeIn .3s ease" }}><b style={{ color: "#075933" }}>{crmMessage}</b></div>}
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, marginBottom: 18 }}>
                 {/* Add New Prospect Form */}
                 <div style={card}>
@@ -1148,14 +1293,14 @@ export default function AdminPortal() {
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>CRM Summary</h2>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 18 }}>
-                    {[{ label: "Total Prospects", value: String(prospects.length), color: "#071a33" }, { label: "Hot Leads", value: String(prospects.filter(p => p.status === "Hot Lead").length), color: "#dc2626" }, { label: "Warm", value: String(prospects.filter(p => p.status === "Warm").length), color: "#bd8e28" }, { label: "New", value: String(prospects.filter(p => p.status === "New").length), color: "#1e4fa3" }].map((s, i) => (
+                    {[{ label: "Total Prospects", value: String(prospects.length), color: "#071a33" }, { label: "Hot Leads", value: String(prospects.filter(p => p.status === "Hot Lead").length), color: "#dc2626" }, { label: "Warm", value: String(prospects.filter(p => p.status === "Warm").length), color: "#bd8e28" }, { label: "Converted", value: String(prospects.filter(p => p.status === "Converted").length), color: "#087345" }].map((s, i) => (
                       <div key={i} style={{ background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 10, padding: "14px 16px", textAlign: "center" }}>
                         <div style={{ fontSize: 28, fontWeight: 900, color: s.color }}>{s.value}</div>
                         <small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase" }}>{s.label}</small>
                       </div>
                     ))}
                   </div>
-                  <p style={{ color: "#667085", fontSize: 13, lineHeight: 1.6 }}>All prospect data is stored in the CRM. Click any prospect below to view details and manage notes. Data is private and only visible to admin users.</p>
+                  <p style={{ color: "#667085", fontSize: 13, lineHeight: 1.6 }}>All prospect data is stored in the CRM. Tim can search, filter, add notes, schedule follow-ups, convert qualified prospects, remove old records, and export the current list.</p>
                 </div>
               </div>
 
@@ -1163,23 +1308,37 @@ export default function AdminPortal() {
               <div style={card}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: 0 }}>All Prospects</h2>
-                  <input placeholder="Search prospects..." style={{ ...fieldInput, width: 240, padding: "10px 14px" }} />
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                    <input value={crmSearch} onChange={(e) => setCrmSearch(e.target.value)} placeholder="Search prospects..." style={{ ...fieldInput, width: 220, padding: "10px 14px" }} />
+                    <select value={crmStatusFilter} onChange={(e) => setCrmStatusFilter(e.target.value)} style={{ ...fieldInput, width: 160, padding: "10px 12px" }}>
+                      <option value="all">All Statuses</option>
+                      <option value="Hot Lead">Hot Leads</option>
+                      <option value="Warm">Warm</option>
+                      <option value="New">New</option>
+                      <option value="Converted">Converted</option>
+                    </select>
+                    <button onClick={fetchProspects} style={btnOutline}>Refresh</button>
+                    <button onClick={exportProspects} style={btnGold}>Export CSV</button>
+                  </div>
                 </div>
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 700 }}>
                     <thead><tr>{["Name", "Phone", "Interest", "Source", "Status", "Last Contact", "Actions"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
                     <tbody>
-                      {prospects.map((p) => (
+                      {visibleProspects.map((p) => (
                         <tr key={p.id} style={{ background: selectedProspect === p.id ? "#f9f6ef" : "transparent", cursor: "pointer" }} onClick={() => setSelectedProspect(selectedProspect === p.id ? null : p.id)}>
                           <td style={{ ...tdS, fontWeight: 700 }}>{p.name}</td>
                           <td style={tdS}>{p.phone}</td>
                           <td style={{ ...tdS, color: "#bd8e28", fontWeight: 700 }}>{p.interest}</td>
                           <td style={{ ...tdS, color: "#667085" }}>{p.source}</td>
-                          <td style={tdS}><span style={{ padding: "4px 10px", borderRadius: 99, background: p.status === "Hot Lead" ? "#fde8e8" : p.status === "Warm" ? "#fffaf0" : "#e7f0ff", color: p.status === "Hot Lead" ? "#dc2626" : p.status === "Warm" ? "#bd8e28" : "#1e4fa3", fontSize: 11, fontWeight: 900 }}>{p.status}</span></td>
+                          <td style={tdS}><span style={{ padding: "4px 10px", borderRadius: 99, background: p.status === "Hot Lead" ? "#fde8e8" : p.status === "Warm" ? "#fffaf0" : p.status === "Converted" ? "#e3f5eb" : "#e7f0ff", color: p.status === "Hot Lead" ? "#dc2626" : p.status === "Warm" ? "#bd8e28" : p.status === "Converted" ? "#087345" : "#1e4fa3", fontSize: 11, fontWeight: 900 }}>{p.status}</span></td>
                           <td style={{ ...tdS, color: "#667085" }}>{p.lastContact}</td>
-                          <td style={tdS}><button style={btnOutline} onClick={(e) => { e.stopPropagation(); setSelectedProspect(p.id); }}>View</button></td>
+                          <td style={tdS}><button style={btnOutline} onClick={(e) => { e.stopPropagation(); setSelectedProspect(p.id); setCrmNote(""); }}>View</button></td>
                         </tr>
                       ))}
+                      {visibleProspects.length === 0 && (
+                        <tr><td colSpan={7} style={{ ...tdS, color: "#667085", textAlign: "center", padding: 28 }}>No prospects match this search.</td></tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -1193,7 +1352,7 @@ export default function AdminPortal() {
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14, flexWrap: "wrap", gap: 10 }}>
                         <div>
                           <h3 style={{ margin: "0 0 4px", fontSize: 18, fontFamily: "Georgia, serif", fontWeight: 400 }}>{p.name}</h3>
-                          <span style={{ padding: "4px 10px", borderRadius: 99, background: p.status === "Hot Lead" ? "#fde8e8" : p.status === "Warm" ? "#fffaf0" : "#e7f0ff", color: p.status === "Hot Lead" ? "#dc2626" : p.status === "Warm" ? "#bd8e28" : "#1e4fa3", fontSize: 11, fontWeight: 900 }}>{p.status}</span>
+                          <span style={{ padding: "4px 10px", borderRadius: 99, background: p.status === "Hot Lead" ? "#fde8e8" : p.status === "Warm" ? "#fffaf0" : p.status === "Converted" ? "#e3f5eb" : "#e7f0ff", color: p.status === "Hot Lead" ? "#dc2626" : p.status === "Warm" ? "#bd8e28" : p.status === "Converted" ? "#087345" : "#1e4fa3", fontSize: 11, fontWeight: 900 }}>{p.status}</span>
                         </div>
                         <button onClick={() => setSelectedProspect(null)} style={{ background: "none", border: "none", fontSize: 18, cursor: "pointer", color: "#667085" }}>✕</button>
                       </div>
@@ -1207,14 +1366,17 @@ export default function AdminPortal() {
                         <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 8, padding: "12px 14px", fontSize: 13.5, lineHeight: 1.6, marginBottom: 10, color: "#3d4a57" }}>{p.notes}</div>
                         <div style={{ display: "flex", gap: 10 }}>
                           <textarea value={crmNote} onChange={(e) => setCrmNote(e.target.value)} placeholder="Add a new note..." rows={2} style={{ flex: 1, ...fieldInput, resize: "none" as const }} />
-                          <button onClick={() => updateProspectNote(p.id, crmNote)} disabled={loading} style={{ ...btnGreen, alignSelf: "flex-end", opacity: loading ? 0.6 : 1 }}>{loading ? "Saving..." : "Save Note"}</button>
+                          <button onClick={() => updateProspectNote(p.id, crmNote, p.notes)} disabled={loading || !crmNote.trim()} style={{ ...btnGreen, alignSelf: "flex-end", opacity: loading || !crmNote.trim() ? 0.6 : 1 }}>{loading ? "Saving..." : "Save Note"}</button>
                         </div>
                       </div>
                       <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                        <button onClick={() => switchTab("scheduler")} style={btnGold}>Schedule Meeting</button>
-                        <button style={btnOutline}>Convert to Member</button>
-                        <button style={{ ...btnOutline, borderColor: "#dc2626", color: "#dc2626" }}>Remove</button>
+                        <button onClick={() => scheduleProspect(p)} style={btnGold}>Schedule Meeting</button>
+                        <button onClick={() => setProspectStatus(p.id, "hot")} style={btnOutline}>Mark Hot</button>
+                        <button onClick={() => setProspectStatus(p.id, "warm")} style={btnOutline}>Mark Warm</button>
+                        <button onClick={() => convertProspectToMember(p)} disabled={loading || !p.email} style={{ ...btnOutline, opacity: loading || !p.email ? 0.55 : 1 }}>Convert to Member</button>
+                        <button onClick={() => removeProspect(p)} disabled={loading} style={{ ...btnOutline, borderColor: "#dc2626", color: "#dc2626", opacity: loading ? 0.6 : 1 }}>Remove</button>
                       </div>
+                      {!p.email && <p style={{ fontSize: 12, color: "#b3541e", margin: "10px 0 0" }}>Add an email before converting this prospect to a member record.</p>}
                     </div>
                   );
                 })()}
@@ -1233,17 +1395,17 @@ export default function AdminPortal() {
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Schedule Meeting</h2>
                   <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                    <div><label style={fieldLabel}>Prospect / Member Name</label><input placeholder="Enter name" style={fieldInput} /></div>
-                    <div><label style={fieldLabel}>Email</label><input type="email" placeholder="email@example.com" style={fieldInput} /></div>
-                    <div><label style={fieldLabel}>Phone</label><input type="tel" placeholder="Phone number" style={fieldInput} /></div>
-                    <div><label style={fieldLabel}>Date</label><input type="date" style={fieldInput} /></div>
-                    <div><label style={fieldLabel}>Time</label><input type="time" style={fieldInput} /></div>
-                    <div><label style={fieldLabel}>Meeting Type</label><select style={fieldInput}><option>Zoom Presentation</option><option>Onboarding Call</option><option>Follow-up</option><option>Member Review</option><option>Prospect Introduction</option></select></div>
+                    <div><label style={fieldLabel}>Prospect / Member Name</label><input value={meetingForm.name} onChange={(e) => setMeetingForm({ ...meetingForm, name: e.target.value })} placeholder="Enter name" style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Email</label><input type="email" value={meetingForm.email} onChange={(e) => setMeetingForm({ ...meetingForm, email: e.target.value })} placeholder="email@example.com" style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Phone</label><input type="tel" value={meetingForm.phone} onChange={(e) => setMeetingForm({ ...meetingForm, phone: e.target.value })} placeholder="Phone number" style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Date</label><input type="date" value={meetingForm.date} onChange={(e) => setMeetingForm({ ...meetingForm, date: e.target.value })} style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Time</label><input type="time" value={meetingForm.time} onChange={(e) => setMeetingForm({ ...meetingForm, time: e.target.value })} style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Meeting Type</label><select value={meetingForm.type} onChange={(e) => setMeetingForm({ ...meetingForm, type: e.target.value })} style={fieldInput}><option>Zoom Presentation</option><option>Onboarding Call</option><option>Follow-up</option><option>Member Review</option><option>Prospect Introduction</option></select></div>
                   </div>
-                  <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Meeting Notes</label><textarea rows={2} placeholder="Pre-meeting notes, agenda items..." style={{ ...fieldInput, resize: "none" as const }} /></div>
-                  <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Follow-up Notes</label><textarea rows={2} placeholder="Post-meeting follow-up..." style={{ ...fieldInput, resize: "none" as const }} /></div>
+                  <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Meeting Notes</label><textarea value={meetingForm.notes} onChange={(e) => setMeetingForm({ ...meetingForm, notes: e.target.value })} rows={2} placeholder="Pre-meeting notes, agenda items..." style={{ ...fieldInput, resize: "none" as const }} /></div>
+                  <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Follow-up Notes</label><textarea value={meetingForm.followUp} onChange={(e) => setMeetingForm({ ...meetingForm, followUp: e.target.value })} rows={2} placeholder="Post-meeting follow-up..." style={{ ...fieldInput, resize: "none" as const }} /></div>
                   <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                    <button onClick={handleCreateMeeting} style={btnGreen}>Create Invite</button>
+                    <button onClick={handleCreateMeeting} disabled={!meetingForm.name} style={{ ...btnGreen, opacity: meetingForm.name ? 1 : 0.6 }}>Create Invite</button>
                     <button onClick={handleCreateZoom} style={btnGold}>Create Zoom Meeting</button>
                     <button onClick={() => setShowGcal(true)} style={btnOutline}>Connect Google Calendar</button>
                   </div>
@@ -1251,7 +1413,7 @@ export default function AdminPortal() {
 
                 {/* Monthly Calendar */}
                 <div style={card}>
-                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>June 2025</h2>
+                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>{currentMonthLabel}</h2>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 2, marginBottom: 16 }}>
                     {["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].map(d => (
                       <div key={d} style={{ textAlign: "center", padding: "6px 0", fontSize: 11, fontWeight: 900, color: "#667085" }}>{d}</div>
@@ -1268,7 +1430,7 @@ export default function AdminPortal() {
                     })}
                   </div>
                   <h3 style={{ fontSize: 14, fontWeight: 800, margin: "0 0 10px", color: "#071a33" }}>Upcoming Meetings</h3>
-                  {meetings.map((m) => (
+                  {scheduledMeetings.map((m) => (
                     <div key={m.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #eef2f6", gap: 8, flexWrap: "wrap" }}>
                       <div>
                         <b style={{ fontSize: 13 }}>{m.title}</b><br />
@@ -1276,7 +1438,7 @@ export default function AdminPortal() {
                       </div>
                       <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
                         <span style={statusBadge(m.status)}>{m.status}</span>
-                        {m.zoom && <button style={{ ...btnOutline, fontSize: 9, padding: "4px 8px" }}>Join Zoom</button>}
+                        {m.zoom && <a href={m.zoom} target="_blank" rel="noreferrer" style={{ ...btnOutline, fontSize: 9, padding: "4px 8px", textDecoration: "none" }}>Join Zoom</a>}
                       </div>
                     </div>
                   ))}

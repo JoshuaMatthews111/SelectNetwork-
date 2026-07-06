@@ -45,11 +45,16 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const { id, notes, status } = await req.json();
+  const { id, notes, status, source, interest_amount, phone, email, name } = await req.json();
   
   const updates: any = { last_contact: new Date().toISOString() };
   if (notes !== undefined) updates.notes = notes;
   if (status !== undefined) updates.status = status;
+  if (source !== undefined) updates.source = source;
+  if (interest_amount !== undefined) updates.interest_amount = interest_amount;
+  if (phone !== undefined) updates.phone = phone;
+  if (email !== undefined) updates.email = email;
+  if (name !== undefined) updates.name = name;
   
   const { data, error } = await supabase
     .from('prospects')
@@ -59,4 +64,18 @@ export async function PATCH(req: NextRequest) {
   
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
+}
+
+export async function DELETE(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get('id');
+  if (!id) return NextResponse.json({ error: 'Missing prospect id' }, { status: 400 });
+
+  const { error } = await supabase
+    .from('prospects')
+    .delete()
+    .eq('id', id);
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ success: true });
 }
