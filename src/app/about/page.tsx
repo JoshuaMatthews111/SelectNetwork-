@@ -11,6 +11,18 @@ const NAVY = "#071a33";
 const GOLD = "#bd8e28";
 const GREEN = "#075933";
 
+const LORENZO_BIO = [
+  "Over the last decade, Lorenzo Miller has generated more than $60.5 million in revenue by identifying opportunities, building scalable systems, and transforming vision into measurable results. What began as a passion for helping dogs and their owners evolved into a comprehensive ecosystem focused on leadership development, talent acquisition, operational excellence, strategic partnerships, and sustainable growth.",
+  "Lorenzo's approach to business is rooted in a simple philosophy: identify opportunity, understand risk, and create value. Rather than chasing trends, he focuses on building strong foundations: people, systems, infrastructure, and partnerships capable of creating long-term results.",
+  "His success has not been driven by short-term wins, but by a consistent ability to see potential where others see limitations and then assemble the resources necessary to bring that potential to life.",
+  "As an entrepreneur, Lorenzo recognized early that the most valuable asset in any organization is not the product, it is the people. Throughout his career, he has recruited, developed, and mentored trainers, leaders, and entrepreneurs, helping individuals transform not only their professional capabilities but also their personal lives.",
+  "Through structured recruitment systems, comprehensive training programs, and scalable operational frameworks, Lorenzo has created opportunities for individuals to build meaningful careers while making a lasting impact in their communities. His focus has never been limited to training dogs. His vision has always been larger: building systems that allow people, businesses, and communities to grow together.",
+  "A firm believer in continuous improvement, Lorenzo has spent years refining infrastructure, strengthening operational processes, and developing growth models designed to remain relevant in an ever-changing marketplace. His ability to combine innovation with execution has led to strategic partnerships throughout the industry, expanding access to quality training services while creating new opportunities for collaboration, expansion, and revenue growth.",
+  "At the center of his work is a mission larger than business itself: creating a unified ecosystem that benefits everyone involved. Through The Select Network Member Group, Lorenzo brings together like-minded select members who value trust, discipline, long-term thinking, and measurable impact.",
+  "The objective is clear: deploy capital with purpose, build enduring systems, and create returns connected to real operating performance, responsible stewardship, and a proven track record.",
+  "Beyond revenue, Lorenzo believes true wealth is measured by the value created for people, the opportunities opened for families, and the legacy left behind. The Select Network Member Group was built around that belief: participation with purpose, disciplined growth, and a commitment to creating impact that lasts.",
+];
+
 export default function AboutPage() {
   return (
     <div style={{ fontFamily: "Inter, Arial, sans-serif", color: NAVY, background: "#fff" }}>
@@ -43,10 +55,12 @@ export default function AboutPage() {
           </Reveal>
           <Reveal delay={120}>
             <div>
-              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 30, margin: "0 0 18px" }}>A Vision Built on a Decade of Results</h2>
-              <p style={{ color: "#4b5563", lineHeight: 1.8, margin: "0 0 18px", fontSize: 15.5 }}>
-                Over the last decade, Lorenzo Miller has generated more than <b style={{ color: NAVY }}>$60.5 million in revenue</b> by identifying opportunities, building scalable systems, and transforming vision into measurable results. What began as a passion for helping dogs and their owners evolved into a comprehensive ecosystem focused on leadership development, talent acquisition, operational excellence, strategic partnerships, and sustainable growth.
-              </p>
+              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 30, margin: "0 0 18px" }}>Lorenzo Miller: A Vision Built on a Decade of Results</h2>
+              {LORENZO_BIO.map((paragraph, i) => (
+                <p key={i} style={{ color: i === 0 ? "#4b5563" : "#667085", lineHeight: 1.8, margin: "0 0 16px", fontSize: 15.5 }}>
+                  {paragraph}
+                </p>
+              ))}
               <div style={{ background: "#fbf9f4", borderLeft: `4px solid ${GOLD}`, borderRadius: "0 10px 10px 0", padding: "20px 24px", margin: "8px 0 4px" }}>
                 <Quote size={26} color={GOLD} />
                 <p style={{ fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: 22, lineHeight: 1.5, margin: "8px 0 0", color: NAVY }}>

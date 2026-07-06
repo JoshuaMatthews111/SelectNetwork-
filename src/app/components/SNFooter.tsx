@@ -37,8 +37,8 @@ export default function SNFooter() {
           maxWidth: 1280,
           margin: "0 auto",
           display: "grid",
-          gridTemplateColumns: "1.4fr 1fr 1fr",
-          gap: 40,
+          gridTemplateColumns: "1.25fr .85fr .9fr 1fr",
+          gap: 34,
           padding: "44px 40px",
         }}
       >
@@ -76,6 +76,23 @@ export default function SNFooter() {
             </Link>
           </div>
         </div>
+
+        <div>
+          <h4 style={{ fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "#d5a83d", margin: "0 0 16px" }}>Member Legacy</h4>
+          <div style={{ maxWidth: 260, border: "1px solid rgba(213,168,61,.28)", borderRadius: 14, overflow: "hidden", background: "#02070d", boxShadow: "0 18px 40px rgba(0,0,0,.25)" }}>
+            <Image
+              src="/assets/select-network/tsn-piggy-bank.gif"
+              alt="The Select Network Member Group animated piggy bank"
+              width={320}
+              height={180}
+              unoptimized
+              style={{ display: "block", width: "100%", height: "auto" }}
+            />
+          </div>
+          <p style={{ color: "#9fb1c7", fontSize: 12.5, lineHeight: 1.6, margin: "12px 0 0", maxWidth: 250 }}>
+            Private member participation, structured reporting, and long-term value.
+          </p>
+        </div>
       </div>
 
       <div
@@ -98,6 +115,21 @@ export default function SNFooter() {
           <ShieldCheck size={14} color="#d5a83d" /> Secure by design · Privacy protected
         </span>
       </div>
+      <style jsx>{`
+        @media (max-width: 980px) {
+          .sn-footer-inner {
+            grid-template-columns: 1fr 1fr !important;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .sn-footer-inner {
+            grid-template-columns: 1fr !important;
+            padding: 34px 24px !important;
+            gap: 28px !important;
+          }
+        }
+      `}</style>
     </footer>
   );
 }
