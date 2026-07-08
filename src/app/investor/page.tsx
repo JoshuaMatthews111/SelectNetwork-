@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { Binoculars, Star, TrendingUp, FolderOpen, Wallet, Network, Megaphone, Settings, Bell, Mail, Diamond, CheckCircle, FileText, CircleDot, Menu, LogOut, MessageSquare, Award, Target, Ribbon } from "lucide-react";
+import { Binoculars, Star, TrendingUp, FolderOpen, Wallet, Network, Megaphone, Settings, Bell, Mail, Diamond, CheckCircle, FileText, CircleDot, Menu, LogOut, MessageSquare, Award, Target, Ribbon, CalendarDays } from "lucide-react";
 
 /* ─── Count-up hook ─── */
 function useCountUp(target: number, duration = 1200) {
@@ -51,6 +51,7 @@ const allTabs = [
   { id: "docs", label: "Documents", ico: <FolderOpen size={20} />, roles: ["Select Member", "Builder"] },
   { id: "payouts", label: "Payouts", ico: <Wallet size={20} />, roles: ["Select Member", "Builder"] },
   { id: "announcements", label: "Announcements", ico: <Megaphone size={20} />, roles: ["Select Member", "Builder"] },
+  { id: "events", label: "Events", ico: <CalendarDays size={20} />, roles: ["Select Member", "Builder"] },
   { id: "chat", label: "Support / Chat", ico: <MessageSquare size={20} />, roles: ["Select Member", "Builder"] },
   { id: "milestones", label: "Milestones", ico: <Award size={20} />, roles: ["Select Member", "Builder"] },
   { id: "certificates", label: "Certificates", ico: <Ribbon size={20} />, roles: ["Select Member", "Builder"] },
@@ -70,6 +71,7 @@ export default function InvestorPortal() {
   const [donutAnim, setDonutAnim] = useState(false);
   // Supabase-backed announcements
   const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
   // Supabase-backed support
   const [myTickets, setMyTickets] = useState<any[]>([]);
   const [activeTicket, setActiveTicket] = useState<any>(null);
@@ -87,13 +89,21 @@ export default function InvestorPortal() {
 
   const switchTab = (id: string) => { setActiveTab(id); setSidebarOpen(false); };
 
-  useEffect(() => { setTimeout(() => setChartDraw(true), 300); setTimeout(() => setDonutAnim(true), 600); fetchAnnouncements(); fetchMyTickets(); }, []);
+  useEffect(() => { setTimeout(() => setChartDraw(true), 300); setTimeout(() => setDonutAnim(true), 600); fetchAnnouncements(); fetchEvents(); fetchMyTickets(); }, []);
 
   const fetchAnnouncements = async () => {
     try {
       const role = MEMBER_ROLE === "Builder" ? "builder" : "investor";
       const res = await fetch(`/api/announcements?role=${role}`);
       if (res.ok) { const data = await res.json(); setAnnouncements(data); }
+    } catch (err) { console.error(err); }
+  };
+
+  const fetchEvents = async () => {
+    try {
+      const role = MEMBER_ROLE === "Builder" ? "builder" : "investor";
+      const res = await fetch(`/api/events?role=${role}`);
+      if (res.ok) { const data = await res.json(); setEvents(data); }
     } catch (err) { console.error(err); }
   };
 
@@ -695,6 +705,42 @@ export default function InvestorPortal() {
                         {a.priority === "urgent" && <span style={{ padding: "4px 10px", borderRadius: 99, background: "#fde8e8", color: "#dc2626", fontSize: 10, fontWeight: 900 }}>Urgent</span>}
                         <span style={{ padding: "4px 10px", borderRadius: 99, background: "#e3f5eb", color: "#087345", fontSize: 10, fontWeight: 900 }}>{a.audience === "all" ? "All" : a.audience}</span>
                       </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ─── EVENTS ─── */}
+          {activeTab === "events" && (
+            <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
+              <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", borderRadius: 14, padding: "20px 24px", color: "#fff", marginBottom: 18, display: "flex", alignItems: "center", gap: 14 }}>
+                <CalendarDays size={26} color="#ffd46f" />
+                <div>
+                  <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: 0 }}>Events</h2>
+                  <p style={{ margin: "4px 0 0", fontSize: 12.5, color: "#c6d2e1" }}>Upcoming calls, reviews, and member meetings posted by the admin team.</p>
+                </div>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                {events.length === 0 && (
+                  <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 12, padding: "40px 20px", textAlign: "center", color: "#667085" }}>
+                    <CalendarDays size={32} color="#e7e2d8" style={{ margin: "0 auto 12px", display: "block" }} />
+                    <p style={{ fontSize: 14, margin: 0 }}>No events are posted yet.</p>
+                  </div>
+                )}
+                {events.map((event: any) => (
+                  <div key={event.id} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 12, padding: "18px 20px", boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap" }}>
+                      <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                        <div style={{ width: 38, height: 38, borderRadius: "50%", background: "linear-gradient(135deg,#075933,#0d6d42)", color: "#ffd46f", display: "grid", placeItems: "center", flexShrink: 0 }}><CalendarDays size={18} /></div>
+                        <div>
+                          <b style={{ fontSize: 15 }}>{event.title}</b>
+                          <div style={{ fontSize: 11.5, color: "#667085", margin: "2px 0 8px" }}>Posted {event.published_at ? new Date(event.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "recently"}</div>
+                          {event.message && <p style={{ margin: 0, fontSize: 13.5, color: "#3d4a57", lineHeight: 1.6, whiteSpace: "pre-line", maxWidth: 720 }}>{event.message}</p>}
+                        </div>
+                      </div>
+                      {event.attachment_url && <a href={event.attachment_url} target="_blank" rel="noreferrer" style={{ background: "#075933", color: "#fff", borderRadius: 8, padding: "9px 13px", fontWeight: 900, fontSize: 11, textDecoration: "none", textTransform: "uppercase" }}>Open Link</a>}
                     </div>
                   </div>
                 ))}

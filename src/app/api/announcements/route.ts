@@ -13,11 +13,13 @@ export async function GET(req: NextRequest) {
   const status = searchParams.get('status');
   const audience = searchParams.get('audience');
   const role = searchParams.get('role'); // investor | builder — for user dashboard filtering
+  const includeEvents = searchParams.get('include_events') === 'true';
 
   let query = supabase.from('announcements').select('*').order('created_at', { ascending: false });
 
   if (status) query = query.eq('status', status);
   if (audience) query = query.eq('audience', audience);
+  if (!includeEvents) query = query.or('attachment_name.is.null,attachment_name.neq.event');
 
   // For user dashboards: show published only, filter by audience matching their role
   if (role) {

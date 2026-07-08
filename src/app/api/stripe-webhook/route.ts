@@ -15,12 +15,24 @@ const supabase = createClient(
   }
 );
 
+function noteValue(notes: string | null | undefined, label: string) {
+  const line = String(notes || "")
+    .split("\n")
+    .find((item) => item.toLowerCase().startsWith(`${label.toLowerCase()}:`));
+
+  return line ? line.slice(label.length + 1).trim() : "";
+}
+
+function memberRole(value: string) {
+  return value.toLowerCase().includes("builder") ? "builder" : "investor";
+}
+
 async function updateApplication(requestId: string | undefined, status: string, note: string) {
-  if (!requestId) return;
+  if (!requestId) return null;
 
   const { data } = await supabase
     .from(MEMBER_REQUESTS_TABLE)
-    .select("notes")
+    .select("id,name,email,phone,interest_amount,notes")
     .eq("id", requestId)
     .single();
 
@@ -30,6 +42,46 @@ async function updateApplication(requestId: string | undefined, status: string, 
     .from(MEMBER_REQUESTS_TABLE)
     .update({ status, notes: nextNotes })
     .eq("id", requestId);
+
+  return { ...data, notes: nextNotes };
+}
+
+async function activateMemberFromApplication(application: any) {
+  if (!application?.email) return;
+
+  const capitalCommitment = Number(application.interest_amount) || 0;
+  const units = Number(noteValue(application.notes, "Units")) || Math.round(capitalCommitment / 100);
+  const role = memberRole(noteValue(application.notes, "Role"));
+  const location = noteValue(application.notes, "Address");
+  const memberRecord = {
+    name: application.name,
+    email: application.email,
+    phone: application.phone || "",
+    status: "active",
+    role,
+    units,
+    invested_amount: capitalCommitment,
+    location,
+    referral_source: "Stripe ACH checkout",
+  };
+
+  const { data: existing } = await supabase
+    .from("members")
+    .select("id")
+    .eq("email", application.email)
+    .maybeSingle();
+
+  if (existing?.id) {
+    await supabase
+      .from("members")
+      .update(memberRecord)
+      .eq("id", existing.id);
+    return;
+  }
+
+  await supabase
+    .from("members")
+    .insert([{ ...memberRecord, joined_date: new Date().toISOString() }]);
 }
 
 export async function POST(req: NextRequest) {
@@ -65,7 +117,8 @@ export async function POST(req: NextRequest) {
 
   if (event.type === "payment_intent.succeeded") {
     const paymentIntent = event.data.object;
-    await updateApplication(paymentIntent.metadata?.request_id, "payment_confirmed", `Stripe ACH payment confirmed: ${paymentIntent.id}`);
+    const application = await updateApplication(paymentIntent.metadata?.request_id, "payment_confirmed", `Stripe ACH payment confirmed: ${paymentIntent.id}`);
+    await activateMemberFromApplication(application);
   }
 
   if (event.type === "payment_intent.payment_failed") {

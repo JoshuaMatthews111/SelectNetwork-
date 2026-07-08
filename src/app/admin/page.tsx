@@ -105,6 +105,7 @@ export default function AdminPortal() {
     notes: "",
     followUp: "",
   });
+  const [eventAudience, setEventAudience] = useState("all");
   // Matrix fullscreen state
   const [matrixFullscreen, setMatrixFullscreen] = useState(false);
   const [matrixZoom, setMatrixZoom] = useState(1);
@@ -503,21 +504,43 @@ export default function AdminPortal() {
     setShowZoom(true);
   };
 
-  const handleCreateMeeting = () => {
+  const handleCreateMeeting = async () => {
     const displayDate = meetingForm.date ? new Date(`${meetingForm.date}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "New date";
     const displayTime = meetingForm.time ? new Date(`2026-01-01T${meetingForm.time}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) : "Time pending";
+    const nextMeeting = {
+      id: Date.now(),
+      title: `${meetingForm.type} - ${meetingForm.name || "New Prospect"}`,
+      date: displayDate,
+      time: displayTime,
+      type: meetingForm.type,
+      status: "Confirmed",
+      zoom: zoomLink,
+    };
     setScheduledMeetings((current) => [
-      {
-        id: Date.now(),
-        title: `${meetingForm.type} - ${meetingForm.name || "New Prospect"}`,
-        date: displayDate,
-        time: displayTime,
-        type: meetingForm.type,
-        status: "Confirmed",
-        zoom: zoomLink,
-      },
+      nextMeeting,
       ...current,
     ]);
+    try {
+      await fetch("/api/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: nextMeeting.title,
+          name: meetingForm.name,
+          email: meetingForm.email,
+          phone: meetingForm.phone,
+          date: displayDate,
+          time: displayTime,
+          type: meetingForm.type,
+          notes: meetingForm.notes,
+          zoom: zoomLink,
+          audience: eventAudience,
+          priority: "normal",
+        }),
+      });
+    } catch (err) {
+      console.error("Failed to publish event:", err);
+    }
     setMeetingCreated(true);
     setTimeout(() => setMeetingCreated(false), 3000);
   };
@@ -1393,6 +1416,7 @@ export default function AdminPortal() {
                     <div><label style={fieldLabel}>Date</label><input type="date" value={meetingForm.date} onChange={(e) => setMeetingForm({ ...meetingForm, date: e.target.value })} style={fieldInput} /></div>
                     <div><label style={fieldLabel}>Time</label><input type="time" value={meetingForm.time} onChange={(e) => setMeetingForm({ ...meetingForm, time: e.target.value })} style={fieldInput} /></div>
                     <div><label style={fieldLabel}>Meeting Type</label><select value={meetingForm.type} onChange={(e) => setMeetingForm({ ...meetingForm, type: e.target.value })} style={fieldInput}><option>Zoom Presentation</option><option>Onboarding Call</option><option>Follow-up</option><option>Member Review</option><option>Prospect Introduction</option></select></div>
+                    <div><label style={fieldLabel}>Post Event To</label><select value={eventAudience} onChange={(e) => setEventAudience(e.target.value)} style={fieldInput}><option value="all">All Members</option><option value="investors">Select Members</option><option value="builders">Builders</option></select></div>
                   </div>
                   <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Meeting Notes</label><textarea value={meetingForm.notes} onChange={(e) => setMeetingForm({ ...meetingForm, notes: e.target.value })} rows={2} placeholder="Pre-meeting notes, agenda items..." style={{ ...fieldInput, resize: "none" as const }} /></div>
                   <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Follow-up Notes</label><textarea value={meetingForm.followUp} onChange={(e) => setMeetingForm({ ...meetingForm, followUp: e.target.value })} rows={2} placeholder="Post-meeting follow-up..." style={{ ...fieldInput, resize: "none" as const }} /></div>
