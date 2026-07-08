@@ -43,10 +43,10 @@ export default function AboutPage() {
 
       {/* Founder */}
       <section style={{ padding: "78px 0", background: "#fff" }}>
-        <div className="sn-shell sn-split" style={{ display: "grid", gridTemplateColumns: "340px 1fr", gap: 40, alignItems: "start" }}>
+        <div className="sn-shell sn-split" style={{ display: "grid", gridTemplateColumns: "420px 1fr", gap: 44, alignItems: "start" }}>
           <Reveal>
             <div style={{ position: "relative" }}>
-              <Image src="/assets/select-network/lorenzo-team.jpg" alt="Lorenzo Miller and Team" width={760} height={620} style={{ width: "100%", height: "auto", borderRadius: 16, border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", objectFit: "cover" }} />
+              <Image src="/assets/select-network/IMG_9919.png" alt="Lorenzo Miller" width={820} height={980} style={{ width: "100%", minHeight: 560, height: "auto", borderRadius: 16, border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", objectFit: "cover", objectPosition: "center 18%", filter: "grayscale(1) contrast(1.08)" }} />
               <div style={{ marginTop: 16, background: "#fbf9f4", border: "1px solid #eee7d8", borderRadius: 12, padding: "18px 20px" }}>
                 <b style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 22, display: "block" }}>Lorenzo Miller</b>
                 <span style={{ color: GOLD, fontSize: 13, fontWeight: 700 }}>Founder · Entrepreneur · Select Member · Visionary</span>
@@ -80,7 +80,7 @@ export default function AboutPage() {
         <div className="sn-shell">
           <div className="sn-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22 }}>
             {[
-              { icon: <Target size={28} />, title: "Our Mission", desc: "To deliver financial return, build critical infrastructure, and create measurable impact across the pet industry and the communities we serve." },
+              { icon: <Target size={28} />, title: "Our Mission", desc: "To build a private member ecosystem that connects qualified Select members with disciplined opportunities, transparent reporting, responsible stewardship, and long-term value creation." },
               { icon: <Sparkles size={28} />, title: "What Makes This Different", desc: "A disciplined, purpose-driven approach backed by a proven operating record, experienced leadership, and systems built to scale responsibly." },
               { icon: <HandCoins size={28} />, title: "Why Select Members Join", desc: "Qualified members gain private access to vetted opportunities, transparent reporting, and alignment focused on long-term value creation." },
             ].map((b, i) => (

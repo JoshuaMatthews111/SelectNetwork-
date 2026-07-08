@@ -97,7 +97,7 @@ export default function ReportsPage() {
                   </div>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 10px" }}>The Select Network Member Group Compensation Plan</h2>
                   <p style={{ color: "#5b6675", lineHeight: 1.7, fontSize: 14.5, margin: "0 0 22px", maxWidth: 560 }}>
-                    Review the official unit allocation and quarterly distribution overview. A Unit is a proportional participation allocation within The Select Network Member Group membership stake structure, used to determine a select member&apos;s share of designated company distributions and growth-based revenue participation. This document illustrates how units are purchased ($100 per unit) and how available quarterly profit is distributed across all units.
+                    Review the official unit allocation and quarterly distribution overview. A Unit is a proportional participation allocation within The Select Network Member Group membership stake structure, used to determine a Select member&apos;s share of designated company distributions and growth-based revenue participation. This document illustrates how units are purchased ($100 per unit) and how available quarterly profit is distributed across all units.
                   </p>
                   <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                     <button onClick={() => setCompOpen(true)} style={btnGreen}><Eye size={15} /> View Document</button>

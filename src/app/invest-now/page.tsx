@@ -115,7 +115,12 @@ export default function InvestNowPage() {
         })
       });
       if (res.ok) {
-        setSubmitted(true);
+        const data = await res.json().catch(() => null);
+        if (data?.url && typeof window !== "undefined") {
+          window.location.href = data.url;
+          return;
+        }
+        setCheckoutError("ACH checkout started, but the secure bank checkout link was not returned. Please contact support.");
       } else {
         const data = await res.json().catch(() => null);
         setCheckoutError(data?.error || "ACH checkout could not be started. Please contact support.");
@@ -298,7 +303,7 @@ export default function InvestNowPage() {
                     <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", borderRadius: 12, padding: "18px 22px", marginBottom: 24, display: "flex", gap: 14, alignItems: "flex-start" }}>
                       <Info size={20} color="#ffd46f" style={{ flexShrink: 0, marginTop: 2 }} />
                       <p style={{ margin: 0, color: "#c6d2e1", fontSize: 13, lineHeight: 1.7 }}>
-                        <b style={{ color: "#ffd46f" }}>What is a Unit?</b> A Unit is a proportional participation allocation within The Select Network Member Group membership stake structure, used to determine a select member&apos;s share of designated company distributions and growth-based revenue participation.
+                        <b style={{ color: "#ffd46f" }}>What is a Unit?</b> A Unit is a proportional participation allocation within The Select Network Member Group membership stake structure, used to determine a Select member&apos;s share of designated company distributions and growth-based revenue participation.
                       </p>
                     </div>
 
@@ -477,7 +482,7 @@ export default function InvestNowPage() {
                     <div style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 14, padding: "22px 24px", marginBottom: 16 }}>
                       <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 16, background: "#e8f4ed", borderRadius: 8, padding: "10px 14px" }}>
                         <FileText size={16} color={GREEN} />
-                        <span style={{ fontSize: 12.5, color: GREEN, fontWeight: 700 }}>ACH Bank Transfer — JPMorgan Payments sandbox connection is handled securely on the server.</span>
+                        <span style={{ fontSize: 12.5, color: GREEN, fontWeight: 700 }}>ACH Bank Transfer — Stripe hosts the secure bank connection and authorization.</span>
                       </div>
                       <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                         <Field label="Account Holder Name"><input value={form.name} readOnly style={inputStyle} /></Field>
@@ -492,7 +497,7 @@ export default function InvestNowPage() {
                     <div style={{ display: "flex", gap: 10, alignItems: "center", background: "#f0f7ff", border: "1px solid #c7ddf5", borderRadius: 10, padding: "12px 16px", marginBottom: 20 }}>
                       <Info size={16} color="#1e40af" style={{ flexShrink: 0 }} />
                       <p style={{ margin: 0, fontSize: 12.5, color: "#1e40af", lineHeight: 1.5 }}>
-                        Bank account collection should use JPMorgan&apos;s approved ACH/payment flow. This page will not accept card payments or collect card details.
+                        Bank account collection uses Stripe&apos;s approved ACH bank-payment flow. This page will not accept card payments or collect card details.
                       </p>
                     </div>
 
@@ -525,7 +530,7 @@ export default function InvestNowPage() {
             <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 16, padding: "32px 28px" }}>
               <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 24, margin: "0 0 16px" }}>How Quarterly Distributions Work</h2>
               <p style={{ color: "#3d4a57", lineHeight: 1.8, fontSize: 14.5, margin: "0 0 16px" }}>
-                Each Unit represents a proportional participation allocation used to determine a select member&apos;s share of designated company distributions and growth-based revenue participation. Approved participants may receive participation yield distributions quarterly when profits are available and posted through The Select Network Member Group reporting system. Initial capital commitments are not treated as available earnings. Members may request payouts only from available profit balances, subject to approval and official member terms.
+                Each Unit represents a proportional participation allocation used to determine a Select member&apos;s share of designated company distributions and growth-based revenue participation. Approved participants may receive participation yield distributions quarterly when profits are available and posted through The Select Network Member Group reporting system. Initial capital commitments are not treated as available earnings. Members may request payouts only from available profit balances, subject to approval and official member terms.
               </p>
               <p style={{ color: "#667085", fontSize: 13, lineHeight: 1.7, margin: "0 0 16px" }}>
                 Full report access, quarterly updates, and member-only documents will be available inside the member dashboard after participation is completed.

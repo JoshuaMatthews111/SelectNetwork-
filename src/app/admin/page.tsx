@@ -59,14 +59,6 @@ const meetings = [
   { id: 4, title: "Quarterly Review - Lorenzo", date: "Jun 10, 2025", time: "9:00 AM", type: "Zoom Presentation", status: "Confirmed", zoom: "https://zoom.us/j/111222333" },
 ];
 
-const quarterlyRows = [
-  { name: "Lorenzo", role: "Select Member-Builder", units: 50, capitalCommitted: "$50,000", suggested: "$1,250", email: "lorenzo@selectnetwork.com" },
-  { name: "Maria Santos", role: "Select Member-Builder", units: 25, capitalCommitted: "$25,000", suggested: "$625", email: "maria@email.com" },
-  { name: "David Chen", role: "Select Member", units: 10, capitalCommitted: "$10,000", suggested: "$250", email: "david@email.com" },
-  { name: "James Wilson", role: "Builder", units: 15, capitalCommitted: "$15,000", suggested: "$375", email: "james@email.com" },
-  { name: "Sophia Lee", role: "Select Member", units: 5, capitalCommitted: "$5,000", suggested: "$125", email: "sophia@email.com" },
-];
-
 export default function AdminPortal() {
   const [activeTab, setActiveTab] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -94,6 +86,7 @@ export default function AdminPortal() {
   const [ticketFilter, setTicketFilter] = useState("all");
   const [prospects, setProspects] = useState<any[]>([]);
   const [memberRequests, setMemberRequests] = useState<any[]>([]);
+  const [members, setMembers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [crmNote, setCrmNote] = useState("");
   const [crmSearch, setCrmSearch] = useState("");
@@ -131,6 +124,7 @@ export default function AdminPortal() {
     }
     fetchProspects();
     fetchMemberRequests();
+    fetchMembers();
     fetchAnnouncements();
     fetchTickets();
   }, []);
@@ -175,6 +169,18 @@ export default function AdminPortal() {
       }
     } catch (err) {
       console.error("Failed to fetch member requests:", err);
+    }
+  };
+
+  const fetchMembers = async () => {
+    try {
+      const res = await fetch("/api/members");
+      if (res.ok) {
+        const data = await res.json();
+        setMembers(data || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch members:", err);
     }
   };
 
@@ -230,10 +236,16 @@ export default function AdminPortal() {
     setLoading(false);
   };
 
-  const membersCount = useCountUp(128);
-  const apps = useCountUp(23);
-  const issued = useCountUp(3450);
-  const remaining = useCountUp(46550);
+  const totalPlannedUnits = 50000;
+  const activeMembers = members.filter((member) => String(member.status || "").toLowerCase() === "active");
+  const issuedUnits = members.reduce((sum, member) => sum + (Number(member.units) || 0), 0);
+  const remainingUnits = Math.max(totalPlannedUnits - issuedUnits, 0);
+  const pendingRequests = memberRequests.filter((request) => !["approved", "active", "payment_confirmed"].includes(String(request.status || "").toLowerCase()));
+  const pendingAchRequests = memberRequests.filter((request) => String(request.status || "").toLowerCase().includes("ach") || String(request.status || "").toLowerCase().includes("stripe"));
+  const totalCapitalCommitted = members.reduce((sum, member) => sum + (Number(member.invested_amount) || Number(member.capital_commitment) || 0), 0);
+  const averageCapitalCommitment = members.length ? Math.round(totalCapitalCommitted / members.length) : 0;
+  const foundationPartners = members.filter((member) => (Number(member.invested_amount) || Number(member.capital_commitment) || 0) >= 10000);
+  const formatMoney = (value: number) => value ? `$${value.toLocaleString()}` : "Not posted";
 
   const card: React.CSSProperties = { background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)" };
   const kpiBox: React.CSSProperties = { ...card, display: "flex", alignItems: "center", gap: 14, padding: "18px 16px", transition: ".3s", cursor: "pointer" };
@@ -275,11 +287,19 @@ export default function AdminPortal() {
       date: request.submitted_at ? new Date(request.submitted_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "New",
       status: request.status === "pending" ? "Pending" : request.status === "approved" ? "Active" : "Review",
     }))
-    : [
-      { name: "Michael Anderson", interest: "$10,000", date: "May 20", status: "Review" },
-      { name: "Sophia Martinez", interest: "$25,000", date: "May 19", status: "Review" },
-      { name: "David Thompson", interest: "$50,000", date: "May 18", status: "Pending" },
-    ];
+    : [];
+  const paymentRows = pendingAchRequests.map((request: any) => ({
+    name: request.name || "New member",
+    amount: request.interest_amount ? `$${Number(request.interest_amount).toLocaleString()}` : "Not listed",
+    status: String(request.status || "Pending").replace(/_/g, " "),
+  }));
+  const quarterlyReviewRows = members.map((member: any) => ({
+    name: member.name || "Member",
+    role: member.role || "Select Member",
+    units: Number(member.units) || 0,
+    capitalCommitted: formatMoney(Number(member.invested_amount) || 0),
+    email: member.email || "No email posted",
+  }));
 
   const switchTab = (id: string) => { setActiveTab(id); setSidebarOpen(false); };
   const normalizedCrmSearch = crmSearch.trim().toLowerCase();
@@ -583,7 +603,7 @@ export default function AdminPortal() {
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
               {/* KPI Row */}
               <div className="sn-kpi-grid-6" style={{ display: "grid", gap: 14, marginBottom: 22 }}>
-                {[{ ico: <Users size={20} />, label: "Active Members", value: String(membersCount) }, { ico: <UserRoundPlus size={20} />, label: "New Requests", value: String(apps) }, { ico: <Star size={20} />, label: "Units Issued", value: issued.toLocaleString() }, { ico: <CircleDot size={20} />, label: "Remaining", value: remaining.toLocaleString() }, { ico: <Landmark size={20} />, label: "ACH Received (MTD)", value: "$84,200" }, { ico: <TrendingUp size={20} />, label: "Growth", value: "+18.4%" }].map((k, i) => (
+                {[{ ico: <Users size={20} />, label: "Active Members", value: String(activeMembers.length) }, { ico: <UserRoundPlus size={20} />, label: "New Requests", value: String(pendingRequests.length) }, { ico: <Star size={20} />, label: "Units Issued", value: issuedUnits.toLocaleString() }, { ico: <CircleDot size={20} />, label: "Remaining", value: remainingUnits.toLocaleString() }, { ico: <Landmark size={20} />, label: "ACH Pending", value: String(pendingAchRequests.length) }, { ico: <TrendingUp size={20} />, label: "Capital Committed", value: formatMoney(totalCapitalCommitted) }].map((k, i) => (
                   <div key={i} style={kpiBox} className="hover:translate-y-[-3px] hover:shadow-[0_16px_40px_rgba(5,20,45,.10)]">
                     <div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div>
                     <div><small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em" }}>{k.label}</small><br /><b style={{ fontSize: 18 }}>{k.value}</b></div>
@@ -602,10 +622,10 @@ export default function AdminPortal() {
                 </div>
                 <div className="sn-kpi-grid-4" style={{ display: "grid", gap: 12 }}>
                   {[
-                    { label: "Foundation Partners", value: "12", c: "#ffd46f" },
-                    { label: "Total Members", value: "87", c: "#fff" },
-                    { label: "Incentive Eligible", value: "41", c: "#9ff5c0" },
-                    { label: "Pending ACH", value: "9", c: "#ffd0a0" },
+                    { label: "Foundation Partners", value: String(foundationPartners.length), c: "#ffd46f" },
+                    { label: "Total Members", value: String(members.length), c: "#fff" },
+                    { label: "Incentive Eligible", value: String(foundationPartners.length), c: "#9ff5c0" },
+                    { label: "Pending ACH", value: String(pendingAchRequests.length), c: "#ffd0a0" },
                   ].map((s, i) => (
                     <div key={i} style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 10, padding: "12px 14px" }}>
                       <div style={{ fontSize: 20, fontWeight: 900, color: s.c }}>{s.value}</div>
@@ -626,60 +646,23 @@ export default function AdminPortal() {
                 </div>
                 <div className="sn-analytics-grid" style={{ display: "grid", gap: 14, marginBottom: 18 }}>
                   {[
-                    { label: "Total ACH Received", value: "$345,000", change: "+22%" },
-                    { label: "New Members (MTD)", value: "18", change: "+12%" },
-                    { label: "Units Sold (MTD)", value: "240", change: "+15%" },
-                    { label: "Avg Capital Commitment", value: "$8,625", change: "+8%" },
+                    { label: "Total Capital Committed", value: formatMoney(totalCapitalCommitted), change: "Live" },
+                    { label: "New Requests", value: String(pendingRequests.length), change: "Needs review" },
+                    { label: "Units Issued", value: issuedUnits.toLocaleString(), change: "Live" },
+                    { label: "Avg Capital Commitment", value: formatMoney(averageCapitalCommitment), change: "Live" },
                   ].map((d, i) => (
                     <div key={i} style={{ background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 10, padding: "14px 16px" }}>
                       <small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase" }}>{d.label}</small>
                       <div style={{ fontSize: 22, fontWeight: 900, margin: "4px 0 2px" }}>{d.value}</div>
-                      <span style={{ fontSize: 11, color: "#087345", fontWeight: 800 }}>{d.change} ↑</span>
+                      <span style={{ fontSize: 11, color: "#087345", fontWeight: 800 }}>{d.change}</span>
                     </div>
                   ))}
                 </div>
-                {/* Animated Chart with Real Numbers */}
-                <div style={{ position: "relative" }}>
-                  <svg viewBox="0 0 640 220" style={{ width: "100%", height: 180 }}>
-                    {/* Y-axis labels */}
-                    <text x="0" y="30" fill="#667085" fontSize="10">$80K</text>
-                    <text x="0" y="70" fill="#667085" fontSize="10">$60K</text>
-                    <text x="0" y="110" fill="#667085" fontSize="10">$40K</text>
-                    <text x="0" y="150" fill="#667085" fontSize="10">$20K</text>
-                    <text x="0" y="190" fill="#667085" fontSize="10">$0</text>
-                    {/* Grid */}
-                    <g stroke="#e7e2d8" strokeWidth="0.5"><path d="M40 28H620M40 68H620M40 108H620M40 148H620M40 188H620" /></g>
-                    {/* Revenue line (gold) */}
-                    <polyline points="70,168 170,148 270,128 370,108 470,78 570,38" fill="none" stroke="#bd8e28" strokeWidth="3" strokeLinecap="round" style={{ strokeDasharray: 900, strokeDashoffset: chartDraw ? 0 : 900, transition: "stroke-dashoffset 2s ease" }} />
-                    {/* Members line (green) */}
-                    <polyline points="70,178 170,168 270,158 370,148 470,128 570,98" fill="none" stroke="#075933" strokeWidth="3" strokeLinecap="round" style={{ strokeDasharray: 900, strokeDashoffset: chartDraw ? 0 : 900, transition: "stroke-dashoffset 2s ease .3s" }} />
-                    {/* Data points with values */}
-                    <g style={{ opacity: chartDraw ? 1 : 0, transition: "opacity .5s ease 1.5s" }}>
-                      <circle cx="70" cy="168" r="5" fill="#fff" stroke="#bd8e28" strokeWidth="3" />
-                      <circle cx="170" cy="148" r="5" fill="#fff" stroke="#bd8e28" strokeWidth="3" />
-                      <circle cx="270" cy="128" r="5" fill="#fff" stroke="#bd8e28" strokeWidth="3" />
-                      <circle cx="370" cy="108" r="5" fill="#fff" stroke="#bd8e28" strokeWidth="3" />
-                      <circle cx="470" cy="78" r="5" fill="#fff" stroke="#bd8e28" strokeWidth="3" />
-                      <circle cx="570" cy="38" r="5" fill="#fff" stroke="#bd8e28" strokeWidth="3" />
-                      <text x="60" y="160" fill="#bd8e28" fontSize="9" fontWeight="700">$22K</text>
-                      <text x="160" y="140" fill="#bd8e28" fontSize="9" fontWeight="700">$38K</text>
-                      <text x="260" y="120" fill="#bd8e28" fontSize="9" fontWeight="700">$52K</text>
-                      <text x="360" y="100" fill="#bd8e28" fontSize="9" fontWeight="700">$61K</text>
-                      <text x="460" y="70" fill="#bd8e28" fontSize="9" fontWeight="700">$72K</text>
-                      <text x="556" y="30" fill="#bd8e28" fontSize="9" fontWeight="700">$84K</text>
-                    </g>
-                    {/* X-axis labels */}
-                    <text x="60" y="210" fill="#667085" fontSize="10">Jan</text>
-                    <text x="160" y="210" fill="#667085" fontSize="10">Feb</text>
-                    <text x="260" y="210" fill="#667085" fontSize="10">Mar</text>
-                    <text x="360" y="210" fill="#667085" fontSize="10">Apr</text>
-                    <text x="460" y="210" fill="#667085" fontSize="10">May</text>
-                    <text x="560" y="210" fill="#667085" fontSize="10">Jun</text>
-                  </svg>
-                  <div style={{ display: "flex", gap: 18, marginTop: 8 }}>
-                    <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12 }}><span style={{ width: 12, height: 3, background: "#bd8e28", borderRadius: 2 }} />Revenue</span>
-                    <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12 }}><span style={{ width: 12, height: 3, background: "#075933", borderRadius: 2 }} />Member Growth</span>
-                  </div>
+                <div style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 12, padding: "22px 20px" }}>
+                  <b style={{ display: "block", marginBottom: 6 }}>Stripe ACH activity will appear here after payments settle.</b>
+                  <p style={{ color: "#667085", fontSize: 13, lineHeight: 1.6, margin: 0 }}>
+                    The old sample chart was removed. Once real ACH payment events are received from Stripe, this area can graph confirmed payments, processing payments, and posted quarterly distributions.
+                  </p>
                 </div>
               </div>
 
@@ -690,29 +673,25 @@ export default function AdminPortal() {
                 {/* Recent Activity */}
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Recent Activity</h2>
-                  {[
-                    { action: "Member Request Approved", who: "Michael Anderson", time: "2 hours ago", color: "#087345" },
-                    { action: "ACH Received", who: "$10,000 — Maria Santos", time: "5 hours ago", color: "#bd8e28" },
-                    { action: "New Member Request", who: "Jessica Moore", time: "8 hours ago", color: "#1e4fa3" },
-                    { action: "Certificate Issued", who: "James Wilson — Builder 10", time: "1 day ago", color: "#5b34a3" },
-                    { action: "Units Assigned", who: "25 units → David Chen", time: "1 day ago", color: "#075933" },
-                  ].map((a, i) => (
+                  {memberRequests.slice(0, 5).map((request: any, i) => (
                     <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "10px 0", borderBottom: "1px solid #eef2f6" }}>
-                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: a.color, marginTop: 6, flexShrink: 0 }} />
-                      <div><b style={{ fontSize: 12.5 }}>{a.action}</b><br /><small style={{ color: "#667085", fontSize: 11.5 }}>{a.who} · {a.time}</small></div>
+                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#bd8e28", marginTop: 6, flexShrink: 0 }} />
+                      <div><b style={{ fontSize: 12.5 }}>Member request</b><br /><small style={{ color: "#667085", fontSize: 11.5 }}>{request.name || "New member"} · {request.status || "Pending"}</small></div>
                     </div>
                   ))}
+                  {memberRequests.length === 0 && <p style={{ color: "#667085", fontSize: 13, margin: 0 }}>No live activity yet.</p>}
                 </div>
 
                 {/* Member Requests Queue */}
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Member Requests</h2>
-                  {[{ name: "Michael Anderson", loc: "Miami, FL", amt: "$10,000" }, { name: "Sophia Martinez", loc: "Austin, TX", amt: "$25,000" }, { name: "David Thompson", loc: "Dallas, TX", amt: "$50,000" }, { name: "Jessica Moore", loc: "Cleveland, OH", amt: "$5,000" }].map((a, i) => (
+                  {memberRequests.slice(0, 4).map((a: any, i) => (
                     <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #eef2f6" }}>
-                      <div><b style={{ fontSize: 13 }}>{a.name}</b><br /><small style={{ color: "#667085" }}>{a.loc} · {a.amt}</small></div>
+                      <div><b style={{ fontSize: 13 }}>{a.name || "New member"}</b><br /><small style={{ color: "#667085" }}>{a.interest_amount ? `$${Number(a.interest_amount).toLocaleString()}` : "Capital commitment pending"} · {a.status || "Pending"}</small></div>
                       <button onClick={() => switchTab("requests")} style={{ ...btnOutline, fontSize: 10, padding: "4px 10px" }}>Review</button>
                     </div>
                   ))}
+                  {memberRequests.length === 0 && <p style={{ color: "#667085", fontSize: 13, margin: 0 }}>No member requests waiting.</p>}
                 </div>
 
                 {/* Quick Actions */}
@@ -731,11 +710,11 @@ export default function AdminPortal() {
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Financial Summary</h2>
                   {[
-                    { label: "Total Raised (All Time)", value: "$345,000" },
-                    { label: "Total Disbursed", value: "$42,300" },
-                    { label: "Operating Account Balance", value: "$302,700" },
-                    { label: "Monthly Burn Rate", value: "$18,400" },
-                    { label: "Projected Q3 Revenue", value: "$125,000" },
+                    { label: "Total Capital Committed", value: formatMoney(totalCapitalCommitted) },
+                    { label: "Posted Distributions", value: "Not posted" },
+                    { label: "Pending ACH Requests", value: String(pendingAchRequests.length) },
+                    { label: "Average Capital Commitment", value: formatMoney(averageCapitalCommitment) },
+                    { label: "Units Issued", value: issuedUnits.toLocaleString() },
                   ].map((f, i) => (
                     <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid #eef2f6", fontSize: 14 }}>
                       <span style={{ color: "#667085" }}>{f.label}</span><b>{f.value}</b>
@@ -744,12 +723,7 @@ export default function AdminPortal() {
                 </div>
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 18, margin: "0 0 14px" }}>Upcoming This Week</h2>
-                  {[
-                    { title: "Select Member Call — Michael Anderson", time: "Today, 10:00 AM", type: "Zoom" },
-                    { title: "Onboarding — Sophia Martinez", time: "Wed, 2:00 PM", type: "Zoom" },
-                    { title: "Follow-up — David Thompson", time: "Fri, 11:30 AM", type: "Call" },
-                    { title: "Q2 Report Publish Deadline", time: "Fri, EOD", type: "Task" },
-                  ].map((m, i) => (
+                  {scheduledMeetings.slice(0, 4).map((m, i) => (
                     <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #eef2f6" }}>
                       <div><b style={{ fontSize: 13 }}>{m.title}</b><br /><small style={{ color: "#667085" }}>{m.time}</small></div>
                       <span style={{ padding: "4px 8px", borderRadius: 6, background: m.type === "Zoom" ? "#e7f0ff" : m.type === "Call" ? "#edf6ef" : "#fffaf0", color: m.type === "Zoom" ? "#1e4fa3" : m.type === "Call" ? "#075933" : "#bd8e28", fontSize: 10, fontWeight: 800 }}>{m.type}</span>
@@ -798,23 +772,25 @@ export default function AdminPortal() {
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 600 }}>
                   <thead><tr>{["Name", "Status", "Units", "Capital Committed", "Joined", "Action"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
                   <tbody>
-                    {[{ name: "Lorenzo", status: "Active", units: 50, capitalCommitted: "$5,000", joined: "May 12", role: "Founder", fp: true }, { name: "Maria Santos", status: "Active", units: 25, capitalCommitted: "$2,500", joined: "May 20", role: "Select Member-Builder", fp: true }, { name: "David Chen", status: "Pending", units: 10, capitalCommitted: "$1,000", joined: "May 22", role: "Select Member", fp: true }, { name: "James Wilson", status: "Active", units: 15, capitalCommitted: "$1,500", joined: "May 28", role: "Builder", fp: true }].map((m, i) => (
-                      <tr key={i}><td style={{ ...tdS, fontWeight: 700 }}>{m.name}{m.fp && <span style={{ marginLeft: 6, background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "2px 7px", borderRadius: 4, verticalAlign: "middle" }}>Foundation Partner</span>}</td><td style={tdS}><span style={statusBadge(m.status)}>{m.status}</span></td><td style={tdS}>{m.units}</td><td style={tdS}>{m.capitalCommitted}</td><td style={{ ...tdS, color: "#667085" }}>{m.joined}</td><td style={tdS}><span style={labelStyle(m.role)}>{m.role}</span> <button style={{ ...btnOutline, marginLeft: 6 }}>View</button></td></tr>
+                    {members.map((m, i) => (
+                      <tr key={m.id || i}><td style={{ ...tdS, fontWeight: 700 }}>{m.name || "Member"}{(Number(m.invested_amount) || 0) >= 10000 && <span style={{ marginLeft: 6, background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "2px 7px", borderRadius: 4, verticalAlign: "middle" }}>Foundation Partner</span>}</td><td style={tdS}><span style={statusBadge(m.status || "Pending")}>{m.status || "Pending"}</span></td><td style={tdS}>{m.units || 0}</td><td style={tdS}>{formatMoney(Number(m.invested_amount) || 0)}</td><td style={{ ...tdS, color: "#667085" }}>{m.joined_date ? new Date(m.joined_date).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "Not posted"}</td><td style={tdS}><span style={labelStyle(m.role || "Select Member")}>{m.role || "Select Member"}</span> <button style={{ ...btnOutline, marginLeft: 6 }}>View</button></td></tr>
                     ))}
                   </tbody>
                 </table>
+                {members.length === 0 && <p style={{ color: "#667085", fontSize: 13, margin: "14px 0 0" }}>No members are posted yet.</p>}
                 </div>
                 <div className="sn-mobile-cards" style={{ display: "none" }}>
-                  {[{ name: "Lorenzo", status: "Active", units: 50, capitalCommitted: "$5,000", joined: "May 12", role: "Founder", fp: true }, { name: "Maria Santos", status: "Active", units: 25, capitalCommitted: "$2,500", joined: "May 20", role: "Select Member-Builder", fp: true }, { name: "David Chen", status: "Pending", units: 10, capitalCommitted: "$1,000", joined: "May 22", role: "Select Member", fp: true }, { name: "James Wilson", status: "Active", units: 15, capitalCommitted: "$1,500", joined: "May 28", role: "Builder", fp: true }].map((m, i) => (
-                    <div key={i}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}><b style={{ fontSize: 15 }}>{m.name}</b><span style={statusBadge(m.status)}>{m.status}</span></div>
-                      {m.fp && <div style={{ marginBottom: 8, display: "flex", gap: 5, flexWrap: "wrap" }}><span style={{ background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "3px 8px", borderRadius: 4 }}>Foundation Partner</span> <span style={labelStyle(m.role)}>{m.role}</span></div>}
-                      <div className="sn-m-card-row"><span className="sn-m-label">Units</span><span className="sn-m-value">{m.units}</span></div>
-                      <div className="sn-m-card-row"><span className="sn-m-label">Capital Committed</span><span className="sn-m-value">{m.capitalCommitted}</span></div>
-                      <div className="sn-m-card-row"><span className="sn-m-label">Joined</span><span className="sn-m-value">{m.joined}</span></div>
+                  {members.map((m, i) => (
+                    <div key={m.id || i}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}><b style={{ fontSize: 15 }}>{m.name || "Member"}</b><span style={statusBadge(m.status || "Pending")}>{m.status || "Pending"}</span></div>
+                      {(Number(m.invested_amount) || 0) >= 10000 && <div style={{ marginBottom: 8, display: "flex", gap: 5, flexWrap: "wrap" }}><span style={{ background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", fontSize: 9, fontWeight: 900, padding: "3px 8px", borderRadius: 4 }}>Foundation Partner</span> <span style={labelStyle(m.role || "Select Member")}>{m.role || "Select Member"}</span></div>}
+                      <div className="sn-m-card-row"><span className="sn-m-label">Units</span><span className="sn-m-value">{m.units || 0}</span></div>
+                      <div className="sn-m-card-row"><span className="sn-m-label">Capital Committed</span><span className="sn-m-value">{formatMoney(Number(m.invested_amount) || 0)}</span></div>
+                      <div className="sn-m-card-row"><span className="sn-m-label">Joined</span><span className="sn-m-value">{m.joined_date ? new Date(m.joined_date).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "Not posted"}</span></div>
                       <button style={{ ...btnOutline, width: "100%", marginTop: 10 }}>View Profile</button>
                     </div>
                   ))}
+                  {members.length === 0 && <p style={{ color: "#667085", fontSize: 13, margin: 0 }}>No members are posted yet.</p>}
                 </div>
               </div>
             </div>
@@ -824,7 +800,7 @@ export default function AdminPortal() {
           {activeTab === "units" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
               <div className="sn-kpi-grid-4" style={{ display: "grid", gap: 14, marginBottom: 22 }}>
-                {[{ ico: <Star size={20} />, label: "Total Planned", value: "50,000" }, { ico: <CheckCircle size={20} />, label: "Issued", value: "3,450" }, { ico: <CircleDot size={20} />, label: "Remaining", value: "46,550" }, { ico: <Wallet size={20} />, label: "Unit Price", value: "$100" }].map((k, i) => (
+                {[{ ico: <Star size={20} />, label: "Total Planned", value: totalPlannedUnits.toLocaleString() }, { ico: <CheckCircle size={20} />, label: "Issued", value: issuedUnits.toLocaleString() }, { ico: <CircleDot size={20} />, label: "Remaining", value: remainingUnits.toLocaleString() }, { ico: <Wallet size={20} />, label: "Unit Price", value: "$100" }].map((k, i) => (
                   <div key={i} style={kpiBox}><div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div><div><small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase" }}>{k.label}</small><br /><b style={{ fontSize: 18 }}>{k.value}</b></div></div>
                 ))}
               </div>
@@ -835,8 +811,8 @@ export default function AdminPortal() {
                   <div><label style={fieldLabel}>Assign To Member</label><input placeholder="Search member" style={fieldInput} /></div>
                 </div>
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}><button style={btnGreen}>Issue Units</button><button style={btnOutline}>Pause Available</button><button style={btnOutline}>Update Availability</button></div>
-                <div style={{ marginTop: 18, height: 12, background: "#edf6ef", borderRadius: 99, overflow: "hidden" }}><div style={{ height: "100%", width: "6.9%", background: "linear-gradient(90deg,#bd8e28,#075933)", borderRadius: 99, transition: "width 1.5s ease" }} /></div>
-                <p style={{ fontSize: 12, color: "#667085", marginTop: 8 }}>3,450 of 50,000 units issued (6.9%)</p>
+                <div style={{ marginTop: 18, height: 12, background: "#edf6ef", borderRadius: 99, overflow: "hidden" }}><div style={{ height: "100%", width: `${Math.min((issuedUnits / totalPlannedUnits) * 100, 100)}%`, background: "linear-gradient(90deg,#bd8e28,#075933)", borderRadius: 99, transition: "width 1.5s ease" }} /></div>
+                <p style={{ fontSize: 12, color: "#667085", marginTop: 8 }}>{issuedUnits.toLocaleString()} of {totalPlannedUnits.toLocaleString()} units issued ({((issuedUnits / totalPlannedUnits) * 100).toFixed(1)}%)</p>
               </div>
             </div>
           )}
@@ -849,14 +825,14 @@ export default function AdminPortal() {
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 550 }}>
                   <thead><tr>{["Member", "Amount", "Method", "Status", "Action"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
                   <tbody>
-                    {[{ name: "David Chen", amount: "$1,000", status: "Pending" }, { name: "Maria Santos", amount: "$2,500", status: "Active" }, { name: "James Wilson", amount: "$1,500", status: "Active" }].map((p, i) => (
+                    {paymentRows.map((p, i) => (
                       <tr key={i}><td style={{ ...tdS, fontWeight: 700 }}>{p.name}</td><td style={tdS}>{p.amount}</td><td style={{ ...tdS, color: "#667085" }}>ACH</td><td style={tdS}><span style={statusBadge(p.status)}>{p.status}</span></td><td style={tdS}><button style={btnOutline}>Review</button></td></tr>
                     ))}
                   </tbody>
                 </table>
                 </div>
                 <div className="sn-mobile-cards" style={{ display: "none" }}>
-                  {[{ name: "David Chen", amount: "$1,000", status: "Pending" }, { name: "Maria Santos", amount: "$2,500", status: "Active" }, { name: "James Wilson", amount: "$1,500", status: "Active" }].map((p, i) => (
+                  {paymentRows.map((p, i) => (
                     <div key={i}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}><b style={{ fontSize: 15 }}>{p.name}</b><span style={statusBadge(p.status)}>{p.status}</span></div>
                       <div className="sn-m-card-row"><span className="sn-m-label">Amount</span><span className="sn-m-value">{p.amount}</span></div>
@@ -865,7 +841,8 @@ export default function AdminPortal() {
                     </div>
                   ))}
                 </div>
-                <div style={{ marginTop: 16, borderLeft: "4px solid #3b82f6", background: "#f0f7ff", color: "#1e40af", padding: "12px 14px", fontSize: 12, borderRadius: "0 6px 6px 0" }}>ACH only. JPMorgan OAuth is handled securely on the server. Credit cards, debit cards, checks, cash, and other payment paths are not accepted.</div>
+                {paymentRows.length === 0 && <p style={{ color: "#667085", fontSize: 13, margin: "14px 0 0" }}>No Stripe ACH checkout activity is posted yet.</p>}
+                <div style={{ marginTop: 16, borderLeft: "4px solid #3b82f6", background: "#f0f7ff", color: "#1e40af", padding: "12px 14px", fontSize: 12, borderRadius: "0 6px 6px 0" }}>ACH only. Stripe hosts the secure bank connection and payment authorization. Credit cards, debit cards, checks, cash, and other payment paths are not accepted.</div>
               </div>
             </div>
           )}
@@ -904,7 +881,7 @@ export default function AdminPortal() {
                 <div style={card}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>2. Quarterly Return Calculator</h2>
                   <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                    <div><label style={fieldLabel}>Profit Pool</label><input defaultValue="$2,625" style={fieldInput} /></div>
+                    <div><label style={fieldLabel}>Profit Pool</label><input placeholder="Enter quarterly profit pool" style={fieldInput} /></div>
                     <div><label style={fieldLabel}>Return Method</label><select style={fieldInput}><option>By Units Owned</option><option>Custom Per Member</option><option>Flat Percent</option></select></div>
                   </div>
                   <div style={{ marginBottom: 12 }}><label style={fieldLabel}>Publish Message</label><textarea rows={3} defaultValue="Q2 earnings have been posted to your member dashboard." style={{ ...fieldInput, resize: "none" as const }} /></div>
@@ -926,21 +903,22 @@ export default function AdminPortal() {
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead><tr>{["Member", "Role", "Units", "Capital Committed", "Quarter Return", "Status"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
                     <tbody>
-                      {quarterlyRows.map((member, index) => (
+                      {quarterlyReviewRows.map((member, index) => (
                         <tr key={member.email}>
                           <td style={tdS}><b>{member.name}</b><br /><small style={{ color: "#667085" }}>{member.email}</small></td>
                           <td style={tdS}>{member.role}</td>
                           <td style={tdS}>{member.units}</td>
                           <td style={tdS}>{member.capitalCommitted}</td>
-                          <td style={tdS}><input defaultValue={member.suggested} style={{ ...fieldInput, maxWidth: 150, padding: "9px 10px" }} /></td>
+                          <td style={tdS}><input placeholder="Enter return" style={{ ...fieldInput, maxWidth: 150, padding: "9px 10px" }} /></td>
                           <td style={tdS}><span style={statusBadge(index < 2 ? "Review" : "Pending")}>{index < 2 ? "Review" : "Pending"}</span></td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
+                  {quarterlyReviewRows.length === 0 && <p style={{ color: "#667085", fontSize: 13, margin: "14px 0 0" }}>No member rows are available yet. Add or approve members before publishing quarterly earnings.</p>}
                 </div>
                 <div className="sn-mobile-cards" style={{ display: "none" }}>
-                  {quarterlyRows.map((member) => (
+                  {quarterlyReviewRows.map((member) => (
                     <div key={member.email}>
                       <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 8 }}>
                         <b>{member.name}</b>
@@ -950,9 +928,10 @@ export default function AdminPortal() {
                       <div className="sn-m-card-row"><span className="sn-m-label">Units</span><span className="sn-m-value">{member.units}</span></div>
                       <div className="sn-m-card-row"><span className="sn-m-label">Capital Committed</span><span className="sn-m-value">{member.capitalCommitted}</span></div>
                       <label style={{ ...fieldLabel, marginTop: 10 }}>Quarter Return</label>
-                      <input defaultValue={member.suggested} style={fieldInput} />
+                      <input placeholder="Enter return" style={fieldInput} />
                     </div>
                   ))}
+                  {quarterlyReviewRows.length === 0 && <p style={{ color: "#667085", fontSize: 13, margin: 0 }}>No member rows are available yet.</p>}
                 </div>
               </div>
             </div>

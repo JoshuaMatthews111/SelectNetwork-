@@ -95,13 +95,7 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    // Demo login bypass
-    if ((email === "demo" || email === "demo@demo.com") && password === "demo") {
-      router.push('/investor');
-      return;
-    }
-    
-    const normalizedEmail = email.trim().toLowerCase() === "tkmillerk999@gmail.com" ? "tmillerk999@gmail.com" : email.trim().toLowerCase();
+    const normalizedEmail = email.trim().toLowerCase();
     const supabase = getSupabaseBrowser();
     const { error: authError } = await supabase.auth.signInWithPassword({
       email: normalizedEmail,
@@ -150,11 +144,6 @@ export default function LoginPage() {
         <form onSubmit={handleLogin}>
           <div style={{ marginBottom: 16 }}><label style={fieldLabel}>Email</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="name@example.com" style={fieldInput} /></div>
           <div style={{ marginBottom: 20 }}><label style={fieldLabel}>Password</label><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" style={fieldInput} /></div>
-          {mode === "staff" && (
-            <div style={{ background: "#f9f6ef", border: "1px solid #e7e2d8", borderRadius: 6, color: "#604b17", fontSize: 12, lineHeight: 1.5, padding: "10px 12px", margin: "0 0 16px" }}>
-              Use <b>tmillerk999@gmail.com</b>. If you typed <b>tkmillerk999@gmail.com</b>, the system will correct that common typo for this login.
-            </div>
-          )}
           <button type="submit" disabled={loading} className="sn-btn-gold sn-btn" style={{ width: "100%", boxSizing: "border-box", padding: "16px 0", opacity: loading ? 0.7 : 1 }}>
             {loading ? <><Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} /> Signing In...</> : "Sign In →"}
           </button>
@@ -175,14 +164,12 @@ export default function LoginPage() {
         <button onClick={() => setMode("investor")} style={{ textAlign: "left", background: "#fff", border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", padding: 28, borderRadius: 10, cursor: "pointer", transition: ".35s" }} className="hover:translate-y-[-4px] hover:border-[#bd8e28]">
           <div style={{ width: 56, height: 56, borderRadius: "50%", border: "1px solid #bd8e28", display: "grid", placeItems: "center", color: "#bd8e28", marginBottom: 16, background: "linear-gradient(135deg,#fffaf0,#fff3d6)" }}><TrendingUp size={26} /></div>
           <b style={{ display: "block", fontSize: 20, color: "#071a33", marginBottom: 8 }}>Select Member Portal</b>
-          <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: "0 0 12px" }}>Access your private dashboard, units, growth chart, documents, earnings, and account updates.</p>
-          <span style={{ fontSize: 11, color: "#bd8e28", fontWeight: 800, textTransform: "uppercase", letterSpacing: ".04em" }}>Demo: demo / demo</span>
+          <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: 0 }}>Access your private dashboard, units, growth chart, documents, earnings, and account updates.</p>
         </button>
         <button onClick={() => setMode("staff")} style={{ textAlign: "left", background: "#fff", border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", padding: 28, borderRadius: 10, cursor: "pointer", transition: ".35s" }} className="hover:translate-y-[-4px] hover:border-[#075933]">
           <div style={{ width: 56, height: 56, borderRadius: "50%", border: "1px solid #075933", display: "grid", placeItems: "center", color: "#075933", marginBottom: 16, background: "linear-gradient(135deg,#e3f5eb,#d4eddf)" }}><ShieldCheck size={26} /></div>
           <b style={{ display: "block", fontSize: 20, color: "#071a33", marginBottom: 8 }}>Staff / Admin Portal</b>
-          <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: "0 0 12px" }}>Access the back office to manage members, requests, payments, documents, reports, and the referral network.</p>
-          <span style={{ fontSize: 11, color: "#075933", fontWeight: 800, textTransform: "uppercase", letterSpacing: ".04em" }}>Admin email: tmillerk999@gmail.com</span>
+          <p style={{ fontSize: 13, lineHeight: 1.55, color: "#667085", margin: 0 }}>Access the back office to manage members, requests, payments, documents, reports, and the referral network.</p>
         </button>
       </div>
       <div style={{ textAlign: "center", marginTop: 24 }}>

@@ -140,10 +140,10 @@ export default function InvestorPortal() {
   };
   useEffect(() => { if (activeTab === "matrix") setTimeout(() => setMatrixAnimated(true), 100); }, [activeTab]);
 
-  const units = useCountUp(50);
-  const reports = useCountUp(8);
-  const balance = useCountUp(5230);
-  const referrals = useCountUp(28);
+  const units = useCountUp(0);
+  const reports = useCountUp(0);
+  const balance = useCountUp(0);
+  const referrals = useCountUp(0);
 
   const openDrawer = (m: typeof matrixMembers.l1[0]) => setDrawerMember(m);
 
@@ -249,10 +249,10 @@ export default function InvestorPortal() {
               {/* KPIs */}
               <div className="sn-kpi-grid-6" style={{ display: "grid", gap: 14, marginBottom: 22 }}>
                 {[
-                  { ico: <Diamond size={20} />, label: "Member Status", value: "Active", color: "#075933" },
+                  { ico: <Diamond size={20} />, label: "Member Status", value: "Pending", color: "#bd8e28" },
                   { ico: <Star size={20} />, label: "Units", value: String(units), color: "#071a33" },
                   { ico: <Wallet size={20} />, label: "Unit Price", value: "$100", color: "#071a33" },
-                  { ico: <CheckCircle size={20} />, label: "KYC Status", value: "Verified", color: "#075933" },
+                  { ico: <CheckCircle size={20} />, label: "KYC Status", value: "Not posted", color: "#bd8e28" },
                   { ico: <FileText size={20} />, label: "Reports", value: String(reports), color: "#071a33" },
                   { ico: <TrendingUp size={20} />, label: "Available Balance", value: `$${balance.toLocaleString()}`, color: "#075933" },
                 ].map((k, i) => (
@@ -267,11 +267,11 @@ export default function InvestorPortal() {
               <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 18, marginBottom: 18 }}>
                 <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: 24, boxShadow: "0 8px 24px rgba(5,20,45,.06)" }}>
                   <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 4px" }}>Quarterly Distribution Overview</h2>
-                  <p style={{ fontSize: 12, color: "#667085", margin: "0 0 16px" }}>Placeholder values — updated each quarter when distributions are posted.</p>
+                  <p style={{ fontSize: 12, color: "#667085", margin: "0 0 16px" }}>Distribution values appear here after admin posts official quarterly results.</p>
                   <div className="sn-quarter-grid" style={{ display: "grid", gap: 10 }}>
-                    {[
-                      { q: "Q1", val: "$0", note: "Baseline" },
-                      { q: "Q2", val: "$0", note: "Baseline" },
+                  {[
+                    { q: "Q1", val: "—", note: "Not posted" },
+                    { q: "Q2", val: "—", note: "Not posted" },
                       { q: "Q3", val: "—", note: "Pending" },
                       { q: "Q4", val: "—", note: "Pending" },
                     ].map((d) => (
@@ -325,11 +325,11 @@ export default function InvestorPortal() {
               <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", borderRadius: 14, padding: "20px 24px", marginBottom: 22, display: "flex", gap: 14, alignItems: "flex-start" }}>
                 <Star size={22} color="#ffd46f" style={{ flexShrink: 0, marginTop: 2 }} />
                 <p style={{ margin: 0, color: "#c6d2e1", fontSize: 13.5, lineHeight: 1.7 }}>
-                  <b style={{ color: "#ffd46f" }}>What is a Unit?</b> A Unit is a proportional participation allocation within The Select Network Member Group membership stake structure, used to determine a select member&apos;s share of designated company distributions and growth-based revenue participation.
+                  <b style={{ color: "#ffd46f" }}>What is a Unit?</b> A Unit is a proportional participation allocation within The Select Network Member Group membership stake structure, used to determine a Select member&apos;s share of designated company distributions and growth-based revenue participation.
                 </p>
               </div>
               <div className="sn-kpi-grid-4" style={{ display: "grid", gap: 14, marginBottom: 22 }}>
-                {[{ ico: <Star size={20} />, label: "Total Owned", value: "50" }, { ico: <Wallet size={20} />, label: "Unit Price", value: "$100" }, { ico: <CheckCircle size={20} />, label: "Active Units", value: "50" }, { ico: <CircleDot size={20} />, label: "Pending Units", value: "0" }].map((k, i) => (
+                {[{ ico: <Star size={20} />, label: "Total Owned", value: "Not posted" }, { ico: <Wallet size={20} />, label: "Unit Price", value: "$100" }, { ico: <CheckCircle size={20} />, label: "Active Units", value: "Not posted" }, { ico: <CircleDot size={20} />, label: "Pending Units", value: "Not posted" }].map((k, i) => (
                   <div key={i} style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 14, padding: "18px 16px", boxShadow: "0 8px 24px rgba(5,20,45,.06)", display: "flex", alignItems: "center", gap: 14 }}>
                     <div style={{ width: 42, height: 42, borderRadius: "50%", background: "#edf6ef", border: "1px solid #c7e2d0", display: "grid", placeItems: "center", color: "#c48817" }}>{k.ico}</div>
                     <div><small style={{ fontSize: 11, color: "#667085", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".04em" }}>{k.label}</small><br /><b style={{ fontSize: 18 }}>{k.value}</b></div>
@@ -342,15 +342,15 @@ export default function InvestorPortal() {
                   <div className="sn-desktop-table">
                     <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                       <thead><tr style={{ borderBottom: "1px solid #e9edf3" }}>{["Date", "Type", "Units", "Amount", "Status"].map(h => <th key={h} style={{ textAlign: "left", padding: 10, color: "#667085", fontSize: 11, textTransform: "uppercase", fontWeight: 900 }}>{h}</th>)}</tr></thead>
-                      <tbody><tr style={{ borderBottom: "1px solid #eef2f6" }}><td style={{ padding: 12 }}>May 19, 2025</td><td style={{ padding: 12 }}>Initial Units</td><td style={{ padding: 12 }}>50</td><td style={{ padding: 12 }}>$5,000</td><td style={{ padding: 12 }}><span style={{ padding: "4px 10px", borderRadius: 99, background: "#e3f5eb", color: "#087345", fontSize: 11, fontWeight: 900 }}>Active</span></td></tr></tbody>
+                      <tbody><tr style={{ borderBottom: "1px solid #eef2f6" }}><td style={{ padding: 12 }}>Pending</td><td style={{ padding: 12 }}>ACH confirmation</td><td style={{ padding: 12 }}>Not posted</td><td style={{ padding: 12 }}>Not posted</td><td style={{ padding: 12 }}><span style={{ padding: "4px 10px", borderRadius: 99, background: "#fffaf0", color: "#bd8e28", fontSize: 11, fontWeight: 900 }}>Pending</span></td></tr></tbody>
                     </table>
                   </div>
                   <div className="sn-mobile-cards" style={{ display: "none" }}>
                     <div>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}><b style={{ fontSize: 15 }}>Initial Units</b><span style={{ padding: "4px 10px", borderRadius: 99, background: "#e3f5eb", color: "#087345", fontSize: 11, fontWeight: 900 }}>Active</span></div>
-                      <div className="sn-m-card-row"><span className="sn-m-label">Date</span><span className="sn-m-value">May 19, 2025</span></div>
-                      <div className="sn-m-card-row"><span className="sn-m-label">Units</span><span className="sn-m-value">50</span></div>
-                      <div className="sn-m-card-row"><span className="sn-m-label">Amount</span><span className="sn-m-value">$5,000</span></div>
+                      <div className="sn-m-card-row"><span className="sn-m-label">Date</span><span className="sn-m-value">Pending</span></div>
+                      <div className="sn-m-card-row"><span className="sn-m-label">Units</span><span className="sn-m-value">Not posted</span></div>
+                      <div className="sn-m-card-row"><span className="sn-m-label">Amount</span><span className="sn-m-value">Not posted</span></div>
                     </div>
                   </div>
                 </div>
@@ -382,9 +382,9 @@ export default function InvestorPortal() {
                 </div>
                 <div className="sn-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
                   {[
-                    { label: "Q2 2026 Return", value: "$1,250", note: "Pending final admin publish" },
-                    { label: "Units Counted", value: "50", note: "Used for return calculation" },
-                    { label: "Report File", value: "Ready", note: "Download after publish" },
+                    { label: "Quarter Return", value: "Not posted", note: "Appears after admin publish" },
+                    { label: "Units Counted", value: "Not posted", note: "Used for return calculation" },
+                    { label: "Report File", value: "Pending", note: "Download after publish" },
                   ].map((item) => (
                     <div key={item.label} style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 10, padding: "14px 16px" }}>
                       <small style={{ display: "block", color: "#667085", fontSize: 11, fontWeight: 900, textTransform: "uppercase", marginBottom: 6 }}>{item.label}</small>

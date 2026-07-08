@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowRight, Phone, Clock, Heart, PawPrint, TrendingUp, ShieldCheck, EyeOff, BadgeCheck, Building2, Plus, Minus, ChevronDown, ChevronUp, Info } from "lucide-react";
+import { ArrowRight, Phone, Clock, Heart, PawPrint, TrendingUp, ShieldCheck, EyeOff, BadgeCheck, Building2, Plus, Minus } from "lucide-react";
 import SNNav from "../../components/SNNav";
 import SNFooter from "../../components/SNFooter";
 import Reveal from "../../components/Reveal";
@@ -21,7 +21,6 @@ const FAQ_ITEMS = [
 
 export default function LDTTOpportunityPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [showDropExplanation, setShowDropExplanation] = useState(false);
 
   return (
     <div style={{ fontFamily: "Inter, Arial, sans-serif", color: NAVY, background: "#fff" }}>
@@ -201,38 +200,14 @@ export default function LDTTOpportunityPage() {
               </Reveal>
             ))}
           </div>
-          <p style={{ textAlign: "center", color: "#667085", fontSize: 12, marginTop: 24, fontStyle: "italic" }}>
-            All statements are subject to member terms and official disclosures. Past performance does not guarantee future results.
-          </p>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════
-          WHY THE DROP HAPPENED + RECOVERY
+          RECOVERY STRATEGY
       ══════════════════════════════════════════════════════ */}
       <section style={{ padding: "70px 0", background: "#fff" }}>
         <div className="sn-shell" style={{ maxWidth: 900 }}>
-          <Reveal>
-            <div style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 16, padding: "32px 28px", marginBottom: 28 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer" }} onClick={() => setShowDropExplanation(!showDropExplanation)}>
-                <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 24, margin: 0, display: "flex", alignItems: "center", gap: 12 }}>
-                  <Info size={22} color={GOLD} /> Why the Drop Happened
-                </h2>
-                {showDropExplanation ? <ChevronUp size={22} color={GOLD} /> : <ChevronDown size={22} color={GOLD} />}
-              </div>
-              {showDropExplanation && (
-                <div style={{ marginTop: 18, animation: "fadeIn .3s ease" }}>
-                  <p style={{ color: "#3d4a57", lineHeight: 1.8, fontSize: 14.5, margin: "0 0 16px" }}>
-                    Lorenzo&apos;s Dog Training Team previously operated with a larger trainer network, reaching more than 100 trainers before major disruption affected the company&apos;s structure and operations. During the COVID period and the seasons that followed, the trainer count dropped to approximately 25 as the business adjusted to market changes, operational challenges, staffing shifts, and the need to rebuild with stronger systems.
-                  </p>
-                  <p style={{ color: "#5b6675", lineHeight: 1.7, fontSize: 13.5, margin: 0, fontStyle: "italic" }}>
-                    This section helps select members understand that the drop represents a past disruption, not the final direction of the company.
-                  </p>
-                </div>
-              )}
-            </div>
-          </Reveal>
-
           <Reveal delay={100}>
             <div style={{ background: "linear-gradient(135deg,#0b5b34,#06351f)", color: "#fff", borderRadius: 16, padding: "32px 28px" }}>
               <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 24, margin: "0 0 16px", color: "#ffd46f" }}>Current Recovery and Growth Strategy</h2>
