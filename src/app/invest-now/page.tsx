@@ -69,6 +69,7 @@ export default function InvestNowPage() {
     state: "",
     zip: "",
     heard: "",
+    sponsor: "",
   });
   const [ack, setAck] = useState({ terms: false, distributions: false, disclaimer: false });
 
@@ -107,6 +108,7 @@ export default function InvestNowPage() {
           zip: form.zip,
           cityState: `${form.city}, ${form.state} ${form.zip}`.trim(),
           heard: form.heard,
+          sponsor: form.sponsor,
           interest_amount: subtotal,
           role,
           units,
@@ -287,6 +289,7 @@ export default function InvestNowPage() {
                       <Field label="State *"><input value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })} placeholder="State" style={inputStyle} /></Field>
                       <Field label="Zip Code *"><input value={form.zip} onChange={(e) => setForm({ ...form, zip: e.target.value })} placeholder="Zip code" style={inputStyle} /></Field>
                       <Field label="How did you hear about The Select Network Member Group?"><input value={form.heard} onChange={(e) => setForm({ ...form, heard: e.target.value })} placeholder="Referral, event, online..." style={inputStyle} /></Field>
+                      <Field label="Who referred you?"><input value={form.sponsor} onChange={(e) => setForm({ ...form, sponsor: e.target.value })} placeholder="Referral name or email, if applicable" style={inputStyle} /></Field>
                     </div>
                     <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
                       <button onClick={next} disabled={!infoValid} style={{ ...btnPrimary, ...(infoValid ? {} : dis) }}>Continue <ArrowRight size={16} /></button>

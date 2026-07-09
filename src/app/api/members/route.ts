@@ -37,7 +37,8 @@ export async function POST(req: NextRequest) {
       invested_amount: body.invested_amount || 0,
       joined_date: new Date().toISOString(),
       location: body.location,
-      referral_source: body.referral_source
+      referral_source: body.referral_source,
+      sponsor_id: body.sponsor_id || ''
     }])
     .select();
   

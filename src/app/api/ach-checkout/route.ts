@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
   const notes = [
     `Address: ${[body.addressLine1, body.addressLine2, body.city, body.state, body.zip].filter(Boolean).join(", ") || body.cityState || ""}`,
     `How they heard: ${body.heard || ""}`,
+    `Sponsor: ${body.sponsor || ""}`,
     `Role: ${body.role || ""}`,
     `Units: ${body.units || ""}`,
     "Payment Method: Stripe ACH bank transfer",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronUp, Expand, RotateCcw, TreePine, UserRoundSearch, Users, X } from "lucide-react";
 
 type RoleMode = "admin" | "investor" | "builder";
@@ -18,37 +18,62 @@ type ReferralPerson = {
   photo: string;
 };
 
-const people: ReferralPerson[] = [
-  { id: "lorenzo", name: "Lorenzo", role: "Origin", status: "Active", level: 0, units: 50, capitalCommitted: "$50,000", joined: "May 19, 2025", photo: "https://i.pravatar.cc/120?img=68" },
+type MemberRecord = {
+  id: string;
+  name?: string;
+  email?: string;
+  role?: string;
+  status?: string;
+  units?: number;
+  invested_amount?: number;
+  capital_commitment?: number;
+  joined_date?: string;
+  sponsor_id?: string;
+  avatar_url?: string;
+};
+
+const rootPerson: ReferralPerson = {
+  id: "lorenzo",
+  name: "Lorenzo",
+  role: "Origin",
+  status: "Active",
+  level: 0,
+  units: 50,
+  capitalCommitted: "$50,000",
+  joined: "May 19, 2025",
+  photo: "/assets/select-network/IMG_9919.png",
+};
+
+const demoPeople: ReferralPerson[] = [
+  rootPerson,
   { id: "maria", name: "Maria Santos", role: "Select Member-Builder", status: "Active", level: 1, units: 25, capitalCommitted: "$25,000", joined: "May 20, 2025", sponsorId: "lorenzo", photo: "https://i.pravatar.cc/120?img=47" },
   { id: "david", name: "David Chen", role: "Select Member", status: "Pending", level: 1, units: 10, capitalCommitted: "$10,000", joined: "May 22, 2025", sponsorId: "lorenzo", photo: "https://i.pravatar.cc/120?img=12" },
   { id: "james", name: "James Wilson", role: "Builder", status: "Active", level: 1, units: 15, capitalCommitted: "$15,000", joined: "May 28, 2025", sponsorId: "lorenzo", photo: "https://i.pravatar.cc/120?img=52" },
   { id: "sophia", name: "Sophia Lee", role: "Select Member", status: "Active", level: 2, units: 5, capitalCommitted: "$5,000", joined: "Jun 1, 2025", sponsorId: "maria", photo: "https://i.pravatar.cc/120?img=5" },
   { id: "michael", name: "Michael Brown", role: "Select Member-Builder", status: "Active", level: 2, units: 8, capitalCommitted: "$8,000", joined: "Jun 5, 2025", sponsorId: "maria", photo: "https://i.pravatar.cc/120?img=11" },
-  { id: "emily", name: "Emily Davis", role: "Select Member", status: "Pending", level: 2, units: 3, capitalCommitted: "$3,000", joined: "Jun 8, 2025", sponsorId: "maria", photo: "https://i.pravatar.cc/120?img=9" },
-  { id: "chris", name: "Chris Park", role: "Select Member", status: "Active", level: 2, units: 12, capitalCommitted: "$12,000", joined: "Jun 10, 2025", sponsorId: "david", photo: "https://i.pravatar.cc/120?img=14" },
-  { id: "ana", name: "Ana Torres", role: "Builder", status: "Active", level: 2, units: 6, capitalCommitted: "$6,000", joined: "Jun 12, 2025", sponsorId: "david", photo: "https://i.pravatar.cc/120?img=16" },
   { id: "tyler", name: "Tyler Reed", role: "Select Member", status: "Active", level: 3, units: 4, capitalCommitted: "$4,000", joined: "Jun 20, 2025", sponsorId: "sophia", photo: "https://i.pravatar.cc/120?img=33" },
-  { id: "keisha", name: "Keisha Moore", role: "Select Member-Builder", status: "Active", level: 3, units: 7, capitalCommitted: "$7,000", joined: "Jun 22, 2025", sponsorId: "michael", photo: "https://i.pravatar.cc/120?img=25" },
-  { id: "ryan", name: "Ryan Scott", role: "Select Member", status: "Review", level: 3, units: 2, capitalCommitted: "$2,500", joined: "Jun 25, 2025", sponsorId: "michael", photo: "https://i.pravatar.cc/120?img=15" },
 ];
 
-const adminPlaceholderPeople: ReferralPerson[] = Array.from({ length: 7 }, (_, index) => {
-  const level = index + 4;
-  const sponsorId = level === 4 ? "tyler" : `future-l${level - 1}`;
-  return {
-    id: `future-l${level}`,
-    name: `Future Level ${level}`,
-    role: "Placeholder",
-    status: "Review",
-    level,
-    units: 0,
-    capitalCommitted: "$0",
-    joined: "Future growth",
-    sponsorId,
-    photo: `https://i.pravatar.cc/120?img=${38 + index}`,
-  };
-});
+function roleLabel(value?: string) {
+  if (value === "builder") return "Select Member-Builder";
+  if (value === "admin") return "Admin";
+  return "Select Member";
+}
+
+function statusLabel(value?: string): ReferralPerson["status"] {
+  if (value === "active") return "Active";
+  if (value === "pending") return "Pending";
+  return "Review";
+}
+
+function money(value?: number) {
+  return `$${Math.round(Number(value) || 0).toLocaleString()}`;
+}
+
+function fallbackAvatar(member: MemberRecord) {
+  const label = encodeURIComponent(member.name || member.email || "Member");
+  return `https://ui-avatars.com/api/?name=${label}&background=075933&color=ffd46f&bold=true`;
+}
 
 function levelLabel(person: ReferralPerson, root: ReferralPerson) {
   if (person.id === root.id) return "L0";
@@ -60,6 +85,77 @@ function statusStyle(status: ReferralPerson["status"]) {
   if (status === "Active") return { background: "#e3f5eb", color: "#087345" };
   if (status === "Pending") return { background: "#fffaf0", color: "#bd8e28" };
   return { background: "#eef2ff", color: "#1e4fa3" };
+}
+
+function isLorenzo(member: MemberRecord) {
+  const name = String(member.name || "").toLowerCase();
+  const email = String(member.email || "").toLowerCase();
+  return name.includes("lorenzo") || email === "tmillerk999@gmail.com";
+}
+
+function buildLivePeople(members: MemberRecord[]) {
+  const lorenzoRecord = members.find(isLorenzo);
+  const root: ReferralPerson = lorenzoRecord ? {
+    ...rootPerson,
+    units: Number(lorenzoRecord.units) || rootPerson.units,
+    capitalCommitted: money(Number(lorenzoRecord.invested_amount || lorenzoRecord.capital_commitment) || 50000),
+    joined: lorenzoRecord.joined_date ? new Date(lorenzoRecord.joined_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : rootPerson.joined,
+    photo: lorenzoRecord.avatar_url || rootPerson.photo,
+  } : rootPerson;
+
+  const livePeople = members
+    .filter((member) => member.id && !isLorenzo(member))
+    .map((member) => {
+      const sponsorId = member.sponsor_id && member.sponsor_id !== member.id ? member.sponsor_id : "lorenzo";
+      const capital = Number(member.invested_amount || member.capital_commitment) || 0;
+      return {
+        id: String(member.id),
+        name: member.name || member.email || "Select Member",
+        role: roleLabel(member.role),
+        status: statusLabel(member.status),
+        level: 1,
+        units: Number(member.units) || Math.round(capital / 100),
+        capitalCommitted: money(capital),
+        joined: member.joined_date ? new Date(member.joined_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Recently",
+        sponsorId,
+        photo: member.avatar_url || fallbackAvatar(member),
+      };
+    });
+
+  return assignLevels([root, ...livePeople]);
+}
+
+function assignLevels(input: ReferralPerson[]) {
+  const byId = new Map(input.map((person) => [person.id, { ...person }]));
+  const children = new Map<string, ReferralPerson[]>();
+
+  for (const person of byId.values()) {
+    if (!person.sponsorId || person.id === "lorenzo") continue;
+    const parentId = byId.has(person.sponsorId) ? person.sponsorId : "lorenzo";
+    person.sponsorId = parentId;
+    children.set(parentId, [...(children.get(parentId) || []), person]);
+  }
+
+  const root = byId.get("lorenzo") || input[0];
+  const queue = [{ person: root, level: 0 }];
+  const visited = new Set<string>();
+
+  while (queue.length) {
+    const { person, level } = queue.shift()!;
+    if (visited.has(person.id)) continue;
+    visited.add(person.id);
+    person.level = level;
+    for (const child of children.get(person.id) || []) queue.push({ person: child, level: level + 1 });
+  }
+
+  for (const person of byId.values()) {
+    if (!visited.has(person.id) && person.id !== "lorenzo") {
+      person.sponsorId = "lorenzo";
+      person.level = 1;
+    }
+  }
+
+  return Array.from(byId.values()).sort((a, b) => a.level - b.level || a.name.localeCompare(b.name));
 }
 
 export default function ReferralNetwork({
@@ -74,15 +170,38 @@ export default function ReferralNetwork({
   const [rootId, setRootId] = useState("lorenzo");
   const [uplineId, setUplineId] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const [livePeople, setLivePeople] = useState<ReferralPerson[]>(demoPeople);
+  const [usingLiveData, setUsingLiveData] = useState(false);
   const isLimitedView = mode !== "admin";
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadMembers = async () => {
+      try {
+        const res = await fetch("/api/members", { cache: "no-store" });
+        if (!res.ok) return;
+        const members = await res.json();
+        if (cancelled || !Array.isArray(members) || members.length === 0) return;
+        setLivePeople(buildLivePeople(members));
+        setUsingLiveData(true);
+      } catch (err) {
+        console.error("Failed to load live referral network:", err);
+      }
+    };
+
+    loadMembers();
+    return () => { cancelled = true; };
+  }, []);
+
   const visiblePeople = useMemo(() => {
-    if (!isLimitedView) return [...people, ...adminPlaceholderPeople];
-    return people.filter((person) => person.level <= 3).slice(0, 40);
-  }, [isLimitedView]);
+    if (!isLimitedView) return livePeople;
+    return livePeople.filter((person) => person.level <= 3).slice(0, 40);
+  }, [isLimitedView, livePeople]);
   const visibleById = useMemo(() => new Map(visiblePeople.map((person) => [person.id, person])), [visiblePeople]);
   const getChildren = (id: string) => visiblePeople.filter((person) => person.sponsorId === id);
 
-  const root = visibleById.get(rootId) || visiblePeople[0] || people[0];
+  const root = visibleById.get(rootId) || visiblePeople[0] || rootPerson;
   const levelRows = useMemo(() => {
     const rows: ReferralPerson[][] = [];
     const visited = new Set<string>([root.id]);
@@ -107,9 +226,9 @@ export default function ReferralNetwork({
   const memberTitle = mode === "investor" ? "My Referrals" : "My Referral Network";
   const openLabel = mode === "admin" ? "View Full Organization Tree" : "View Full Referral Network";
   const scopeCopy = mode === "admin"
-    ? "Admin can see the full organization, including 10 placeholder levels now. Live data can keep expanding past L10 without changing this view."
+    ? "Admin can see the full live organization tree. New confirmed members are placed automatically under their sponsor/upline, and members without a sponsor are placed under Lorenzo."
     : "This is your referral view. Select a person to open their referrals, or press View Upline to see who brought them in. Builder visibility is capped at L1-L3 and 40 total people including you.";
-  const totalCount = mode === "admin" ? 128 : Math.min(visiblePeople.length, 40);
+  const totalCount = isLimitedView ? Math.min(visiblePeople.length, 40) : visiblePeople.length;
 
   const showUpline = (person: ReferralPerson) => {
     setUplineId(person.id);
@@ -179,7 +298,7 @@ export default function ReferralNetwork({
         ) : null}
       </div>
 
-      <p className="sn-ref-copy">{scopeCopy}</p>
+      <p className="sn-ref-copy">{scopeCopy} {usingLiveData ? "Live member data is connected." : "Showing sample structure until live members are available."}</p>
 
       {uplinePerson ? (
         <div className="sn-ref-upline-panel">
@@ -235,7 +354,7 @@ export default function ReferralNetwork({
         </div>
         <div className="sn-ref-stats">
           <span><Users size={16} /> {totalCount} people</span>
-          <span><TreePine size={16} /> {mode === "admin" ? "L10+ ready" : "L1-L3 · 40 max"}</span>
+          <span><TreePine size={16} /> {mode === "admin" ? "Live depth" : "L1-L3 · 40 max"}</span>
         </div>
       </div>
 

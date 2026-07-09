@@ -27,6 +27,26 @@ function memberRole(value: string) {
   return value.toLowerCase().includes("builder") ? "builder" : "investor";
 }
 
+async function resolveSponsorId(application: any) {
+  const sponsor = noteValue(application?.notes, "Sponsor");
+  if (!sponsor) return "lorenzo";
+
+  const byEmail = sponsor.includes("@")
+    ? await supabase.from("members").select("id").eq("email", sponsor).maybeSingle()
+    : null;
+
+  if (byEmail?.data?.id) return byEmail.data.id;
+
+  const { data } = await supabase
+    .from("members")
+    .select("id")
+    .ilike("name", `%${sponsor}%`)
+    .limit(1)
+    .maybeSingle();
+
+  return data?.id || "lorenzo";
+}
+
 async function updateApplication(requestId: string | undefined, status: string, note: string) {
   if (!requestId) return null;
 
@@ -53,6 +73,7 @@ async function activateMemberFromApplication(application: any) {
   const units = Number(noteValue(application.notes, "Units")) || Math.round(capitalCommitment / 100);
   const role = memberRole(noteValue(application.notes, "Role"));
   const location = noteValue(application.notes, "Address");
+  const sponsorId = await resolveSponsorId(application);
   const memberRecord = {
     name: application.name,
     email: application.email,
@@ -63,6 +84,7 @@ async function activateMemberFromApplication(application: any) {
     invested_amount: capitalCommitment,
     location,
     referral_source: "Stripe ACH checkout",
+    sponsor_id: sponsorId,
   };
 
   const { data: existing } = await supabase
