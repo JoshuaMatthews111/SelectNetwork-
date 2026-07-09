@@ -30,21 +30,39 @@ function memberRole(value: string) {
 async function resolveSponsorId(application: any) {
   const sponsor = noteValue(application?.notes, "Sponsor");
   if (!sponsor) return "lorenzo";
+  if (sponsor === "lorenzo") return "lorenzo";
 
-  const byEmail = sponsor.includes("@")
-    ? await supabase.from("members").select("id").eq("email", sponsor).maybeSingle()
+  const byId = sponsor.startsWith("m-")
+    ? await supabase.from("members").select("id,name,email").eq("id", sponsor).maybeSingle()
     : null;
 
-  if (byEmail?.data?.id) return byEmail.data.id;
+  if (byId?.data?.id) {
+    const sponsorEmail = String(byId.data.email || "").toLowerCase();
+    const sponsorName = String(byId.data.name || "").toLowerCase();
+    return sponsorEmail === "tmillerk999@gmail.com" || sponsorName.includes("lorenzo") ? "lorenzo" : byId.data.id;
+  }
+
+  const byEmail = sponsor.includes("@")
+    ? await supabase.from("members").select("id,name,email").eq("email", sponsor).maybeSingle()
+    : null;
+
+  if (byEmail?.data?.id) {
+    const sponsorEmail = String(byEmail.data.email || "").toLowerCase();
+    const sponsorName = String(byEmail.data.name || "").toLowerCase();
+    return sponsorEmail === "tmillerk999@gmail.com" || sponsorName.includes("lorenzo") ? "lorenzo" : byEmail.data.id;
+  }
 
   const { data } = await supabase
     .from("members")
-    .select("id")
+    .select("id,name,email")
     .ilike("name", `%${sponsor}%`)
     .limit(1)
     .maybeSingle();
 
-  return data?.id || "lorenzo";
+  if (!data?.id) return "lorenzo";
+  const sponsorEmail = String(data.email || "").toLowerCase();
+  const sponsorName = String(data.name || "").toLowerCase();
+  return sponsorEmail === "tmillerk999@gmail.com" || sponsorName.includes("lorenzo") ? "lorenzo" : data.id;
 }
 
 async function updateApplication(requestId: string | undefined, status: string, note: string) {

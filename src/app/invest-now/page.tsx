@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ArrowRight, ArrowLeft, CheckCircle, Shield, Lock, Landmark, Info, Users, UserPlus, FileText, Building2 } from "lucide-react";
 import SNNav from "../components/SNNav";
 import SNFooter from "../components/SNFooter";
@@ -80,6 +80,12 @@ export default function InvestNowPage() {
   const infoValid = !!(form.name && form.email && form.phone && form.addressLine1 && form.city && form.state && form.zip);
   const roleValid = !!role;
   const agreementValid = contractRead && ack.terms && ack.distributions && ack.disclaimer;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const ref = new URLSearchParams(window.location.search).get("ref");
+    if (ref) setForm((current) => ({ ...current, sponsor: ref }));
+  }, []);
 
   const next = () => setStep((s) => Math.min(s + 1, STEPS.length - 1));
   const back = () => setStep((s) => Math.max(s - 1, 0));
@@ -289,7 +295,7 @@ export default function InvestNowPage() {
                       <Field label="State *"><input value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })} placeholder="State" style={inputStyle} /></Field>
                       <Field label="Zip Code *"><input value={form.zip} onChange={(e) => setForm({ ...form, zip: e.target.value })} placeholder="Zip code" style={inputStyle} /></Field>
                       <Field label="How did you hear about The Select Network Member Group?"><input value={form.heard} onChange={(e) => setForm({ ...form, heard: e.target.value })} placeholder="Referral, event, online..." style={inputStyle} /></Field>
-                      <Field label="Who referred you?"><input value={form.sponsor} onChange={(e) => setForm({ ...form, sponsor: e.target.value })} placeholder="Referral name or email, if applicable" style={inputStyle} /></Field>
+                      <Field label="Referral Link / Referred By"><input value={form.sponsor} onChange={(e) => setForm({ ...form, sponsor: e.target.value })} placeholder="Referral name, email, or tracking code" style={inputStyle} /></Field>
                     </div>
                     <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
                       <button onClick={next} disabled={!infoValid} style={{ ...btnPrimary, ...(infoValid ? {} : dis) }}>Continue <ArrowRight size={16} /></button>
@@ -464,6 +470,7 @@ export default function InvestNowPage() {
                         ["Email", form.email],
                         ["Units", `${units} units (${fmt(subtotal)})`],
                         ["Role", role],
+                        ...(form.sponsor ? [["Referred By", form.sponsor]] : []),
                         ...(isFoundationPartner ? [["Recognition", "Foundation Partner"]] : []),
                         ["Agreement", "Signed — " + new Date().toLocaleDateString()],
                       ].map(([l, v]) => (

@@ -342,6 +342,69 @@ button, a, .sn-btn { touch-action: manipulation; }
 .sn-ref-upline-actions button:hover {
   border-color: #bd8e28;
 }
+.sn-ref-message {
+  background: #e8f4ed;
+  border: 1px solid #b9dec8;
+  color: #075933;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  font-weight: 800;
+  margin: 0 0 14px;
+}
+.sn-ref-admin-tools {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.2fr) minmax(160px, .8fr) minmax(160px, .8fr) auto;
+  gap: 10px;
+  align-items: center;
+  background: #f9f6ef;
+  border: 1px solid #e7e2d8;
+  border-radius: 12px;
+  padding: 12px;
+  margin: 0 0 14px;
+}
+.sn-ref-admin-tools b {
+  display: block;
+  font-size: 13px;
+  color: #071a33;
+}
+.sn-ref-admin-tools span,
+.sn-ref-admin-tools small {
+  display: block;
+  color: #667085;
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+.sn-ref-admin-tools select {
+  width: 100%;
+  border: 1px solid #e7e2d8;
+  border-radius: 8px;
+  background: #fff;
+  color: #071a33;
+  padding: 10px 11px;
+  font-size: 12.5px;
+  outline: none;
+}
+.sn-ref-admin-tools button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(135deg,#075933,#0b7346);
+  color: #fff;
+  padding: 10px 13px;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  cursor: pointer;
+}
+.sn-ref-admin-tools button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
 .sn-ref-canvas {
   background: linear-gradient(180deg,#fcfbf8,#fff);
   border: 1px solid #eee7d8;
@@ -387,7 +450,9 @@ button, a, .sn-btn { touch-action: manipulation; }
     "photo role"
     "photo meta"
     "status status"
-    "upline upline";
+    "upline upline"
+    "link link"
+    "move move";
   column-gap: 12px;
   row-gap: 4px;
   min-height: 128px;
@@ -469,6 +534,29 @@ button, a, .sn-btn { touch-action: manipulation; }
   font-size: 11px;
   font-weight: 900;
 }
+.sn-ref-link,
+.sn-ref-move {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 8px;
+  padding: 7px 8px;
+  font-size: 11px;
+  font-weight: 900;
+}
+.sn-ref-link {
+  grid-area: link;
+  background: #fffaf0;
+  color: #a46a00;
+  border: 1px solid #ead8a8;
+}
+.sn-ref-move {
+  grid-area: move;
+  background: #fff;
+  color: #071a33;
+  border: 1px solid #d8d2c6;
+}
 .sn-ref-empty {
   background: #f9f6ef;
   border: 1px dashed #d8d0bd;
@@ -515,6 +603,7 @@ button, a, .sn-btn { touch-action: manipulation; }
   .sn-ref-upline-photo { width: 46px; height: 46px; }
   .sn-ref-upline-actions { grid-column: 1 / -1; justify-content: stretch; display: grid; grid-template-columns: 1fr; }
   .sn-ref-upline-actions button { width: 100%; }
+  .sn-ref-admin-tools { grid-template-columns: 1fr; }
   .sn-ref-canvas { padding: 18px 12px; overflow-x: visible; }
   .sn-ref-level-row { grid-template-columns: 1fr; min-width: 0; }
   .sn-ref-node { grid-template-columns: 46px 1fr; padding: 13px; }

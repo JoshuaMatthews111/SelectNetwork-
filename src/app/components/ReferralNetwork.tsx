@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ChevronUp, Expand, RotateCcw, TreePine, UserRoundSearch, Users, X } from "lucide-react";
+import { ChevronUp, Copy, Expand, RotateCcw, Save, TreePine, UserRoundSearch, Users, X } from "lucide-react";
 
 type RoleMode = "admin" | "investor" | "builder";
 
@@ -95,6 +95,7 @@ function isLorenzo(member: MemberRecord) {
 
 function buildLivePeople(members: MemberRecord[]) {
   const lorenzoRecord = members.find(isLorenzo);
+  const lorenzoDatabaseId = lorenzoRecord?.id;
   const root: ReferralPerson = lorenzoRecord ? {
     ...rootPerson,
     units: Number(lorenzoRecord.units) || rootPerson.units,
@@ -106,7 +107,8 @@ function buildLivePeople(members: MemberRecord[]) {
   const livePeople = members
     .filter((member) => member.id && !isLorenzo(member))
     .map((member) => {
-      const sponsorId = member.sponsor_id && member.sponsor_id !== member.id ? member.sponsor_id : "lorenzo";
+      const rawSponsorId = member.sponsor_id && member.sponsor_id !== member.id ? member.sponsor_id : "lorenzo";
+      const sponsorId = rawSponsorId === lorenzoDatabaseId ? "lorenzo" : rawSponsorId;
       const capital = Number(member.invested_amount || member.capital_commitment) || 0;
       return {
         id: String(member.id),
@@ -172,6 +174,10 @@ export default function ReferralNetwork({
   const [expanded, setExpanded] = useState(false);
   const [livePeople, setLivePeople] = useState<ReferralPerson[]>(demoPeople);
   const [usingLiveData, setUsingLiveData] = useState(false);
+  const [movePersonId, setMovePersonId] = useState("");
+  const [moveSponsorId, setMoveSponsorId] = useState("lorenzo");
+  const [moveMessage, setMoveMessage] = useState("");
+  const [draggingId, setDraggingId] = useState("");
   const isLimitedView = mode !== "admin";
 
   useEffect(() => {
@@ -239,6 +245,62 @@ export default function ReferralNetwork({
     setUplineId(null);
   };
 
+  const referralLink = (person: ReferralPerson) => {
+    if (typeof window === "undefined") return `/invest-now?ref=${encodeURIComponent(person.id)}`;
+    return `${window.location.origin}/invest-now?ref=${encodeURIComponent(person.id)}`;
+  };
+
+  const copyReferralLink = async (person: ReferralPerson) => {
+    try {
+      await navigator.clipboard.writeText(referralLink(person));
+      setMoveMessage(`${person.name}'s referral link copied.`);
+      setTimeout(() => setMoveMessage(""), 2600);
+    } catch (err) {
+      console.error("Could not copy referral link:", err);
+    }
+  };
+
+  const canMoveUnder = (personId: string, sponsorId: string) => {
+    if (!personId || personId === "lorenzo" || personId === sponsorId) return false;
+    const descendants = new Set<string>();
+    let current = getChildren(personId);
+    while (current.length) {
+      current.forEach((person) => descendants.add(person.id));
+      current = current.flatMap((person) => getChildren(person.id));
+    }
+    return !descendants.has(sponsorId);
+  };
+
+  const saveUpline = async (personId = movePersonId, sponsorId = moveSponsorId) => {
+    if (!canMoveUnder(personId, sponsorId)) {
+      setMoveMessage("That move is not allowed because it would place someone under themselves or their own downline.");
+      return;
+    }
+
+    const person = livePeople.find((item) => item.id === personId);
+    const sponsorPerson = livePeople.find((item) => item.id === sponsorId);
+    if (!person || !sponsorPerson) return;
+
+    const nextPeople = assignLevels(livePeople.map((item) => (
+      item.id === personId ? { ...item, sponsorId } : item
+    )));
+    setLivePeople(nextPeople);
+    setMovePersonId(personId);
+    setMoveSponsorId(sponsorId);
+    setMoveMessage(`${person.name} moved under ${sponsorPerson.name}.`);
+
+    try {
+      await fetch("/api/members", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: personId, sponsor_id: sponsorId }),
+      });
+    } catch (err) {
+      console.error("Failed to save upline:", err);
+      setMoveMessage("The view updated, but saving to Supabase failed. Please try again.");
+    }
+  };
+
   const sponsor = uplineId ? visibleById.get(visibleById.get(uplineId)?.sponsorId || "") : null;
   const uplinePerson = uplineId ? visibleById.get(uplineId) : null;
 
@@ -247,6 +309,15 @@ export default function ReferralNetwork({
       key={`${person.id}-${isRoot ? "root" : "node"}`}
       type="button"
       onClick={() => openPerson(person)}
+      draggable={mode === "admin" && person.id !== "lorenzo"}
+      onDragStart={() => setDraggingId(person.id)}
+      onDragOver={(event) => {
+        if (mode === "admin") event.preventDefault();
+      }}
+      onDrop={(event) => {
+        event.preventDefault();
+        if (mode === "admin" && draggingId) saveUpline(draggingId, person.id);
+      }}
       className={`sn-ref-node ${isRoot ? "sn-ref-root" : ""}`}
     >
       <span className="sn-ref-level">{levelLabel(person, root)}</span>
@@ -274,8 +345,55 @@ export default function ReferralNetwork({
         <ChevronUp size={12} />
         View Upline
       </span>
+      {(mode === "admin" || mode === "builder") ? (
+        <span
+          role="button"
+          tabIndex={0}
+          className="sn-ref-link"
+          onClick={(event) => {
+            event.stopPropagation();
+            copyReferralLink(person);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              copyReferralLink(person);
+            }
+          }}
+        >
+          <Copy size={12} />
+          Referral Link
+        </span>
+      ) : null}
+      {mode === "admin" && person.id !== "lorenzo" ? (
+        <span
+          role="button"
+          tabIndex={0}
+          className="sn-ref-move"
+          onClick={(event) => {
+            event.stopPropagation();
+            setMovePersonId(person.id);
+            setMoveSponsorId(person.sponsorId || "lorenzo");
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              setMovePersonId(person.id);
+              setMoveSponsorId(person.sponsorId || "lorenzo");
+            }
+          }}
+        >
+          Change Upline
+        </span>
+      ) : null}
     </button>
   );
+
+  const movablePeople = visiblePeople.filter((person) => person.id !== "lorenzo");
+  const sponsorOptions = visiblePeople.filter((person) => person.id !== movePersonId);
+  const movingPerson = visibleById.get(movePersonId);
 
   const networkBody = (
     <>
@@ -299,6 +417,33 @@ export default function ReferralNetwork({
       </div>
 
       <p className="sn-ref-copy">{scopeCopy} {usingLiveData ? "Live member data is connected." : "Showing sample structure until live members are available."}</p>
+
+      {moveMessage ? <div className="sn-ref-message">{moveMessage}</div> : null}
+
+      {mode === "admin" ? (
+        <div className="sn-ref-admin-tools">
+          <div>
+            <b>Move Member / Change Upline</b>
+            <span>Click Change Upline on a person, or drag a person onto the new upline card.</span>
+          </div>
+          <select value={movePersonId} onChange={(event) => {
+            const nextPerson = visibleById.get(event.target.value);
+            setMovePersonId(event.target.value);
+            setMoveSponsorId(nextPerson?.sponsorId || "lorenzo");
+          }}>
+            <option value="">Select member</option>
+            {movablePeople.map((person) => <option key={person.id} value={person.id}>{person.name}</option>)}
+          </select>
+          <select value={moveSponsorId} onChange={(event) => setMoveSponsorId(event.target.value)} disabled={!movePersonId}>
+            {sponsorOptions.map((person) => <option key={person.id} value={person.id}>{person.name}</option>)}
+          </select>
+          <button type="button" onClick={() => saveUpline()} disabled={!movePersonId}>
+            <Save size={14} />
+            Save Upline
+          </button>
+          {movingPerson ? <small>{movingPerson.name} will be moved under {visibleById.get(moveSponsorId)?.name || "selected upline"}.</small> : null}
+        </div>
+      ) : null}
 
       {uplinePerson ? (
         <div className="sn-ref-upline-panel">
