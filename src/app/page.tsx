@@ -15,7 +15,7 @@ export default function SelectNetworkHomePage() {
     "Connect Capital to Growing Companies.",
     "Build Strategic Partnerships.",
     "Expand With Proven Systems.",
-    "Join a Private Select Member Network.",
+    "Join a Private Membership Network.",
   ];
   useEffect(() => {
     const timer = setInterval(() => setActiveCard((i) => (i + 1) % 6), 1700);
@@ -41,7 +41,7 @@ export default function SelectNetworkHomePage() {
             <Link href="/about">About</Link>
             <Link href="/investment-focus">Capital Focus</Link>
             <Link href="/reports">Network Performance Reports</Link>
-            <Link href="/invest-now">Select Units</Link>
+            <Link href="/invest-now">Select Tier</Link>
             <Link href="/contact">Contact</Link>
           </div>
           <Link href="/login" className="sn-portal-btn sn-hide-mobile">🔒 Member Portal</Link>
@@ -61,7 +61,7 @@ export default function SelectNetworkHomePage() {
               <button onClick={() => setMobileOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "#071a33" }}><X size={24} /></button>
             </div>
             <nav style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {[{ label: "About", href: "/about" }, { label: "Capital Focus", href: "/investment-focus" }, { label: "Network Performance Reports", href: "/reports" }, { label: "Select Units", href: "/invest-now" }, { label: "Contact", href: "/contact" }].map((l) => (
+              {[{ label: "About", href: "/about" }, { label: "Capital Focus", href: "/investment-focus" }, { label: "Network Performance Reports", href: "/reports" }, { label: "Select Tier", href: "/invest-now" }, { label: "Risk Factors", href: "/risk-factors" }, { label: "Contact", href: "/contact" }].map((l) => (
                 <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)} style={{ padding: "14px 16px", borderRadius: 10, fontSize: 14, fontWeight: 800, letterSpacing: ".03em", textTransform: "uppercase", color: "#0d2845", textDecoration: "none" }}>{l.label}</Link>
               ))}
             </nav>
@@ -164,13 +164,13 @@ export default function SelectNetworkHomePage() {
           </div>
         </section>
 
-        {/* ═══ GROW YOUR MONEY NOW ═══ */}
-        <section className="sn-money" id="investment-focus" aria-label="Grow your money now capital focus section">
+        {/* ═══ PRIVATE CAPITAL OPPORTUNITIES ═══ */}
+        <section className="sn-money" id="investment-focus" aria-label="Private capital opportunities section">
           <div className="sn-money-copy">
-            <h2>GROW YOUR MONEY NOW</h2>
+            <h2>PRIVATE CAPITAL OPPORTUNITIES</h2>
             <div className="sn-small-rule"></div>
-            <p>Explore our current capital focus and discover how The Select Network Member Group is creating value across real private membership stake opportunities.</p>
-            <Link href="/investment-focus" className="sn-btn-gold">View Capital Focus <ArrowRight size={16} /></Link>
+            <p>Qualified individuals may request access to current opportunities after completing our review process.</p>
+            <Link href="/invest-now" className="sn-btn-gold">Request Private Access <ArrowRight size={16} /></Link>
           </div>
           <div className="sn-chart" aria-label="Illustrative platform growth visualization">
             <svg viewBox="0 0 360 200" preserveAspectRatio="xMidYMid meet">
@@ -237,12 +237,15 @@ export default function SelectNetworkHomePage() {
 
       {/* ═══ FOOTER ═══ */}
       <footer className="sn-footer-home">
-        <strong>TRUST. PRIVACY. EXCELLENCE.</strong>
-        <div className="sn-script">Built for discerning select members who value impact and integrity.</div>
-        <div className="sn-footer-right">
-          <span>Become by Design</span>
-          <span>🔒 Private Protected</span>
+        <div className="sn-footer-main">
+          <strong>TRUST. PRIVACY. EXCELLENCE.</strong>
+          <div className="sn-script">Built for discerning select members who value impact and integrity.</div>
+          <div className="sn-footer-right">
+            <span>Become by Design</span>
+            <span>🔒 Private Protected</span>
+          </div>
         </div>
+        <p className="sn-home-disclaimer">This website is for informational purposes only and does not constitute an offer to sell, a solicitation to buy, or a guarantee of investment returns. Participation in any Select Network opportunity is subject to eligibility review, approval, official offering documents, risk disclosures, and applicable securities laws. Past performance does not guarantee future results. All investments involve risk, including possible loss of principal.</p>
       </footer>
 
       {/* ═══ SCOPED STYLES ═══ */}
@@ -654,10 +657,12 @@ export default function SelectNetworkHomePage() {
         .sn-trust-item p { font-size: 12px; line-height: 1.4; color: #23354e; font-weight: 600; margin: 0; }
 
         /* ─── FOOTER ─── */
-        .sn-footer-home { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 46px 25px; color: var(--navy); max-width: 1500px; margin: 0 auto; }
+        .sn-footer-home { display: flex; flex-direction: column; gap: 14px; padding: 0 46px 25px; color: var(--navy); max-width: 1500px; margin: 0 auto; }
+        .sn-footer-main { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
         .sn-footer-home strong { font-family: Georgia, serif; font-size: 20px; letter-spacing: .07em; }
         .sn-script { font-family: "Brush Script MT", "Segoe Script", cursive; color: #c17a2a; font-size: 22px; }
         .sn-footer-right { display: flex; align-items: center; gap: 24px; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; font-weight: 850; }
+        .sn-home-disclaimer { max-width: 1240px; margin: 0 auto; color: #6b7280; font-size: 9.5px; line-height: 1.55; text-align: center; }
 
         /* ─── RESPONSIVE: TABLET ─── */
         @media (max-width: 1180px) {
@@ -716,7 +721,8 @@ export default function SelectNetworkHomePage() {
           .sn-money-copy { padding: 28px 22px; }
           .sn-ldtt-card { grid-template-columns: 1fr; text-align: center; }
           .sn-trust-item { grid-template-columns: 60px 1fr; }
-          .sn-footer-home { flex-direction: column; text-align: center; padding: 0 16px 25px; }
+          .sn-footer-home { text-align: center; padding: 0 16px 25px; }
+          .sn-footer-main { flex-direction: column; }
           .sn-footer-right { flex-wrap: wrap; justify-content: center; }
           .sn-script { font-size: 18px; }
         }

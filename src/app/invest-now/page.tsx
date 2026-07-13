@@ -12,7 +12,7 @@ const GOLD = "#bd8e28";
 const GREEN = "#075933";
 
 const UNIT_PRICE = 100;
-const STEPS = ["Your Information", "Unit Selection", "Role Selection", "Agreement", "Payment"];
+const STEPS = ["Your Information", "Select Tier", "Role Selection", "Agreement", "Review Request"];
 
 const DISCLAIMER_PARAGRAPHS = [
   "This presentation is confidential and proprietary and has been prepared exclusively for invited prospective members of The Select Network Private Members Group LLC (the Company). It is provided solely for informational and evaluation purposes in connection with a potential private membership opportunity and may not be copied, reproduced, distributed, published, or disclosed, in whole or in part, without the prior written consent of the Company.",
@@ -27,6 +27,14 @@ const MISSION_PARAGRAPHS = [
   "We unite visionary entrepreneurs, business leaders, and strategic members through a disciplined capital model that aligns private capital with high-potential business opportunities. By creating direct access to capital within our network, we reduce dependence on traditional financing and establish a sustainable framework for long-term economic growth.",
   "Our mission is to create an enduring ecosystem where capital is continuously reinvested, businesses are empowered to scale, innovation is accelerated, and enterprise value is strengthened across the network. Every member contributes to expanding opportunity, increasing ownership, and building lasting financial prosperity.",
   "Guided by integrity, strategic discipline, transparency, and collaboration, The Select Network is creating more than a capital platform. We are building an economic infrastructure designed to generate sustainable growth, preserve operational independence, and create shared value over time.",
+];
+
+const PROGRESSIVE_OWNERSHIP_POLICY = [
+  "The Select Network is a private Membership Enterprise founded on stewardship, disciplined capital formation, and long-term value creation. Ownership within the Enterprise is intentionally structured to reward increasing commitment while protecting the integrity, stability, and future growth of the Enterprise for the benefit of the entire Membership.",
+  "The Enterprise has authorized a maximum issuance of 50,000 Ownership Units. Because the available ownership pool is finite, each Unit carries scarcity and should be acquired through an orderly, responsible process.",
+  "A prospective member may establish their initial position by selecting one approved tier during enrollment. Subsequent increases may be reviewed through progressively higher tiers rather than repeated same-level purchases.",
+  "Members who request ownership beyond initial tiers are subject to allocation review, availability, compliance requirements, and official company discretion. No member is guaranteed additional units, distributions, or approval to increase participation.",
+  "This policy is intended to promote equitable access, support responsible ownership, and preserve the long-term strength of the Enterprise for current and future members.",
 ];
 
 const inputStyle: React.CSSProperties = {
@@ -58,6 +66,7 @@ export default function InvestNowPage() {
   const [role, setRole] = useState("");
   const [checkoutError, setCheckoutError] = useState("");
   const [contractRead, setContractRead] = useState(false);
+  const [tierAck, setTierAck] = useState(false);
   const contractRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = useState({
     name: "",
@@ -80,6 +89,7 @@ export default function InvestNowPage() {
   const infoValid = !!(form.name && form.email && form.phone && form.addressLine1 && form.city && form.state && form.zip);
   const roleValid = !!role;
   const agreementValid = contractRead && ack.terms && ack.distributions && ack.disclaimer;
+  const tierValid = units > 0 && tierAck;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -128,14 +138,14 @@ export default function InvestNowPage() {
           window.location.href = data.url;
           return;
         }
-        setCheckoutError("ACH checkout started, but the secure bank checkout link was not returned. Please contact support.");
+        setCheckoutError("Secure checkout started, but the hosted link was not returned. Please contact support.");
       } else {
         const data = await res.json().catch(() => null);
-        setCheckoutError(data?.error || "ACH checkout could not be started. Please contact support.");
+        setCheckoutError(data?.error || "Secure checkout could not be started. Please contact support.");
       }
     } catch (err) {
       console.error(err);
-      setCheckoutError("ACH checkout could not be started. Please contact support.");
+      setCheckoutError("Secure checkout could not be started. Please contact support.");
     }
     setSubmitting(false);
   };
@@ -303,11 +313,11 @@ export default function InvestNowPage() {
                   </div>
                 )}
 
-                {/* ── STEP 2: Unit Selection ── */}
+                {/* STEP 2: tier selection */}
                 {step === 1 && (
                   <div>
-                    <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 26, margin: "0 0 6px" }}>Unit Selection</h2>
-                    <p style={{ color: "#5b6675", fontSize: 14, margin: "0 0 10px" }}>Select the number of units to participate with. Each unit is <b>${UNIT_PRICE}</b>.</p>
+                    <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 26, margin: "0 0 6px" }}>Select Tier</h2>
+                    <p style={{ color: "#5b6675", fontSize: 14, margin: "0 0 10px" }}>Select the tier you would like reviewed. Each unit is <b>${UNIT_PRICE}</b>, subject to availability, eligibility review, and official acceptance.</p>
 
                     <div style={{ background: "linear-gradient(135deg,#071a33,#0d3366)", borderRadius: 12, padding: "18px 22px", marginBottom: 24, display: "flex", gap: 14, alignItems: "flex-start" }}>
                       <Info size={20} color="#ffd46f" style={{ flexShrink: 0, marginTop: 2 }} />
@@ -320,6 +330,7 @@ export default function InvestNowPage() {
                       {[{ u: 10, popular: false }, { u: 50, popular: true }, { u: 100, popular: false }].map((p) => (
                         <div key={p.u} onClick={() => setUnits(p.u)} style={{ position: "relative", border: units === p.u ? `2px solid ${GOLD}` : "1px solid #e7e2d8", background: units === p.u ? "linear-gradient(135deg,#071a33,#0d3366)" : "#fbf9f4", color: units === p.u ? "#fff" : NAVY, borderRadius: 14, padding: "28px 18px", textAlign: "center", cursor: "pointer", transition: ".25s" }}>
                           {p.popular && <span style={{ position: "absolute", top: -11, left: "50%", transform: "translateX(-50%)", background: `linear-gradient(135deg,${GOLD},#a07520)`, color: "#fff", fontSize: 9, fontWeight: 900, padding: "3px 12px", borderRadius: 99, textTransform: "uppercase", letterSpacing: ".06em" }}>Most Popular</span>}
+                          <div style={{ fontSize: 11, fontWeight: 900, textTransform: "uppercase", letterSpacing: ".08em", color: units === p.u ? "#ffd46f" : GOLD, marginBottom: 6 }}>Tier {p.u === 10 ? "I" : p.u === 50 ? "II" : "III"}</div>
                           <div style={{ fontSize: 38, fontWeight: 800 }}>{p.u}</div>
                           <div style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".06em", opacity: .7 }}>Units</div>
                           <div style={{ fontSize: 20, fontWeight: 800, color: units === p.u ? "#ffd46f" : GREEN, marginTop: 8 }}>{fmt(p.u * UNIT_PRICE)}</div>
@@ -330,7 +341,7 @@ export default function InvestNowPage() {
                     <div style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 14, padding: "18px 22px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, marginBottom: 14 }}>
                       <div>
                         <div style={{ fontSize: 11.5, fontWeight: 800, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em" }}>Selected</div>
-                        <div style={{ fontSize: 22, fontWeight: 800, color: NAVY }}>{units} Units</div>
+                        <div style={{ fontSize: 22, fontWeight: 800, color: NAVY }}>Tier Request · {units} Units</div>
                       </div>
                       <div style={{ textAlign: "right" }}>
                         <div style={{ fontSize: 11.5, fontWeight: 800, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em" }}>Total</div>
@@ -347,9 +358,16 @@ export default function InvestNowPage() {
                       </div>
                     )}
 
+                    <label style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "#fff", border: "1px solid #e7e2d8", borderRadius: 12, padding: "14px 16px", cursor: "pointer" }}>
+                      <input type="checkbox" checked={tierAck} onChange={(e) => setTierAck(e.target.checked)} style={{ marginTop: 3 }} />
+                      <span style={{ fontSize: 13, color: "#475569", lineHeight: 1.6 }}>
+                        I understand this tier request is subject to membership review, availability of authorized units, official documents, risk disclosures, and acceptance by The Select Network Member Group.
+                      </span>
+                    </label>
+
                     <div style={{ display: "flex", justifyContent: "space-between", marginTop: 24 }}>
                       <button onClick={back} style={btnGhost}><ArrowLeft size={16} /> Back</button>
-                      <button onClick={next} style={btnPrimary}>Continue <ArrowRight size={16} /></button>
+                      <button onClick={next} disabled={!tierValid} style={{ ...btnPrimary, ...(tierValid ? {} : dis) }}>Continue <ArrowRight size={16} /></button>
                     </div>
                   </div>
                 )}
@@ -414,7 +432,7 @@ export default function InvestNowPage() {
                       <p><b>3. Roles.</b> Members may participate as a Select Member or Select Member-Builder. Select Member accounts receive quarterly distribution access and member reports. Select Member-Builder accounts additionally receive access to the referral network, builder tools, and referral tracking. Role capabilities are subject to program requirements.</p>
                       <p><b>4. Foundation Partner.</b> Members with a capital commitment of $10,000 or more are recognized as Foundation Partners within The Select Network Member Group. This recognition is based solely on capital commitment level and is not limited by membership count.</p>
                       <p><b>5. Incentives.</b> Eligible Select Member-Builders may qualify for referral or marketing incentives according to official program terms. Incentives are not guaranteed and are subject to eligibility, compliance, and program requirements.</p>
-                      <p><b>6. Payment &amp; Activation.</b> Dashboard access is activated automatically upon confirmed payment. There is no manual review or approval process after payment is confirmed.</p>
+                      <p><b>6. Review, Payment &amp; Activation.</b> Membership requests are subject to eligibility review, official documents, and acceptance. Dashboard access and payment confirmation are posted through the member system after approval and completion of required steps.</p>
                       <p><b>7. No Guarantees.</b> The Select Network Member Group does not guarantee returns, distributions, profits, or any specific financial outcome. Past performance of associated businesses does not guarantee future results.</p>
                       <p><b>8. Member Records.</b> The Member&apos;s name, email, unit selection, role, agreement acceptance date/time, and payment status will be stored securely as part of the official participation record.</p>
                       <p><b>9. Modifications.</b> The Select Network Member Group reserves the right to update or modify program terms, incentives, and participation structures at any time with notice to members.</p>
@@ -423,6 +441,11 @@ export default function InvestNowPage() {
                       <b style={{ fontSize: 15, color: NAVY, display: "block", marginBottom: 12 }}>Confidentiality &amp; Private Placement Disclaimer</b>
                       {DISCLAIMER_PARAGRAPHS.map((p, i) => (
                         <p key={i} style={i === DISCLAIMER_PARAGRAPHS.length - 1 ? { marginBottom: 0 } : undefined}>{p}</p>
+                      ))}
+                      <div style={{ height: 1, background: "#d8d2c6", margin: "22px 0" }} />
+                      <b style={{ fontSize: 15, color: NAVY, display: "block", marginBottom: 12 }}>Progressive Ownership Policy</b>
+                      {PROGRESSIVE_OWNERSHIP_POLICY.map((p, i) => (
+                        <p key={i} style={i === PROGRESSIVE_OWNERSHIP_POLICY.length - 1 ? { marginBottom: 0 } : undefined}>{p}</p>
                       ))}
                     </div>
 
@@ -451,16 +474,16 @@ export default function InvestNowPage() {
 
                     <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
                       <button onClick={back} style={btnGhost}><ArrowLeft size={16} /> Back</button>
-                      <button onClick={next} disabled={!agreementValid} style={{ ...btnPrimary, ...(agreementValid ? {} : dis) }}>Continue to Payment <ArrowRight size={16} /></button>
+                      <button onClick={next} disabled={!agreementValid} style={{ ...btnPrimary, ...(agreementValid ? {} : dis) }}>Continue to Review <ArrowRight size={16} /></button>
                     </div>
                   </div>
                 )}
 
-                {/* ── STEP 5: Payment ── */}
+                {/* ── STEP 5: Review Request ── */}
                 {step === 4 && (
                   <div>
-                    <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 26, margin: "0 0 6px" }}>Submit Your Payment</h2>
-                    <p style={{ color: "#5b6675", fontSize: 14, margin: "0 0 20px" }}>Review your selection and complete your payment to activate your member dashboard.</p>
+                    <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 26, margin: "0 0 6px" }}>Submit Membership Review Request</h2>
+                    <p style={{ color: "#5b6675", fontSize: 14, margin: "0 0 20px" }}>Review your tier request and submit it through the secure review flow. Official payment and activation steps are subject to acceptance and posted records.</p>
 
                     {/* Summary */}
                     <div style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 14, padding: "20px 22px", marginBottom: 16 }}>
@@ -468,7 +491,7 @@ export default function InvestNowPage() {
                       {[
                         ["Name", form.name],
                         ["Email", form.email],
-                        ["Units", `${units} units (${fmt(subtotal)})`],
+                        ["Tier Request", `${units} units (${fmt(subtotal)})`],
                         ["Role", role],
                         ...(form.sponsor ? [["Referred By", form.sponsor]] : []),
                         ...(isFoundationPartner ? [["Recognition", "Foundation Partner"]] : []),
@@ -482,24 +505,24 @@ export default function InvestNowPage() {
                     </div>
 
                     <div style={{ marginBottom: 16 }}>
-                      <div style={{ fontSize: 11.5, fontWeight: 800, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 10 }}>Payment Method</div>
+                      <div style={{ fontSize: 11.5, fontWeight: 800, color: "#667085", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 10 }}>Secure Review Flow</div>
                       <div style={{ border: `2px solid ${GREEN}`, background: "#edf6ef", borderRadius: 12, padding: "16px 18px" }}>
-                        <b style={{ fontSize: 14, color: GREEN, display: "flex", alignItems: "center", gap: 8 }}><Landmark size={17} /> ACH Bank Transfer Only</b>
-                        <span style={{ fontSize: 11.5, color: "#667085" }}>Credit cards, debit cards, checks, and other payment types are not accepted.</span>
+                        <b style={{ fontSize: 14, color: GREEN, display: "flex", alignItems: "center", gap: 8 }}><Landmark size={17} /> Private Membership Review</b>
+                        <span style={{ fontSize: 11.5, color: "#667085" }}>Payment method and activation instructions are handled through the approved member process.</span>
                       </div>
                     </div>
 
                     <div style={{ background: "#fbf9f4", border: "1px solid #e7e2d8", borderRadius: 14, padding: "22px 24px", marginBottom: 16 }}>
                       <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 16, background: "#e8f4ed", borderRadius: 8, padding: "10px 14px" }}>
                         <FileText size={16} color={GREEN} />
-                        <span style={{ fontSize: 12.5, color: GREEN, fontWeight: 700 }}>ACH Bank Transfer — Stripe hosts the secure bank connection and authorization.</span>
+                        <span style={{ fontSize: 12.5, color: GREEN, fontWeight: 700 }}>Secure submission — Stripe hosts the current authorization flow while final payment terms are posted through official member records.</span>
                       </div>
                       <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                         <Field label="Account Holder Name"><input value={form.name} readOnly style={inputStyle} /></Field>
                         <Field label="Capital Commitment"><input value={fmt(subtotal)} readOnly style={inputStyle} /></Field>
                       </div>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 12, borderTop: "1px solid #e7e2d8", marginTop: 4 }}>
-                        <span style={{ fontSize: 12.5, color: "#667085", display: "inline-flex", alignItems: "center", gap: 6 }}><Lock size={13} /> ACH only · server-side token handling</span>
+                        <span style={{ fontSize: 12.5, color: "#667085", display: "inline-flex", alignItems: "center", gap: 6 }}><Lock size={13} /> Secure server-side handling</span>
                         <b style={{ fontSize: 20 }}>{fmt(subtotal)}</b>
                       </div>
                     </div>
@@ -507,7 +530,7 @@ export default function InvestNowPage() {
                     <div style={{ display: "flex", gap: 10, alignItems: "center", background: "#f0f7ff", border: "1px solid #c7ddf5", borderRadius: 10, padding: "12px 16px", marginBottom: 20 }}>
                       <Info size={16} color="#1e40af" style={{ flexShrink: 0 }} />
                       <p style={{ margin: 0, fontSize: 12.5, color: "#1e40af", lineHeight: 1.5 }}>
-                        Bank account collection uses Stripe&apos;s approved ACH bank-payment flow. This page will not accept card payments or collect card details.
+                        Submission uses a secure hosted authorization flow. The site does not store sensitive payment credentials.
                       </p>
                     </div>
 
@@ -521,7 +544,7 @@ export default function InvestNowPage() {
                     <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
                       <button onClick={back} style={btnGhost}><ArrowLeft size={16} /> Back</button>
                       <button onClick={handleSubmit} disabled={submitting} style={{ ...btnPrimary, background: "linear-gradient(135deg,#d1a645,#bc8b25)", ...(submitting ? dis : {}) }}>
-                        {submitting ? "Processing..." : <><Landmark size={16} /> Submit ACH Payment — {fmt(subtotal)}</>}
+                        {submitting ? "Processing..." : <><Landmark size={16} /> Submit Membership Review — {fmt(subtotal)}</>}
                       </button>
                     </div>
                   </div>
@@ -530,6 +553,33 @@ export default function InvestNowPage() {
               </div>
             </>
           )}
+        </div>
+      </section>
+
+      {/* Membership explanation */}
+      <section style={{ padding: "10px 0 70px", background: "#fbf9f4" }}>
+        <div className="sn-shell" style={{ maxWidth: 980 }}>
+          <Reveal>
+            <div style={{ background: "#fff", border: "1px solid #e7e2d8", borderRadius: 18, padding: "32px 30px", boxShadow: "0 14px 40px rgba(5,20,45,.07)" }}>
+              <div style={{ color: GOLD, fontSize: 11.5, fontWeight: 900, letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 10 }}>What Your Membership Includes</div>
+              <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 26, margin: "0 0 16px" }}>Private access after review and acceptance.</h2>
+              <div className="sn-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                {[
+                  "Eligibility to purchase approved Units, subject to availability and acceptance.",
+                  "Participation rights as defined in the Membership Agreement and official offering documents.",
+                  "Access to quarterly member communications and business performance updates.",
+                  "Member portal access after approval, activation, and completed official records.",
+                  "Builder referral tracking and personal invitation links for approved Select Builders.",
+                  "Access to published reports, documents, notices, and distribution records inside the portal.",
+                ].map((item) => (
+                  <div key={item} style={{ display: "flex", gap: 10, alignItems: "flex-start", color: "#3d4a57", fontSize: 13.5, lineHeight: 1.65 }}>
+                    <CheckCircle size={17} color={GREEN} style={{ flexShrink: 0, marginTop: 2 }} />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 

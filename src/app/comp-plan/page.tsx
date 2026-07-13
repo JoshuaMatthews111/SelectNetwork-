@@ -53,7 +53,7 @@ export default function CompPlanPage() {
 
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               <Link href="/invest-now" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: `linear-gradient(135deg, ${GREEN}, #064a28)`, color: "#fff", borderRadius: 8, padding: "14px 22px", fontWeight: 800, fontSize: 12.5, textTransform: "uppercase", letterSpacing: ".04em", textDecoration: "none" }}>
-                Back to Select Units <ArrowRight size={14} />
+                Back to Select Tier <ArrowRight size={14} />
               </Link>
               <Link href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", color: NAVY, border: "1.5px solid #d4cdbf", borderRadius: 8, padding: "14px 22px", fontWeight: 800, fontSize: 12.5, textTransform: "uppercase", letterSpacing: ".04em", textDecoration: "none" }}>
                 Contact Us

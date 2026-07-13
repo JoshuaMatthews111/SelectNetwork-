@@ -49,7 +49,7 @@ export default function AboutPage() {
               <Image src="/assets/select-network/IMG_9919.png" alt="Lorenzo Miller" width={1242} height={2688} style={{ width: "100%", height: "auto", borderRadius: 16, border: "1px solid #e7e2d8", boxShadow: "0 18px 45px rgba(5,20,45,.12)", objectFit: "contain", filter: "grayscale(1) contrast(1.08)" }} />
               <div style={{ marginTop: 16, background: "#fbf9f4", border: "1px solid #eee7d8", borderRadius: 12, padding: "18px 20px" }}>
                 <b style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 22, display: "block" }}>Lorenzo Miller</b>
-                <span style={{ color: GOLD, fontSize: 13, fontWeight: 700 }}>Founder · Entrepreneur · Select Member · Visionary</span>
+                <span style={{ color: GOLD, fontSize: 13, fontWeight: 700 }}>Founder · Entrepreneur · Select Builder · Visionary</span>
               </div>
             </div>
           </Reveal>

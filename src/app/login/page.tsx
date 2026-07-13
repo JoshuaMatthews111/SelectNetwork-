@@ -61,7 +61,7 @@ export default function LoginPage() {
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <h3 style={{ fontFamily: "Georgia, serif", fontSize: 22, margin: "0 0 8px" }}>Information Received!</h3>
-            <p style={{ color: "#667085", fontSize: 14, margin: "0 0 20px" }}>Thank you. Visit the Select Units page to select your units, review the agreement, and submit your payment.</p>
+            <p style={{ color: "#667085", fontSize: 14, margin: "0 0 20px" }}>Thank you. Visit the Select Tier page to choose your tier, review the agreement, and request membership review.</p>
             <button onClick={() => { setApplySuccess(false); setMode("choice"); }} style={{ background: "linear-gradient(135deg,#d1a645,#bc8b25)", color: "#fff", border: 0, borderRadius: 8, padding: "12px 24px", fontWeight: 800, cursor: "pointer" }}>Back to Login</button>
           </div>
         ) : (
@@ -80,7 +80,7 @@ export default function LoginPage() {
             <textarea rows={3} value={applyForm.message} onChange={(e) => setApplyForm({...applyForm, message: e.target.value})} placeholder="Tell us about your interest..." style={{ ...fieldInput, resize: "none" as const }} />
           </div>
           <button type="submit" disabled={applyLoading} className="sn-btn-gold sn-btn" style={{ width: "100%", padding: "16px 0", opacity: applyLoading ? 0.7 : 1 }}>
-            {applyLoading ? <><Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} /> Submitting...</> : "Continue to Select Units →"}
+            {applyLoading ? <><Loader2 size={18} style={{ animation: "spin 1s linear infinite" }} /> Submitting...</> : "Continue to Select Tier →"}
           </button>
         </form>
         <button onClick={() => setMode("choice")} style={{ display: "block", width: "100%", textAlign: "center", marginTop: 14, background: "none", border: "none", color: "#667085", fontSize: 13, cursor: "pointer" }}>← Back to login options</button>

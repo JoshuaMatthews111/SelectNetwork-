@@ -19,7 +19,7 @@ const adminTabs = [
   { id: "requests", label: "Member Requests", ico: "request" },
   { id: "members", label: "Members", ico: "users" },
   { id: "units", label: "Units", ico: "star" },
-  { id: "payments", label: "ACH Payments", ico: "credit" },
+  { id: "payments", label: "Payments", ico: "credit" },
   { id: "crm", label: "Prospect CRM", ico: "contact" },
   { id: "scheduler", label: "Scheduler", ico: "calendar" },
   { id: "reports", label: "Upload Reports", ico: "chart" },
@@ -843,13 +843,13 @@ export default function AdminPortal() {
           {/* PAYMENTS */}
           {activeTab === "payments" && (
             <div className="sn-mobile-content" style={{ animation: "fadeIn .5s ease" }}>
-              <div className="sn-table-wrap" style={card}><h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>ACH Payments</h2>
+              <div className="sn-table-wrap" style={card}><h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 20, margin: "0 0 14px" }}>Payments</h2>
                 <div className="sn-desktop-table" style={{ overflowX: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, minWidth: 550 }}>
                   <thead><tr>{["Member", "Amount", "Method", "Status", "Action"].map(h => <th key={h} style={thS}>{h}</th>)}</tr></thead>
                   <tbody>
                     {paymentRows.map((p, i) => (
-                      <tr key={i}><td style={{ ...tdS, fontWeight: 700 }}>{p.name}</td><td style={tdS}>{p.amount}</td><td style={{ ...tdS, color: "#667085" }}>ACH</td><td style={tdS}><span style={statusBadge(p.status)}>{p.status}</span></td><td style={tdS}><button style={btnOutline}>Review</button></td></tr>
+                      <tr key={i}><td style={{ ...tdS, fontWeight: 700 }}>{p.name}</td><td style={tdS}>{p.amount}</td><td style={{ ...tdS, color: "#667085" }}>Secure Payment</td><td style={tdS}><span style={statusBadge(p.status)}>{p.status}</span></td><td style={tdS}><button style={btnOutline}>Review</button></td></tr>
                     ))}
                   </tbody>
                 </table>
@@ -859,13 +859,13 @@ export default function AdminPortal() {
                     <div key={i}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}><b style={{ fontSize: 15 }}>{p.name}</b><span style={statusBadge(p.status)}>{p.status}</span></div>
                       <div className="sn-m-card-row"><span className="sn-m-label">Amount</span><span className="sn-m-value">{p.amount}</span></div>
-                      <div className="sn-m-card-row"><span className="sn-m-label">Method</span><span className="sn-m-value" style={{ color: "#667085" }}>ACH</span></div>
+                      <div className="sn-m-card-row"><span className="sn-m-label">Method</span><span className="sn-m-value" style={{ color: "#667085" }}>Secure Payment</span></div>
                       <button style={{ ...btnOutline, width: "100%", marginTop: 10 }}>Review</button>
                     </div>
                   ))}
                 </div>
-                {paymentRows.length === 0 && <p style={{ color: "#667085", fontSize: 13, margin: "14px 0 0" }}>No Stripe ACH checkout activity is posted yet.</p>}
-                <div style={{ marginTop: 16, borderLeft: "4px solid #3b82f6", background: "#f0f7ff", color: "#1e40af", padding: "12px 14px", fontSize: 12, borderRadius: "0 6px 6px 0" }}>ACH only. Stripe hosts the secure bank connection and payment authorization. Credit cards, debit cards, checks, cash, and other payment paths are not accepted.</div>
+                {paymentRows.length === 0 && <p style={{ color: "#667085", fontSize: 13, margin: "14px 0 0" }}>No Stripe payment activity is posted yet.</p>}
+                <div style={{ marginTop: 16, borderLeft: "4px solid #3b82f6", background: "#f0f7ff", color: "#1e40af", padding: "12px 14px", fontSize: 12, borderRadius: "0 6px 6px 0" }}>Stripe hosts the secure payment authorization flow. Approved member records, unit totals, sponsor attribution, and status updates post back into the admin system after confirmation.</div>
               </div>
             </div>
           )}

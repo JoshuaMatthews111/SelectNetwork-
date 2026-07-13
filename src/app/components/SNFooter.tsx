@@ -8,10 +8,13 @@ const LINKS = [
   { label: "About", href: "/about" },
   { label: "Capital Focus", href: "/investment-focus" },
   { label: "Network Performance Reports", href: "/reports" },
-  { label: "Select Units", href: "/invest-now" },
+  { label: "Select Tier", href: "/invest-now" },
+  { label: "Risk Factors", href: "/risk-factors" },
   { label: "Contact", href: "/contact" },
   { label: "Member Portal", href: "/login" },
 ];
+
+const FOOTER_DISCLAIMER = "This website is for informational purposes only and does not constitute an offer to sell, a solicitation to buy, or a guarantee of investment returns. Participation in any Select Network opportunity is subject to eligibility review, approval, official offering documents, risk disclosures, and applicable securities laws. Past performance does not guarantee future results. All investments involve risk, including possible loss of principal.";
 
 export default function SNFooter() {
   return (
@@ -114,6 +117,9 @@ export default function SNFooter() {
         <span style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "#7e90a8", fontSize: 12 }}>
           <ShieldCheck size={14} color="#d5a83d" /> Secure by design · Privacy protected
         </span>
+      </div>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px 22px", color: "#6f829b", fontSize: 9.5, lineHeight: 1.55 }}>
+        {FOOTER_DISCLAIMER}
       </div>
       <style jsx>{`
         @media (max-width: 980px) {

@@ -215,7 +215,7 @@ export default function ReportsPage() {
         <div className="sn-shell">
           <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 18px" }}>Review the full record inside the Member Portal.</h2>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/invest-now" className="sn-btn" style={{ background: `linear-gradient(135deg,#0b5b34,#08431f)` }}>Select Units <ArrowRight size={16} /></Link>
+            <Link href="/invest-now" className="sn-btn" style={{ background: `linear-gradient(135deg,#0b5b34,#08431f)` }}>Select Tier <ArrowRight size={16} /></Link>
             <Link href="/login" className="sn-btn sn-btn-outline">Member Portal</Link>
           </div>
         </div>

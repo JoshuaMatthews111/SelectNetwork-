@@ -20,7 +20,7 @@ const siteUrl = (req: NextRequest) =>
 
 export async function POST(req: NextRequest) {
   if (!stripe) {
-    return NextResponse.json({ error: "ACH checkout is not configured yet." }, { status: 503 });
+    return NextResponse.json({ error: "Secure checkout is not configured yet." }, { status: 503 });
   }
 
   const body = await req.json();
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
     `Sponsor: ${body.sponsor || ""}`,
     `Role: ${body.role || ""}`,
     `Units: ${body.units || ""}`,
-    "Payment Method: Stripe ACH bank transfer",
+    "Payment Method: Stripe secure bank authorization",
     "Stripe Checkout Session: pending",
     `Agreement Accepted: ${body.agreementAcceptedAt || new Date().toISOString()}`,
     `Foundation Partner: ${Boolean(body.foundationPartner)}`,
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
             unit_amount: amountCents,
             product_data: {
               name: `${body.units || "Select"} Units`,
-              description: "The Select Network Member Group ACH capital commitment",
+              description: "The Select Network Member Group membership review authorization",
             },
           },
         },
@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
       request: data,
     });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "ACH checkout could not be started.";
+    const message = err instanceof Error ? err.message : "Secure checkout could not be started.";
     await supabase
       .from(MEMBER_REQUESTS_TABLE)
       .update({

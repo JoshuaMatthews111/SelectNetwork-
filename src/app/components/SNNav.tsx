@@ -10,7 +10,8 @@ const NAV = [
   { label: "About", href: "/about" },
   { label: "Capital Focus", href: "/investment-focus" },
   { label: "Network Performance Reports", href: "/reports" },
-  { label: "Select Units", href: "/invest-now" },
+  { label: "Select Tier", href: "/invest-now" },
+  { label: "Risk Factors", href: "/risk-factors" },
   { label: "Contact", href: "/contact" },
 ];
 

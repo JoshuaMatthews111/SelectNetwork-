@@ -16,7 +16,7 @@ const FAQ_ITEMS = [
   { q: "Who is eligible to participate?", a: "Participation is open to qualified select members and strategic partners who share our mission of long-term value creation and impact in the pet industry." },
   { q: "What types of membership stake opportunities are available?", a: "Members gain access to carefully selected opportunities connected to Lorenzo's Dog Training Team and future growth initiatives within the expanding pet industry." },
   { q: "How is my information protected?", a: "All member information is protected with the highest standard of privacy and security protocols. We are confidential by design." },
-  { q: "How does the participation process work?", a: "The process is straightforward: select your units, choose your role, review and sign the Participation Agreement, then complete payment by ACH bank transfer only. Your member dashboard activates automatically once payment is confirmed." },
+  { q: "How does the participation process work?", a: "Qualified individuals request private access, select a participation tier, review the membership documents and risk disclosures, and submit for membership review. Approved members receive dashboard access and official next steps through the member portal." },
 ];
 
 export default function LDTTOpportunityPage() {
@@ -100,7 +100,7 @@ export default function LDTTOpportunityPage() {
                   boxShadow: "0 6px 18px rgba(7,89,51,.25)",
                 }}
               >
-                Select Units <ArrowRight size={15} />
+                Select Tier <ArrowRight size={15} />
               </Link>
               <Link
                 href="/contact"

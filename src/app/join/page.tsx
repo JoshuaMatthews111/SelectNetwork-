@@ -48,9 +48,9 @@ export default function JoinPage() {
         <div className="sn-shell">
           <div className="sn-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22 }}>
             {[
-              { n: 1, icon: <FileText size={26} />, title: "Select Your Units", desc: "Choose the number of units and your participation role." },
+              { n: 1, icon: <FileText size={26} />, title: "Select Your Tier", desc: "Choose the tier and participation role you would like reviewed." },
               { n: 2, icon: <FileSignature size={26} />, title: "Review & Sign Agreement", desc: "Read and accept the Participation Agreement." },
-              { n: 3, icon: <PhoneCall size={26} />, title: "Submit ACH Payment", desc: "Complete payment by ACH bank transfer only to activate your member dashboard automatically." },
+              { n: 3, icon: <PhoneCall size={26} />, title: "Submit Review Request", desc: "Submit your membership request for review, approval, and official next steps." },
             ].map((s, i) => (
               <Reveal key={i} delay={i * 100}>
                 <div style={{ background: "#fbf9f4", border: "1px solid #eee7d8", borderRadius: 16, padding: 30, height: "100%", position: "relative" }}>
@@ -78,7 +78,7 @@ export default function JoinPage() {
                 <div style={{ background: "#edf6ef", border: "1px solid #c7e2d0", borderRadius: 12, padding: "28px 24px", textAlign: "center" }}>
                   <CheckCircle2 size={44} color={GREEN} style={{ margin: "0 auto 12px" }} />
                   <h3 style={{ margin: "0 0 8px", color: NAVY }}>Information Received</h3>
-                  <p style={{ color: "#4b5563", fontSize: 14, lineHeight: 1.6, margin: 0 }}>Thank you, {form.firstName}. Proceed to the Select Units page to select your units, review the agreement, and submit your payment to activate your dashboard.</p>
+                  <p style={{ color: "#4b5563", fontSize: 14, lineHeight: 1.6, margin: 0 }}>Thank you, {form.firstName}. Proceed to the Select Tier page to choose your tier, review the agreement, and submit your membership request.</p>
                 </div>
               ) : (
                 <form onSubmit={(e) => { e.preventDefault(); if (valid) setSubmitted(true); }}>

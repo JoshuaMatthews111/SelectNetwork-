@@ -172,7 +172,7 @@ export default function InvestmentFocusPage() {
           <h2 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: 28, margin: "0 0 18px" }}>Review the operating record behind the opportunity.</h2>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/reports" className="sn-btn" style={{ background: `linear-gradient(135deg,#0b5b34,#08431f)` }}>View Network Performance Reports <ArrowRight size={16} /></Link>
-            <Link href="/invest-now" className="sn-btn sn-btn-outline">Select Units</Link>
+            <Link href="/invest-now" className="sn-btn sn-btn-outline">Select Tier</Link>
           </div>
         </div>
       </section>

@@ -101,7 +101,7 @@ async function activateMemberFromApplication(application: any) {
     units,
     invested_amount: capitalCommitment,
     location,
-    referral_source: "Stripe ACH checkout",
+    referral_source: "Stripe secure checkout",
     sponsor_id: sponsorId,
   };
 
